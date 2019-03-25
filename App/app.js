@@ -34,9 +34,13 @@ var selectRouter = require('./routes/select');
 var formsRouter = require('./routes/forms');
 /* ---------------------------- */
 
-/* --- V6: Modify Database  --- */
+
 var registerRouter = require('./routes/register');
-/* ---------------------------- */
+var reservationRouter = require('./routes/reservation')
+var servicesRouter = require('./routes/services')
+var menuRouter = require('./routes/menu')
+var specialtiesRouter = require('./routes/specialties')
+
 
 var app = express();
 
@@ -88,7 +92,10 @@ app.use('/forms', formsRouter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/register', registerRouter);
-/* ---------------------------- */
+app.use('/services', servicesRouter);
+app.use('/menu', menuRouter);
+app.use('/specialties', specialtiesRouter);
+app.use('/reservation', reservationRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

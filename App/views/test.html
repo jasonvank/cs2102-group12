@@ -1,0 +1,127 @@
+
+<div ng-cloak>
+  <md-content>
+    <md-tabs md-dynamic-height md-border-bottom md-selected="myTabIndex">
+      <md-tab id="regTab" label="SEARCH RESTUARANTS">
+        <md-content class="md-padding">
+          <p>Search Restuarants by Name/Location/Cuisine: {{searchBy}}</p>
+          <md-radio-group ng-model="searchBy">
+                <md-radio-button value="name" class="md-primary">Name</md-radio-button>
+                <md-radio-button value="location" class="md-primary"> Location </md-radio-button>              
+                <md-radio-button value="cuisine" class="md-primary"> Cuisine </md-radio-button>              
+          </md-radio-group>
+          <div layout="column" layout-align="center center">
+
+            <md-input-container class="md-block" ng-show="searchBy == 'name'">
+                  <label>Search by name</label>
+                  <input type="text" name="searchName" ng-model="searchName" />
+            </md-input-container>
+            
+            <md-input-container class="md-block" ng-show="searchBy == 'location'">     
+              <label>Search by location</label>
+              <md-select name="searchLocation" ng-model="searchLocation">
+                <md-option value="BANGALORE">BANGALORE</md-option>
+                <md-option value="PUNE">PUNE</md-option>
+                <md-option value="MUMBAI">MUMBAI</md-option>
+                <md-option value="DELHI">DELHI</md-option>
+              </md-select>
+            </md-input-container>
+
+            <md-input-container class="md-block" ng-show="searchBy == 'cuisine'">     
+              <label>Search by cuisine</label>
+              <md-select name="searchCuisine" ng-model="searchCuisine">
+                <md-option value="Italian">Italian</md-option>
+                <md-option value="Indian">Indian</md-option>
+                <md-option value="Chinese">Chinese</md-option>
+              </md-select>
+            </md-input-container>
+
+             
+            <md-button class="md-raised md-primary" ng-click="search(searchBy)">Search</md-button>           
+          </div>
+          <md-list>
+            <md-subheader class="md-no-sticky">SEARCH RESULTS:</md-subheader>
+            <md-list-item ng-repeat="restuarant in restuarants track by $index">           
+              <div flex="70" class="md-list-item-text" layout="row" layout-align="start center">                
+                <h4>{{restuarant.Name}}</h4><br/>                
+                <h6>&nbsp;@{{restuarant.Location}}</h6>                
+              </div>
+              <!-- <div flex="30" layout="row" layout-align="end center">
+                <md-button class="md-icon-button" ng-click="editRest(restuarant)" title="Edit"><md-icon>mode_edit</md-icon></md-button> 
+                
+                <md-button class="md-icon-button" ng-click="showConfirmDel($event,restuarant)" title="Delete"><md-icon>cancel</md-icon></md-button> 
+              </div> -->
+
+              
+              
+          </md-list-item>
+          </md-list>
+          
+          
+          
+        </md-content>
+      </md-tab>
+      <md-tab label="SEARCH & BOOK A TABLE" ng-click="tabChange()">
+        <md-content class="md-padding">
+          <p>Search for your fav Restuarant and book a table of your choice!!!</p>
+          <div layout="column" layout-align="center center">
+            <md-input-container class="md-block">     
+              <label>Choose your Restuarant, not sure? Go back to our Restuarant Search!!!</label>
+              <md-select name="selectedRest" ng-model="selectedRest">
+                <md-option ng-repeat="rest in availRests track by $index" ng-value=rest>{{rest.Name}}
+                &nbsp;@{{rest.Location}}</md-option>
+                
+              </md-select>
+            </md-input-container>
+            <md-input-container flex="50">
+                  <label>Tell us for how many??</label>
+                  <md-select name="tableCapacity" ng-model="tableCapacity" required>
+                    <md-option value="Table for 2">Table for 2</md-option>
+                    <md-option value="Table for 4">Table for 4</md-option>
+                    <md-option value="Table for 6">Table for 6</md-option>
+                  </md-select>                
+                </md-input-container>
+
+            <md-button class="md-raised md-primary" ng-click="getTables(selectedRest,tableCapacity)">Get Tables</md-button>    
+          </div>
+          
+            <md-list>
+            <md-subheader class="md-no-sticky">Available Tables:</md-subheader>
+            <md-list-item ng-repeat="table in availTables track by $index">           
+              <div flex="70" class="md-list-item-text" layout="row" layout-align="start end">                
+                <h4>{{table.name}}</h4><br/>  
+                <md-button class="md-raised md-primary" ng-click="bookTable(selectedRest,table)" disabled>BOOK</md-button>              
+              </div>
+              
+
+              
+              
+          </md-list-item>
+          </md-list>
+          
+        </md-content>
+      </md-tab>
+      <md-tab label="REVIEWS">
+        <md-content class="md-padding">
+          <p>Tell us about your experience @ one of our restuarants!!!</p>
+          <div layout="column" layout-align="center center">
+            <md-input-container class="md-block">     
+              <label>Choose your Restuarant, not sure? Go back to our Restuarant Search!!!</label>
+              <md-select name="reviewRest" ng-model="reviewRest">
+                <md-option ng-repeat="rest in availRests track by $index" ng-value=rest>{{rest.Name}}
+                &nbsp;@{{rest.Location}}</md-option>
+                
+              </md-select>
+            </md-input-container>
+            <md-input-container class="md-block">
+              <label>Write something about the Restuarant...</label>
+              <textarea ng-model="review.comment" md-maxlength="150" rows="5" md-select-on-focus></textarea>
+            </md-input-container>
+
+            <md-button class="md-raised md-primary" ng-click="postReview()">Post Review</md-button>
+          </div>
+        </md-content>
+      </md-tab>
+    </md-tabs>
+  </md-content>
+</div>

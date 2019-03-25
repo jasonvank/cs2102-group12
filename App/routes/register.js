@@ -28,7 +28,7 @@ router.post('/', function(req, res, next) {
 	console.log(insert_query);
 	
 	pool.query(insert_query, (err, data) => {
-		console.log("Registration sucessful "  + data);
+		console.log("Registration sucessful "  + data.username);
 		res.redirect('/select')
 	});
 });

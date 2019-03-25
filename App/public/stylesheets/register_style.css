@@ -1,10 +1,9 @@
 body {
     background: #222;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://unsplash.it/1200/800/?random');
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/images/bg_1.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
-    background-fill-mode: rgba(0,0,0,0.5);
     display: flex;
     justify-content: center;
     align-items: center;

@@ -1,8 +1,15 @@
+var sql_query = require('./sql');
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
+const exphbs = require('express-handlebars')
+const bodyParser = require('body-parser')
+const session = require('express-session')
+const passport = require('passport')
 
 /* --- V7: Using dotenv     --- */
 require('dotenv').config({path: __dirname + '/.env'})
@@ -28,10 +35,24 @@ var formsRouter = require('./routes/forms');
 /* ---------------------------- */
 
 /* --- V6: Modify Database  --- */
-var insertRouter = require('./routes/insert');
+var registerRouter = require('./routes/register');
 /* ---------------------------- */
 
 var app = express();
+
+
+// Authentication Setup
+//require('dotenv').load();
+require('./auth').init(app);
+app.use(session({
+  // secret: process.env.SECRET,
+  secret: "reservation",
+  resave: true,
+  saveUninitialized: true
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -64,10 +85,9 @@ app.use('/forms', formsRouter);
 /* ---------------------------- */
 
 /* --- V6: Modify Database  --- */
-var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/insert', insertRouter);
+app.use('/register', registerRouter);
 /* ---------------------------- */
 
 // catch 404 and forward to error handler

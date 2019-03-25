@@ -6,12 +6,12 @@ const { Pool } = require('pg')
 const pool = new Pool({connectionString: process.env.DATABASE_URL});
 
 /* SQL Query */
-var sql_query = 'SELECT * FROM student_info';
+var sql_query = 'SELECT * FROM users';
 
 
 router.get('/', function(req, res, next) {
 	pool.query(sql_query, (err, data) => {
-		res.render('select', { title: 'Database Connect', data: data.rows });
+		res.render('select', { title: 'User Info', data: data.rows });
 	});
 });
 

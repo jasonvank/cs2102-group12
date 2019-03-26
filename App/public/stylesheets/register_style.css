@@ -161,6 +161,20 @@ input:-moz-placeholder { /* Firefox 18- */
     width: 15%!important;
 }
 
+
+.login100-form {
+  width: 100%;
+}
+
+.login100-form-title {
+  display: block;
+  font-family: OpenSans-Regular;
+  font-size: 30px;
+  color: #555555;
+  line-height: 1.2;
+  text-align: center;
+}
+
 .row {margin-bottom: 10px!important;}
 /* Responsive */
 @media screen and (max-width: 767px) {

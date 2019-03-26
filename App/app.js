@@ -36,17 +36,19 @@ var formsRouter = require('./routes/forms');
 
 
 var registerRouter = require('./routes/register');
+var loginRouter = require('./routes/login')
 var reservationRouter = require('./routes/reservation')
 var servicesRouter = require('./routes/services')
 var menuRouter = require('./routes/menu')
 var specialtiesRouter = require('./routes/specialties')
 
 
+
 var app = express();
 
 
 // Authentication Setup
-//require('dotenv').load();
+// require('dotenv').load();
 require('./auth').init(app);
 app.use(session({
   // secret: process.env.SECRET,
@@ -96,6 +98,7 @@ app.use('/services', servicesRouter);
 app.use('/menu', menuRouter);
 app.use('/specialties', specialtiesRouter);
 app.use('/reservation', reservationRouter);
+app.use('/login', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

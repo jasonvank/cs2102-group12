@@ -26,7 +26,7 @@ body {
 	-ms-border-radius: 8px;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
-	margin: 175px 0;
+	margin: 0 0;
 	font-family: 'Roboto', sans-serif;
 	color: #333;
 	font-weight: 400;
@@ -149,16 +149,23 @@ input:-moz-placeholder { /* Firefox 18- */
   font-size: 16px;
 }
 
-.radio {
-  -webkit-appearance: radio!important;
+input.radio {
+  -webkit-appearance: radio;
+  float: left;
+  width: 60px;
 }
 
 .radio-label {
-  display: -webkit-inline-box!important;
+  /*display: -webkit-inline-box!important;*/
+  float: left;
+  margin-left: 0px;
+  padding-left: 0px;
 }
 
 .col.s6 {
     width: 15%!important;
+    margin-left: 70px;
+    margin-right: 0px;
 }
 
 

@@ -37,6 +37,7 @@ var formsRouter = require('./routes/forms');
 
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login')
+var forgotRouter = require('./routes/forgot')
 var reservationRouter = require('./routes/reservation')
 var servicesRouter = require('./routes/services')
 var menuRouter = require('./routes/menu')
@@ -99,7 +100,7 @@ app.use('/menu', menuRouter);
 app.use('/specialties', specialtiesRouter);
 app.use('/reservation', reservationRouter);
 app.use('/login', loginRouter);
-
+app.use('/forgot', forgotRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

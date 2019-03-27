@@ -11,12 +11,33 @@ CREATE TABLE users (
 );
 
 CREATE TABLE restaurant_managers (
-	uid     char(36),
+	uid     uuid,
   foreign key (uid) references users (user_uid)
 );
 
+CREATE TABLE restaurants (
+    rid     uuid DEFAULT uuid_generate_v4 (),
+    uid     varchar(36) UNIQUE NOT NULL,
+    name    varchar(50) NOT NULL,
+    primary key (rid),
+    foreign key (uid) references restaurant_managers (uid)
+);
+
+CREATE TABLE branches (
+    bid     uuid DEFAULT uuid_generate_v4 (),
+    name    varchar(50),
+    location varchar(50) NOT NULL,
+    opentime TIME NOT NULL,
+    closetime TIME NOT NULL,
+    aveRating NUMERIC(2,1) NOT NULL DEFAULT 5.0,
+    contacts  NUMERIC(10,0) NOT NULL,
+    CHECK (aveRating >= 0.0 and aveRating <= 5.0),
+    primary key (bid),
+    foreign key (name) references restaurants (name) on delete cascade on update cascade
+);
+
 CREATE TABLE branch_managers (
-	uid     char(36),
+	uid     uuid,
   bid     char(36) UNIQUE,
   foreign key (bid) references branches (bid),
   foreign key (uid) references users (user_uid),
@@ -24,7 +45,7 @@ CREATE TABLE branch_managers (
 );
 
 CREATE TABLE customers (
-	uid     char(36),
+	uid     uuid,
   foreign key (uid) references users (user_uid),
   primary key (uid)
 );
@@ -39,31 +60,8 @@ CREATE TABLE assigns (
     foreign key (rmid) references restaurant_managers (uid)
 );
 
-CREATE TABLE restaurants (
-    rid     uuid DEFAULT uuid_generate_v4 (),
-    uid     varchar(36) UNIQUE NOT NULL,
-    name    varchar(50) NOT NULL,
-    primary key (rid),
-    foreign key (uid) references restaurant_managers (uid)
-);
-
-CREATE TABLE branches (
-    bid     uuid DEFAULT uuid_generate_v4 (),
-    uid     uuid NOT NULL,
-    name    varchar(50),
-    location varchar(50) NOT NULL,
-    opentime TIME NOT NULL,
-    closetime TIME NOT NULL,
-    aveRating NUMERIC(2,1) NOT NULL DEFAULT 5.0,
-    contacts  NUMERIC(10,0) NOT NULL,
-    CHECK (aveRating >= 0.0 and <= 5.0),
-    primary key (bid),
-    foreign key (uid) references branch_managers (uid),
-    foreign key (name) references restaurants (name) on delete cascade on update cascade
-);
-
 CREATE TABLE manages (
-    uid     char(36) NOT NULL,
+    uid     uuid NOT NULL,
     bid     char(36) NOT NULL,
     primary key (uid, bid),
     foreign key (uid) references branch_managers (uid),
@@ -79,7 +77,7 @@ CREATE TABLE opens (
 );
 
 CREATE TABLE registers (
-    uid   char(36) NOT NULL,
+    uid   uuid NOT NULL,
     rid   char(36) NOT NULL,
     primary key (uid, rid),
     foreign key (uid) references restaurant_managers (uid),
@@ -93,7 +91,7 @@ CREATE TABLE categories (
 );
 
 CREATE TABLE belongs (
-    cid     char(36) NOT NULL,
+    cid     uuid NOT NULL,
     rid     char(36) NOT NULL,
     primary key (cid, rid),
     foreign key (cid) references categories (cid),
@@ -144,7 +142,7 @@ CREATE TABLE reservations (
 );
 
 CREATE TABLE processes (
-    resid     char(36) NOT NULL,
+    resid     uuid NOT NULL,
     bid       char(36) NOT NULL,
     primary key (resid, bid),
     foreign key (resid) references reservations (resid),
@@ -152,8 +150,8 @@ CREATE TABLE processes (
 );
 
 CREATE TABLE books (
-    resid     char(36) NOT NULL,
-    uid       char(36) NOT NULL,
+    resid     uuid NOT NULL,
+    uid       uuid NOT NULL,
     primary key (resid, uid),
     foreign key (resid) references reservations (resid),
     foreign key (uid) references customers (uid)
@@ -166,8 +164,8 @@ CREATE TABLE rewards (
 );
 
 CREATE TABLE earns (
-    rewid     char(36) NOT NULL,
-    uid       char(36) NOT NULL,
+    rewid     uuid NOT NULL,
+    uid       uuid NOT NULL,
     primary key (rewid, uid),
     foreign key (rewid) references rewards (rewid),
     foreign key (uid) references customers (uid)

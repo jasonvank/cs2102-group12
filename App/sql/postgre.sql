@@ -32,13 +32,14 @@ CREATE TABLE restaurants (
 CREATE TABLE branches (
     bid     uuid UNIQUE DEFAULT uuid_generate_v4 (),
     name    varchar(50),
+    rid     uuid UNIQUE NOT NULL references restaurants (rid),
     location varchar(50) NOT NULL,
     opentime TIME NOT NULL,
     closetime TIME NOT NULL,
     aveRating NUMERIC(2,1) NOT NULL DEFAULT 5.0,
     contacts  NUMERIC(10,0) NOT NULL,
     CHECK (aveRating >= 0.0 and aveRating <= 5.0),
-    primary key (bid),
+    primary key (rid, bid),
     foreign key (name) references restaurants (name) on delete cascade on update cascade
 );
 
@@ -100,9 +101,9 @@ CREATE TABLE belongs (
 
 CREATE TABLE menus (
     name  varchar(50),
-    mid   uuid DEFAULT uuid_generate_v4 (),
+    mid   uuid UNIQUE DEFAULT uuid_generate_v4 (),
     bid   uuid NOT NULL,
-    primary key (mid),
+    primary key (mid, bid),
     foreign key (bid) references branches (bid) on delete cascade
 );
 
@@ -115,12 +116,12 @@ CREATE TABLE provides (
 );
 
 CREATE TABLE items (
-    iid     uuid DEFAULT uuid_generate_v4 (),
+    iid     uuid UNIQUE NOT NULL DEFAULT uuid_generate_v4 (),
     name    varchar(50) NOT NULL,
     price   NUMERIC(3,2) NOT NULL,
     description text,
     mid     uuid NOT NULL,
-    primary key (iid),
+    primary key (iid, mid),
     foreign key (mid) references menus (mid) on delete cascade
 );
 

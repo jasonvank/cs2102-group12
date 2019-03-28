@@ -1,49 +1,26 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE users (
-    user_uid   uuid DEFAULT uuid_generate_v4 (),
+  user_uid   uuid DEFAULT uuid_generate_v4 (),
 	username   varchar(255) NOT NULL,
 	password_hash   varchar(64) NOT NULL,
-    first_name varchar(64) NOT NULL,
+  first_name varchar(64) NOT NULL,
 	last_name  varchar(64) NOT NULL,
-    primary key (user_uid)
+  primary key (user_uid),
+  unique(username)
 );
 
 CREATE TABLE restaurant_managers (
-	uid     char(36),
-    foreign key (uid) references users (user_uid)
-);
-
-CREATE TABLE branch_managers (
-	uid     char(36),
-    foreign key (uid) references users (user_uid),
-    primary key (uid)
-);
-
-CREATE TABLE administrators (
-	uid     char(36),
-    foreign key (uid) references users (user_uid),
-    primary key (uid)
-);
-
-CREATE TABLE customers (
-	uid     char(36),
-    foreign key (uid) references users (user_uid),
-    primary key (uid)
-);
-
-CREATE TABLE assigns (
-    brid    char(36),
-    rmid   char(36),
-    primary key (brid, rmid),
-    foreign key (brid) references branch_managers.uid,
-    foreign key (rmid) references restaurant_managers.uid,
+	uid     uuid,
+  foreign key (uid) references users (user_uid)
 );
 
 CREATE TABLE restaurants (
     rid     uuid DEFAULT uuid_generate_v4 (),
-    name    varchar(50) NOT NULL, 
-    primary key (rid)
+    uid     varchar(36) UNIQUE NOT NULL,
+    name    varchar(50) NOT NULL,
+    primary key (rid),
+    foreign key (uid) references restaurant_managers (uid)
 );
 
 CREATE TABLE branches (
@@ -54,33 +31,57 @@ CREATE TABLE branches (
     closetime TIME NOT NULL,
     aveRating NUMERIC(2,1) NOT NULL DEFAULT 5.0,
     contacts  NUMERIC(10,0) NOT NULL,
-    CHECK (aveRating >= 0.0 and <= 5.0),
+    CHECK (aveRating >= 0.0 and aveRating <= 5.0),
     primary key (bid),
-    foreign key (name) references restaurants.name on delete cascade on update cascade
+    foreign key (name) references restaurants (name) on delete cascade on update cascade
+);
+
+CREATE TABLE branch_managers (
+	uid     uuid,
+  bid     char(36) UNIQUE,
+  foreign key (bid) references branches (bid),
+  foreign key (uid) references users (user_uid),
+  primary key (uid)
+);
+
+CREATE TABLE customers (
+	uid     uuid,
+  foreign key (uid) references users (user_uid),
+  primary key (uid)
+);
+
+CREATE TABLE assigns (
+    brid   char(36),
+    rmid   char(36),
+    bid    char(36),
+    primary key (brid, rmid, bid),
+    foreign key (bid) references branches (bid),
+    foreign key (brid) references branch_managers (uid),
+    foreign key (rmid) references restaurant_managers (uid)
 );
 
 CREATE TABLE manages (
-    uid     char(36) NOT NULL,
+    uid     uuid NOT NULL,
     bid     char(36) NOT NULL,
     primary key (uid, bid),
-    foreign key (uid) references branch_managers.uid,
-    foreign key (bid) references branches.bid
+    foreign key (uid) references branch_managers (uid),
+    foreign key (bid) references branches (bid)
 );
 
 CREATE TABLE opens (
     rid   char(36) NOT NULL,
-    bid     char(36) NOT NULL,
+    bid   char(36) NOT NULL,
     primary key (rid, bid),
-    foreign key (rid) references restaurants.rid,
-    foreign key (bid) references branches.bid
+    foreign key (rid) references restaurants (rid),
+    foreign key (bid) references branches (bid)
 );
 
 CREATE TABLE registers (
-    uid     char(36) NOT NULL,
+    uid   uuid NOT NULL,
     rid   char(36) NOT NULL,
     primary key (uid, rid),
-    foreign key (uid) references restaurant_managers.uid,
-    foreign key (rid) references restaurants.rid
+    foreign key (uid) references restaurant_managers (uid),
+    foreign key (rid) references restaurants (rid)
 );
 
 CREATE TABLE categories (
@@ -90,11 +91,11 @@ CREATE TABLE categories (
 );
 
 CREATE TABLE belongs (
-    cid     char(36) NOT NULL,
+    cid     uuid NOT NULL,
     rid     char(36) NOT NULL,
     primary key (cid, rid),
-    foreign key (cid) references categories.cid,
-    foreign key (rid) references restaurants.rid
+    foreign key (cid) references categories (cid),
+    foreign key (rid) references restaurants (rid)
 );
 
 CREATE TABLE menus (
@@ -102,15 +103,15 @@ CREATE TABLE menus (
     mid   uuid DEFAULT uuid_generate_v4 (),
     bid   varchar(50) NOT NULL,
     primary key (mid),
-    foreign key (bid) references branches.bid on delete cascade
+    foreign key (bid) references branches (bid) on delete cascade
 );
 
 CREATE TABLE provides (
     bid     char(36) NOT NULL,
     mid     char(36) NOT NULL,
     primary key (bid, mid),
-    foreign key (bid) references branches.bid,
-    foreign key (mid) references menus.mid
+    foreign key (bid) references branches (bid),
+    foreign key (mid) references menus (mid)
 );
 
 CREATE TABLE items (
@@ -118,17 +119,17 @@ CREATE TABLE items (
     name    varchar(50) NOT NULL,
     price   NUMERIC(3,2) NOT NULL,
     description text,
-    mid     char(36), NOT NULL,
+    mid     char(36) NOT NULL,
     primary key (iid),
-    foreign key (mid) references menus.mid on delete cascade
+    foreign key (mid) references menus (mid) on delete cascade
 );
 
 CREATE TABLE contains (
     iid     char(36) NOT NULL,
     mid     char(36) NOT NULL,
     primary key (iid, mid),
-    foreign key (iid) references items.iid,
-    foreign key (mid) references menus.mid
+    foreign key (iid) references items (iid),
+    foreign key (mid) references menus (mid)
 );
 
 CREATE TABLE reservations (
@@ -141,19 +142,19 @@ CREATE TABLE reservations (
 );
 
 CREATE TABLE processes (
-    resid     char(36) NOT NULL,
+    resid     uuid NOT NULL,
     bid       char(36) NOT NULL,
     primary key (resid, bid),
-    foreign key (resid) references reservations.resid,
-    foreign key (bid) references branches.bid
+    foreign key (resid) references reservations (resid),
+    foreign key (bid) references branches (bid)
 );
 
 CREATE TABLE books (
-    resid     char(36) NOT NULL,
-    uid       char(36) NOT NULL,
+    resid     uuid NOT NULL,
+    uid       uuid NOT NULL,
     primary key (resid, uid),
-    foreign key (resid) references reservations.resid,
-    foreign key (uid) references customers.uid
+    foreign key (resid) references reservations (resid),
+    foreign key (uid) references customers (uid)
 );
 
 CREATE TABLE rewards (
@@ -163,11 +164,11 @@ CREATE TABLE rewards (
 );
 
 CREATE TABLE earns (
-    rewid     char(36) NOT NULL,
-    uid       char(36) NOT NULL,
+    rewid     uuid NOT NULL,
+    uid       uuid NOT NULL,
     primary key (rewid, uid),
-    foreign key (rewid) references rewards.rewid,
-    foreign key (uid) references customers.uid
+    foreign key (rewid) references rewards (rewid),
+    foreign key (uid) references customers (uid)
 );
 
 INSERT INTO users (username, password_hash, first_name, last_name)
@@ -179,6 +180,3 @@ VALUES ('cs2102', '$2b$10$vS4KkX8uenTCNooir9vyUuAuX5gUhSGVql8yQdsDDD4TG8bSUjkt.'
 
 -- INSERT INTO contacts (first_name, last_name, email, phone)
 -- VALUES ('John', 'Smith', 'john.smith@example.com', '408-237-2345');
-
- 
-

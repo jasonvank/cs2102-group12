@@ -10,21 +10,27 @@ CREATE TABLE users (
   unique(username)
 );
 
+INSERT INTO users (username, password_hash, first_name, last_name)
+VALUES ('admini', '$2b$10$13BWk/6YJ4JYlxPvkNTnqeT6J8zsPTe592QIen.Le7apc921uebUW', 'Adi', 'Prabawa');
+
 CREATE TABLE restaurant_managers (
-	uid     uuid,
-  foreign key (uid) references users (user_uid)
+	uid     uuid primary key references users on delete cascade
 );
+
+INSERT INTO restaurant_managers (uid)
+SELECT user_uid
+FROM users;
 
 CREATE TABLE restaurants (
     rid     uuid DEFAULT uuid_generate_v4 (),
-    uid     varchar(36) UNIQUE NOT NULL,
-    name    varchar(50) NOT NULL,
+    uid     uuid UNIQUE NOT NULL,
+    name    varchar(50) UNIQUE NOT NULL,
     primary key (rid),
     foreign key (uid) references restaurant_managers (uid)
 );
 
 CREATE TABLE branches (
-    bid     uuid DEFAULT uuid_generate_v4 (),
+    bid     uuid UNIQUE DEFAULT uuid_generate_v4 (),
     name    varchar(50),
     location varchar(50) NOT NULL,
     opentime TIME NOT NULL,
@@ -37,23 +43,17 @@ CREATE TABLE branches (
 );
 
 CREATE TABLE branch_managers (
-	uid     uuid,
-  bid     char(36) UNIQUE,
-  foreign key (bid) references branches (bid),
-  foreign key (uid) references users (user_uid),
-  primary key (uid)
+	uid     uuid primary key references users on delete cascade
 );
 
 CREATE TABLE customers (
-	uid     uuid,
-  foreign key (uid) references users (user_uid),
-  primary key (uid)
+	uid     uuid primary key references users on delete cascade
 );
 
 CREATE TABLE assigns (
-    brid   char(36),
-    rmid   char(36),
-    bid    char(36),
+    brid   uuid,
+    rmid   uuid,
+    bid    uuid,
     primary key (brid, rmid, bid),
     foreign key (bid) references branches (bid),
     foreign key (brid) references branch_managers (uid),
@@ -62,23 +62,23 @@ CREATE TABLE assigns (
 
 CREATE TABLE manages (
     uid     uuid NOT NULL,
-    bid     char(36) NOT NULL,
+    bid     uuid NOT NULL,
     primary key (uid, bid),
     foreign key (uid) references branch_managers (uid),
     foreign key (bid) references branches (bid)
 );
 
 CREATE TABLE opens (
-    rid   char(36) NOT NULL,
-    bid   char(36) NOT NULL,
+    rid   uuid NOT NULL,
+    bid   uuid NOT NULL,
     primary key (rid, bid),
-    foreign key (rid) references restaurants (rid),
+    foreign key (rid) references restaurants (rid) on delete cascade,
     foreign key (bid) references branches (bid)
 );
 
 CREATE TABLE registers (
     uid   uuid NOT NULL,
-    rid   char(36) NOT NULL,
+    rid   uuid NOT NULL,
     primary key (uid, rid),
     foreign key (uid) references restaurant_managers (uid),
     foreign key (rid) references restaurants (rid)
@@ -92,7 +92,7 @@ CREATE TABLE categories (
 
 CREATE TABLE belongs (
     cid     uuid NOT NULL,
-    rid     char(36) NOT NULL,
+    rid     uuid NOT NULL,
     primary key (cid, rid),
     foreign key (cid) references categories (cid),
     foreign key (rid) references restaurants (rid)
@@ -101,16 +101,16 @@ CREATE TABLE belongs (
 CREATE TABLE menus (
     name  varchar(50),
     mid   uuid DEFAULT uuid_generate_v4 (),
-    bid   varchar(50) NOT NULL,
+    bid   uuid NOT NULL,
     primary key (mid),
     foreign key (bid) references branches (bid) on delete cascade
 );
 
 CREATE TABLE provides (
-    bid     char(36) NOT NULL,
-    mid     char(36) NOT NULL,
+    bid     uuid NOT NULL,
+    mid     uuid NOT NULL,
     primary key (bid, mid),
-    foreign key (bid) references branches (bid),
+    foreign key (bid) references branches (bid) on delete cascade,
     foreign key (mid) references menus (mid)
 );
 
@@ -119,17 +119,17 @@ CREATE TABLE items (
     name    varchar(50) NOT NULL,
     price   NUMERIC(3,2) NOT NULL,
     description text,
-    mid     char(36) NOT NULL,
+    mid     uuid NOT NULL,
     primary key (iid),
     foreign key (mid) references menus (mid) on delete cascade
 );
 
 CREATE TABLE contains (
-    iid     char(36) NOT NULL,
-    mid     char(36) NOT NULL,
+    iid     uuid NOT NULL,
+    mid     uuid NOT NULL,
     primary key (iid, mid),
     foreign key (iid) references items (iid),
-    foreign key (mid) references menus (mid)
+    foreign key (mid) references menus (mid) on delete cascade
 );
 
 CREATE TABLE reservations (
@@ -143,7 +143,7 @@ CREATE TABLE reservations (
 
 CREATE TABLE processes (
     resid     uuid NOT NULL,
-    bid       char(36) NOT NULL,
+    bid       uuid NOT NULL,
     primary key (resid, bid),
     foreign key (resid) references reservations (resid),
     foreign key (bid) references branches (bid)

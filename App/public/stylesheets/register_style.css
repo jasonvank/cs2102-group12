@@ -26,16 +26,18 @@ body {
 	-ms-border-radius: 8px;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
-	margin: 0 0;
+	top: 50%;
+	transform: translateY(-50%);
 	font-family: 'Roboto', sans-serif;
 	color: #333;
 	font-weight: 400;
-	position: relative;
+	position: absolute;
 	font-size: 18px;
 }
 .form-v5-content .form-detail {
 	padding: 30px 45px 30px 45px;
 	position: relative;
+	height: auto;
 }
 .form-detail h2 {
 	font-weight: 700;

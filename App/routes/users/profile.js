@@ -1,9 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET services page. */
+// GET route after registering
 router.get('/', function(req, res, next) {
-  res.render('services', { title: 'Express' });
+  res.render('users/profile', { title: 'Express' });
 });
-
-module.exports = router;

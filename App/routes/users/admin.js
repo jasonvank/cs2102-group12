@@ -11,7 +11,7 @@ var sql_query = 'SELECT * FROM users';
 
 router.get('/', function(req, res, next) {
 	pool.query(sql_query, (err, data) => {
-		res.render('select', { title: 'User Info', data: data.rows });
+		res.render('users/admin', { title: 'User Info', data: data.rows });
 	});
 });
 

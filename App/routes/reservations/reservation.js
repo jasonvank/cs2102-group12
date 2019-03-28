@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET menu page. */
+/* GET reservation page. */
 router.get('/', function(req, res, next) {
-  res.render('menu', { title: 'Express' });
+  res.render('reservations/reservation', { title: 'Express' });
 });
 
 module.exports = router;

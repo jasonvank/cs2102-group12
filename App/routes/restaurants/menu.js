@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET specialties page. */
+/* GET menu page. */
 router.get('/', function(req, res, next) {
-  res.render('specialties', { title: 'Express' });
+  res.render('restaurants/menu', { title: 'Express' });
 });
 
 module.exports = router;

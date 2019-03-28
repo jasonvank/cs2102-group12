@@ -1,49 +1,41 @@
-var sql_query = require('./sql');
-
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var flash = require('connect-flash');
 
-const exphbs = require('express-handlebars')
-const bodyParser = require('body-parser')
-const session = require('express-session')
-const passport = require('passport')
+var bodyParser = require('body-parser')
+var session = require('express-session')
+var passport = require('passport')
 
 /* --- V7: Using dotenv     --- */
 require('dotenv').config({path: __dirname + '/.env'})
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-/* --- V2: Adding Web Pages --- */
-var aboutRouter = require('./routes/about');
-/* ---------------------------- */
-
-/* --- V3: Basic Template   --- */
+/* --- sample ---*/
 var tableRouter = require('./routes/table');
 var loopsRouter = require('./routes/loops');
-/* ---------------------------- */
-
-/* --- V4: Database Connect --- */
-var selectRouter = require('./routes/select');
-/* ---------------------------- */
-
-/* --- V5: Adding Forms     --- */
 var formsRouter = require('./routes/forms');
-/* ---------------------------- */
 
 
-var registerRouter = require('./routes/register');
-var loginRouter = require('./routes/login')
-var forgotRouter = require('./routes/forgot')
-var reservationRouter = require('./routes/reservation')
-var servicesRouter = require('./routes/services')
-var menuRouter = require('./routes/menu')
-var specialtiesRouter = require('./routes/specialties')
+var indexRouter = require('./routes/index');
+var aboutRouter = require('./routes/about');
 
+/* --- users management --- */
+var registerRouter = require('./routes/users/register');
+var loginRouter = require('./routes/users/login');
+var forgotRouter = require('./routes/users/forgot');
+var adminRouter = require('./routes/users/admin');
+// var profileRouter = require('./routes/users/profile');
+var usersRouter = require('./routes/users/users');
 
+/* --- restarants management --- */
+var menuRouter = require('./routes/restaurants/menu');
+var specialtiesRouter = require('./routes/restaurants/specialties');
+
+/* --- reservations management --- */
+var reservationRouter = require('./routes/reservations/reservation');
+var servicesRouter = require('./routes/reservations/services');
 
 var app = express();
 
@@ -52,13 +44,13 @@ var app = express();
 // require('dotenv').load();
 require('./auth').init(app);
 app.use(session({
-  // secret: process.env.SECRET,
-  secret: "reservation",
+  secret: process.env.SECRET,
   resave: true,
   saveUninitialized: true
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(flash())
 
 
 // view engine setup
@@ -71,36 +63,35 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-/* --- V2: Adding Web Pages --- */
-app.use('/about', aboutRouter);
-/* ---------------------------- */
-
-/* --- V3: Basic Template   --- */
-app.use('/table', tableRouter);
-app.use('/loops', loopsRouter);
-/* ---------------------------- */
-
-/* --- V4: Database Connect --- */
-app.use('/select', selectRouter);
-/* ---------------------------- */
-
-/* --- V5: Adding Forms     --- */
-app.use('/forms', formsRouter);
-/* ---------------------------- */
-
-/* --- V6: Modify Database  --- */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/register', registerRouter);
-app.use('/services', servicesRouter);
+
+/* --- sample --- */
+app.use('/table', tableRouter);
+app.use('/loops', loopsRouter);
+app.use('/forms', formsRouter);
+
+
+app.use('/', indexRouter);
+app.use('/about', aboutRouter);
+
+/* --- restaurants management --- */
 app.use('/menu', menuRouter);
 app.use('/specialties', specialtiesRouter);
-app.use('/reservation', reservationRouter);
+
+/* --- users management --- */
+app.use('/register', registerRouter);
 app.use('/login', loginRouter);
+// app.use('/profile', profileRouter);
+app.use('/admin', adminRouter);
+app.use('/users', usersRouter);
 app.use('/forgot', forgotRouter);
+
+/* --- reservation management --- */
+app.use('/services', servicesRouter);
+app.use('/reservation', reservationRouter);
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

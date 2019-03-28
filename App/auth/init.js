@@ -11,27 +11,24 @@ const antiMiddleware = require('./antimiddle');
 const { Pool } = require('pg');
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
-function findUser (username, callback) {
+function findOne (username, done) {
 	pool.query(sql_query.query.user_login, [username], (err, data) => {
-		if(err) {
-			console.error("Cannot find user");
-			return callback(null);
-		}
-		
-		if(data.rows.length == 0) {
-			console.error("User does not exists?");
-			return callback(null)
-		} else if(data.rows.length == 1) {
-      console.log("+++" + data.rows[0].username);
-			return callback(null, {
-				username    : data.rows[0].username,
+    if (err) {
+      return done(err, false);
+    }
+    if (data.rows.length == 0) {
+      var err = new Error('User not found.');
+      err.status = 401;
+      return done(err, false);
+    } else if(data.rows.length == 1) {
+			return done(null, {
+				username     : data.rows[0].username,
 				password_hash: data.rows[0].password_hash,
       });
 		} else {
-			console.error("More than one user?");
-			return callback(null);
+			return done(null);
 		}
-	});
+  })
 }
 
 passport.serializeUser(function (user, cb) {
@@ -39,32 +36,28 @@ passport.serializeUser(function (user, cb) {
 })
 
 passport.deserializeUser(function (username, cb) {
-  findUser(username, cb);
+  findOne(username, cb);
 })
 
 function initPassport () {
   passport.use(new LocalStrategy(
     (username, password, done) => {
-      findUser(username, (err, user) => {
+      findOne(username, (err, user) => {
         if (err) {
           return done(err);
-        }
-
-        // User not found
-        if (!user) {
-          console.error('User not found');
-          return done(null, false);
+        } else if (!user) {
+          var err = new Error('User not found.');
+          err.status = 401;
+          return done(err);
         }
 
         // Always use hashed passwords and fixed time comparison
         bcrypt.compare(password, user.password_hash, (err, isValid) => {
-          if (err) {
-            return done(err);
+          if (isValid) {
+            return done(null, user);
+          } else {
+            return done(null, false, {message: 'Incorrect password.'});
           }
-          if (!isValid) {
-            return done(null, false);
-          }
-          return done(null, user);
         })
       })
     }
@@ -72,7 +65,7 @@ function initPassport () {
 
   passport.authMiddleware = authMiddleware;
   passport.antiMiddleware = antiMiddleware;
-	passport.findUser = findUser;
+	passport.findOne = findOne;
 }
 
 module.exports = initPassport;

@@ -1,4 +1,4 @@
-const sql_query = require('../sql');
+const sql_query = require('../../sql');
 
 var express = require('express');
 var bcrypt = require('bcrypt');
@@ -9,7 +9,7 @@ const pool = new Pool({connectionString: process.env.DATABASE_URL});
 
 // GET
 router.get('/', function(req, res, next) {
-	res.render('register', { title: 'Logging System' });
+	res.render('users/register', { title: 'Logging System' });
 });
 
 // POST
@@ -21,8 +21,27 @@ router.post('/', function(req, res, next) {
 	var first_name = req.body.first_name;
 
 	pool.query(sql_query.query.user_register, [username, password_hash, last_name, first_name], (err, data) => {
-		res.redirect('/')
+		
+		if(err) {
+			return next(err);
+		} else {
+			console.log(data.user_uid);
+			// req.session.userid = data.sessionID;
+			res.redirect('/profile');
+		}
 	});
 });
+
+// GET route after registering
+router.get('/profile', function (req, res, next) {
+	User.findById(req.session.userIi)
+	  .exec(function (error, user) {
+		if (error) {
+		  return next(error);
+		} else {
+		  return res.json({ name: user.name });
+		}
+	});
+});	
 
 module.exports = router;

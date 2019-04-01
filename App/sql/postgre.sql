@@ -35,7 +35,7 @@ CREATE TABLE branches (
     close_time   TIME NOT NULL,
     ave_Rating   NUMERIC(2,1) NOT NULL DEFAULT 5.0,
     contacts     NUMERIC(10,0) NOT NULL,
-    CHECK (aveRating >= 0.0 and aveRating <= 5.0),
+    CHECK (ave_Rating >= 0.0 and ave_Rating <= 5.0),
     primary key (rid, bid),
     foreign key (name) references restaurants (name) on delete cascade on update cascade
 );

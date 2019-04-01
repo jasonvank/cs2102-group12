@@ -1,19 +1,49 @@
-<!DOCTYPE html>
+<!-- views/profile.ejs -->
+<!doctype html>
 <html>
-  <head>
-		<!-- Page Title -->
-    <title>CS2102 Template</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-		
-		<!-- CSS for Styling -->
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-		
-		<!-- JavaScript for Interactivity -->
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-  </head>
-  <body>
-    <h1>CS2102 Template: <%= title%></h1>
-  </body>
+<head>
+    <title>Node Authentication</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body        { padding-top:80px; word-wrap:break-word; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="page-header text-center">
+        <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+    </div>
+
+    <div>
+      <table class="table">
+        124
+        <tbody>
+             <tr>
+                  <td><%= data.username%></td>
+                  <td><%= data.last_name%></td>
+                  <td><%= data.first_name%></td>
+             </tr>
+       </tbody>
+   </table>
+    </div>
+    <div class="row">
+
+        <!-- LOCAL INFORMATION -->
+        <div class="col-sm-6">
+            <div class="well">
+                <h3><span class="fa fa-user"></span> Local</h3>
+                    <p>
+                        <strong>username</strong>: <%= data.username %><br>
+                        <strong>Last Name</strong>: <%= data.last_name %><br>
+                        <strong>First Name</strong>: <%= data.first_name %>
+                    </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
 </html>

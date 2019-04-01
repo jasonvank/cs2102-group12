@@ -25,8 +25,6 @@ router.post('/', function(req, res, next) {
 		if(err) {
 			return next(err);
 		} else {
-			console.log(data.user_uid);
-			// req.session.userid = data.sessionID;
 			res.redirect('/profile');
 		}
 	});

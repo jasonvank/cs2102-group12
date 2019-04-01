@@ -30,5 +30,4 @@ function check(event) {
 		event.stopPropagation();
 		return false;
 	}
-	console.log("check");
 }

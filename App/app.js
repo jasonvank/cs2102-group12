@@ -22,9 +22,9 @@ var indexRouter = require('./routes/index');
 var aboutRouter = require('./routes/about');
 
 /* --- users management --- */
-var registerRouter = require('./routes/users/register');
-var loginRouter = require('./routes/users/login');
-var forgotRouter = require('./routes/users/forgot');
+// var registerRouter = require('./routes/users/register');
+// var loginRouter = require('./routes/users/login');
+// var forgotRouter = require('./routes/users/forgot');
 var adminRouter = require('./routes/users/admin');
 // var profileRouter = require('./routes/users/profile');
 var usersRouter = require('./routes/users/users');
@@ -80,12 +80,12 @@ app.use('/menu', menuRouter);
 app.use('/specialties', specialtiesRouter);
 
 /* --- users management --- */
-app.use('/register', registerRouter);
-app.use('/login', loginRouter);
+// app.use('/register', registerRouter);
+// app.use('/login', loginRouter);
 // app.use('/profile', profileRouter);
 app.use('/admin', adminRouter);
-app.use('/users', usersRouter);
-app.use('/forgot', forgotRouter);
+// app.use('/users', usersRouter);
+// app.use('/forgot', forgotRouter);
 
 /* --- reservation management --- */
 app.use('/services', servicesRouter);

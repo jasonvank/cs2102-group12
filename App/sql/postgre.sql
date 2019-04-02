@@ -20,7 +20,7 @@ CREATE TABLE restaurant_managers (
 
 CREATE TABLE restaurants (
     rid     uuid DEFAULT uuid_generate_v4 (),
-    uid     uuid UNIQUE NOT NULL,
+    uid     uuid NOT NULL,
     name    varchar(50) UNIQUE NOT NULL,
     primary key (rid),
     foreign key (uid) references restaurant_managers (uid)

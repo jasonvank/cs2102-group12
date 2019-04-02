@@ -11,7 +11,9 @@ sql.query = {
 	// Update
 	update_info: 'UPDATE users SET first_name=$2, last_name=$3 WHERE username=$1',
 	update_pass: 'UPDATE users SET password=$2 WHERE username=$1',
-	
+
+  // Restaurants
+  add_restaurant: 'INSERT INTO restaurants (uid, name) VALUES ($1, $2)',
 }
 
 module.exports = sql

@@ -130,7 +130,8 @@ CREATE TABLE contains (
 
 CREATE TABLE reservations (
     resid       uuid DEFAULT uuid_generate_v4 (),
-    restime     timestamp NOT NULL,
+    restime     time NOT NULL,
+    resdate     date NOT NULL,
     numpeople   integer NOT NULL,
     --bid     char(36) NOT NULL,
     primary key (resid)

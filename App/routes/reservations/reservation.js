@@ -22,12 +22,13 @@ router.get('/', function(req, res, next) {
     res.render('reservations/reservation', {user: req.user}); //the user:req.user is for navbar
     //get user_id of current user
     var user = req.user;
+    console.log(user.user_uid);
     pool.query('select user_uid from users where username = ' + "'" + user.username + "'", (err, data) => {
     	uuid = data.rows[0].user_uid;
     	console.log('user id is ' + uuid);
     });
     /*
-    //check if user is customer, if not, redirect to login
+    //check if user is customer, if not, alert("Only customers can make reservations"); redirect to home page
     pool.query('select user_uid from customers where uid = ' + uuid, (err, data) => {
     	if 
     });

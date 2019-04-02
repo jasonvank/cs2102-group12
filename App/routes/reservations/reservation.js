@@ -47,17 +47,27 @@ router.post('/', function(req, res, next) {
 	var restime = req.body.book_time;
 	var numpeople = req.body.numpeople;
 	console.log("form: " + resdate + ", " + restime + "," + numpeople);
-	//var resid = gen_random_uuid(); need to add CREATE EXTENSION IF NOT EXISTS pgcrypto; to sql
-	var reserve_query = 'insert into reservations value (resid, restime, resdate, numpeople) values (' + resid + ',' + restime + ',' + resdate + ',' + numpeople + ')';
-	var book_query;
-	/*
-	var callback = res.redirect('/confirm');
+	var resid;
+	pool.query('select uuid_generate_v4 ()', (err, data) => {
+		resid = data.rows[0].uuid_generate_v4;
+		console.log(resid);
+	});
+
+	var reserve_query = 'insert into reservations (resid, restime, resdate, numpeople) values (' + resid + ',' + restime + ',' + resdate + ',' + numpeople + ')';
+	var book_query = 'insert into books (resid, uid) values (' + resid + ', ' + uid + ')';
+	var process_query = 'insert into processes (resid, bid) values(' + resid + ', ' + bid + ')';
+	
+	var callback = res.redirect('/'); //change to confirm booking page later
 	//insert into Reservations table
 	pool.query(reserve_query, function(err, data) {
 		if (err) {return "ERROR";}
 		//insert into Books table
-		pool.query(book_query, callback);
-	});*/
+		pool.query(book_query, function(err, data) {
+			if (err) {return "ERROR";}
+			// insert into processes table
+			pool.query(process_query, callback);
+		});
+	});
 });
 
 

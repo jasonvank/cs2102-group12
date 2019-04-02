@@ -11,17 +11,12 @@ const { Pool } = require('pg')
 const pool = new Pool({connectionString: process.env.DATABASE_URL});
 
 /* GET reservation page. */
+
 router.get('/', function(req, res, next) {
 	if (!req.isAuthenticated()){
         res.redirect('/login');
-        console.log("not logged in");
 	}
-    res.render('reservations/reservation', { title: 'Express' });
-
-});
-
-router.get('/', function(req, res, next) {
-  res.render('reservation', {user: req.user});
+    res.render('reservations/reservation', {user: req.user});
 });
 
 

@@ -28,16 +28,17 @@ CREATE TABLE restaurants (
 
 CREATE TABLE branches (
     bid          uuid UNIQUE DEFAULT uuid_generate_v4 (),
-    name         varchar(50),
-    rid          uuid UNIQUE NOT NULL references restaurants (rid),
+    name         varchar(50) UNIQUE NOT NULL,
+    uid          uuid NOT NULL,
     address      varchar(50) NOT NULL,
     open_time    TIME NOT NULL,
     close_time   TIME NOT NULL,
     ave_Rating   NUMERIC(2,1) NOT NULL DEFAULT 5.0,
     contacts     NUMERIC(10,0) NOT NULL,
     CHECK (ave_Rating >= 0.0 and ave_Rating <= 5.0),
-    primary key (rid, bid),
-    foreign key (name) references restaurants (name) on delete cascade on update cascade
+    primary key (bid),
+    foreign key (uid) references restaurant_managers (uid)
+    -- foreign key (name) references restaurants (name) on delete cascade on update cascade
 );
 
 

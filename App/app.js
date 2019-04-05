@@ -33,7 +33,10 @@ var usersRouter = require('./routes/users/users');
 var menuRouter = require('./routes/restaurants/menu');
 var specialtiesRouter = require('./routes/restaurants/specialties');
 var addRestaurantRouter = require('./routes/restaurants/add_restaurant');
+var selectMenuRouter = require('./routes/restaurants/add_item/select_menus');
 var addMenuRouter = require('./routes/restaurants/add_menu');
+var addMenuItemRouter = require('./routes/restaurants/add_item/add_menu_item');
+var reEnterRouter = require('./routes/restaurants/add_item/re_enter_form');
 
 /* --- reservations management --- */
 var reservationRouter = require('./routes/reservations/reservation');
@@ -82,6 +85,9 @@ app.use('/menu', menuRouter);
 app.use('/specialties', specialtiesRouter);
 app.use('/add_restaurant', addRestaurantRouter);
 app.use('/add_menu', addMenuRouter);
+app.use('/add_item/add_menu_item', addMenuItemRouter);
+app.use('/add_item/select_menus', selectMenuRouter)
+app.use('/add_item/re_enter_form', reEnterRouter);
 
 /* --- users management --- */
 // app.use('/register', registerRouter);

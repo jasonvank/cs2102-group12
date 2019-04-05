@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Re enter form</title>
+	<!-- Mobile Specific Metas -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<!-- Font-->
+	<link rel="stylesheet" type="text/css" href="stylesheets/roboto-font.css">
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5/css/fontawesome-all.min.css">
+	<!-- Main Style Css -->
+    <link rel="stylesheet" href="stylesheets/register_style.css"/>
+</head>
+<body class="form-v5">
+	<div class="page-content">
+		<div class="form-v5-content">
+			<form class="form-detail" action="" method="post">
+				<h2>Enter another item?</h2>
+
+        <input type="checkbox" id="Check1" name="Check1" value="Yes" onclick="selectOnlyThis(this.id)" style="margin:1em 1em 5px 5px" />Yes
+        <input type="checkbox" id="Check2" name="Check2" value="No" onclick="selectOnlyThis(this.id)" style="margin:1em 1em 5px 5px" />No
+
+				<div class="form-row-last">
+					<input type="submit" name="register" class="register" value="Confirm">
+				</div>
+      </form>
+
+		</div>
+    <script>
+      function selectOnlyThis(id) {
+        // console.log(id);
+        for (var i = 0; i <= 2; i++) {
+          var element = document.getElementById("Check" + i);
+          if (element){
+            document.getElementById("Check" + i).checked = false;
+          }
+        }
+        document.getElementById(id).checked = true;
+      }
+      </script>
+	</div>
+</body>
+</html>

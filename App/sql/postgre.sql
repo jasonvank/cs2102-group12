@@ -108,7 +108,7 @@ CREATE TABLE menus (
 CREATE TABLE items (
     iid         uuid UNIQUE NOT NULL DEFAULT uuid_generate_v4 (),
     name        varchar(50) NOT NULL,
-    price       NUMERIC(3,2) NOT NULL,
+    price       decimal(8,2) NOT NULL,
     description text,
     mid         uuid NOT NULL,
     primary key (iid, mid, name),

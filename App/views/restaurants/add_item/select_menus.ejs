@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>select which menu to add</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body        { padding-top:80px; word-wrap:break-word; }
+    </style>
+</head>
+<body>
+
+  <p id="para"></p>
+
+<div>
+
+    <div class="page-header text-center">
+        <h1><span class="fa fa-anchor"></span> select which menu to add</h1>
+    </div>
+    <div class="container">
+      <table class='table table-bordered table-condensed table-striped table-hover'>
+     <thead>
+          <tr >
+               <th scope="col"> Menu name</th>
+          </tr>
+     </thead>
+     <tbody>
+       <tbody style="cursor:pointer" >
+          <% for(var i=0; i<data.rows.length; i++) { %>
+          <tr>
+               <td id = 'td1' onclick="content(this)"><%= data.rows[i].name%></td>
+          </tr>
+          <% } %>
+     </tbody>
+</table>
+
+<script>
+function content(elem) {
+  document.getElementById("menu_name").value = elem.innerHTML;
+}
+</script>
+
+		<form class="form-detail" action="" method="post">
+<div class="form-row">
+  <label for="Enter the restaurant name">Selected menu name</label>
+  <input type="name" id="menu_name" name="menu_name" placeholder="menu name from above"  style="width: 300px" required="required">
+</div>
+
+<div class="form-row-last">
+  <input type="submit" name="submit" class="submit" value="submit">
+</div>
+      </form>
+
+    </div>
+
+</div>
+</body>
+</html>

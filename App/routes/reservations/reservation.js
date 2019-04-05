@@ -17,29 +17,42 @@ var bid;
 
 router.get('/', function(req, res, next) {
 	if (!req.isAuthenticated()){ // if not logged in, redirect to login page
-        res.redirect('/login');
+        return res.redirect('/login');
+	} else {
+		return next();
 	}
-    res.render('reservations/reservation', {user: req.user}); //the user:req.user is for navbar
+}, function(req, res, next) {
     //get user_id of current user
     uid = req.user.user_uid;
     console.log("uid:" + uid);
+
+    var checkCustQuery = 'select case when not exists(select * from customers where uid = ' + "'" + uid + "'" + ') then 1 else 0 end as result';
+    pool.query(checkCustQuery, (err, data) => {
+    	var isNotCustomer = data.rows[0].result;
+    	var error = err;
+    	if (err) {
+	    	return next();
+	    } else if (isNotCustomer == 1) {
+			console.log("Only customers can make reservations");
+			return res.redirect('/');
+	    } else {
+	    	return next();
+    	}
+ 	});
+
     /*
-    //check if user is customer, if not, alert("Only customers can make reservations"); redirect to home page
-    pool.query('select user_type from users where user_uid = ' + uid, (err, data) => {
-    	var type = data.rows[0].user_type;
-
-    });
-
     //get bid of branch. (get redirect parameter value)
     var params = req.query;
 		//if no bid in params
 		if (!params.bid) {
-			alert("please find a restaurant branch first");
+			//alert("please find a restaurant branch first");
 		} else {
 			bid = params.bid;
 		}
 	*/
-});
+}, function(req, res, next) {
+    res.render('reservations/reservation', {user: req.user}); //the user:req.user is for navbar
+});	    
 
 // POST reservation
 router.post('/', function(req, res, next) {

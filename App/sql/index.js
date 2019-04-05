@@ -13,7 +13,8 @@ sql.query = {
 	update_pass: 'UPDATE users SET password=$2 WHERE username=$1',
 
   // Restaurants
-  add_restaurant: 'INSERT INTO restaurants (uid, name) VALUES ($1, $2)',
+  user_restaurant: 'SELECT * FROM branches WHERE uid=$1',
+  add_restaurant: 'INSERT INTO branches (uid, name, address, open_time, close_time, contacts) VALUES ($1, $2, $3, $4, $5, $6)',
 }
 
 module.exports = sql

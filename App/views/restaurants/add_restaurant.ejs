@@ -21,22 +21,32 @@
 					<input type="text" name="name" id="name" class="input-text" placeholder="Your new restaurant name" required>
 					<i class="fas fa-user"></i>
 				</div>
-				<!-- <div class="form-row">
-					<label for="first-name">First Name</label>
-					<input type="text" name="first_name" id="first_name" class="input-text" placeholder="Your First name" required>
-					<i class="fas fa-user"></i>
-        </div>
-        <div class="form-row">
-					<label for="last-name">Last Name</label>
-					<input type="text" name="last_name" id="last_name" class="input-text" placeholder="Your Last name" required>
-					<i class="fas fa-user"></i>
-				</div>
 
 				<div class="form-row">
-					<label for="password">Password</label>
-					<input type="password" name="password" id="password" class="input-text" placeholder="Your Password" required>
-					<i class="fas fa-lock"></i>
-        </div> -->
+					<label for="your restaurant address">address</label>
+					<input type="text" name="address" id="address" class="input-text" placeholder="Your new restaurant's address" required>
+					<!-- <i class="fas fa-user"></i> -->
+        </div>
+
+        <div class="form-row">
+          <label for="Choose your opening time">open_time</label>
+          <input type="time" id="open_time" name="open_time" min="6:00" max="18:00" required>
+          <!-- <i class="fas fa-user"></i> -->
+          <!-- <span class="note">Office hours are 9am to 6pm</span> -->
+				</div>
+
+        <div class="form-row">
+          <label for="Choose your closing time:">close_time</label>
+          <input type="time" id="close_time" name="close_time">
+          <!-- <i class="fas fa-user"></i> -->
+          <!-- <span class="note">Office hours are 9am to 6pm</span> -->
+        </div>
+
+				<div class="form-row">
+					<label for="Your restaurant contact">contacts</label>
+          <input type="tel" name="contacts" maxlength="10" placeholder="Your new restaurant's contact" required>
+          <!-- <i class="fas fa-lock"></i> -->
+        </div>
 
         <!-- <div class="row">
           <input class="radio col s6" type="radio" id="customer" name="usertype" value="customer">

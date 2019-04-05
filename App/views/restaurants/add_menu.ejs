@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Choos from your current restarants</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body        { padding-top:80px; word-wrap:break-word; }
+    </style>
+</head>
+<body>
+
+  <p id="para"></p>
+
+<div class="container">
+
+    <div class="page-header text-center">
+        <h1><span class="fa fa-anchor"></span> Choos from your current restarants</h1>
+        <!-- <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+        <a href="/add_branch" class="btn btn-default btn-sm">Add branch</a>
+        <a href="/add_restaurant" class="btn btn-default btn-sm">Add restaurant</a>
+        <a href="/add_menu" class="btn btn-default btn-sm">Add menus to your restarants</a> -->
+    </div>
+    <div class="container">
+      <table class='table table-bordered table-condensed table-striped table-hover'>
+     <thead>
+          <tr style = 'cursor: pointer'>
+               <th scope="col">Restaurant name</th>
+               <th scope="col">Address</th>
+               <th scope="col">contact</th>
+          </tr>
+     </thead>
+     <tbody>
+       <tbody style="cursor:pointer">
+          <% for(var i=0; i<data.rows.length; i++) { %>
+          <tr>
+               <td id="td1" onclick="content(this)"><%= data.rows[i].name%></td>
+               <td id="td1" onclick="content(this)"><%= data.rows[i].address%></td>
+               <td id="td1" onclick="content(this)"><%= data.rows[i].contacts%></td>
+          </tr>
+          <% } %>
+     </tbody>
+</table>
+
+<script>
+
+function content(elem) {
+  elem.style.background = "red";
+
+  var p = document.getElementById("para");
+  p.innerHTML = 'You cloced on cell:' + ' ' + elem.innerText;
+}
+</script>
+
+		<form class="form-detail" action="" method="post">
+<div class="form-row">
+  <label for="Enter the restaurant name">Enter the restaurant name</label>
+  <input type="name" id="name" name="name" placeholder="restaurant name from above"  style="width: 300px" required="required">
+  <!-- <i class="fas fa-user"></i> -->
+  <!-- <span class="note">Office hours are 9am to 6pm</span> -->
+</div>
+
+<div class="form-row-last">
+  <input type="submit" name="submit" class="submit" value="submit">
+</div>
+      </form>
+
+    </div>
+
+</div>
+</body>
+</html>

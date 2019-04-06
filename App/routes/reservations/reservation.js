@@ -51,7 +51,7 @@ router.get('/', function(req, res, next) {
 		}
 	*/
 }, function(req, res, next) {
-    res.render('reservations/reservation', {user: req.user}); //the user:req.user is for navbar
+    res.render('reservations/reservation', {user: req.user, /*points: req.user.points*/}); //the user is for navbar, points for displaying use points button
 });	    
 
 // POST reservation
@@ -59,6 +59,8 @@ router.post('/', function(req, res, next) {
 	var resdate = req.body.book_date;
 	var restime = req.body.book_time;
 	var numpeople = req.body.numpeople;
+	var usereward = req.body.usereward;
+
 	console.log("form: " + resdate + ", " + restime + "," + numpeople);
 	var resid;
 	pool.query('select uuid_generate_v4 ()', (err, data) => {
@@ -69,8 +71,25 @@ router.post('/', function(req, res, next) {
 	var reserve_query = 'insert into reservations (resid, restime, resdate, numpeople) values (' + resid + ',' + restime + ',' + resdate + ',' + numpeople + ')';
 	var book_query = 'insert into books (resid, uid) values (' + resid + ', ' + uid + ')';
 	var process_query = 'insert into processes (resid, bid) values(' + resid + ', ' + bid + ')';
+	var get_rewid = 'select rewid from rewards where uid = ' + uid;
+	var rewid;
+	pool.query(get_rewid, (err, data) => {
+		rewid = data.rows[0].rewid;
+		console.log("rewid:" + rewid);
+	});
+	var usereward_query = 'insert into uses (rewid, resid) values (' + rewid + ',' + resid + ')';
+	var update_reward_pt = 'update rewards set value = value - 100 where uid = ' + uid;
 	
-	var callback = res.redirect('/'); //change to confirm booking page later
+	if (usereward == 'on') {
+		pool.query(usereward_query, (err, data) => {
+			if (err) {return "ERROR";}
+			pool.query(update_reward_pt, (err,data) => {
+				if (err) {return "ERROR";}
+			});
+		});
+	}
+	
+	var callback = res.redirect('/profile'); 
 	//insert into Reservations table
 	pool.query(reserve_query, function(err, data) {
 		if (err) {return "ERROR";}

@@ -1,4 +1,6 @@
 -- drop table assigns;
+drop trigger if_menu_name_existed ON menus;
+drop function trig_addMenu();
 drop table belongs;
 drop table books;
 drop table rate;

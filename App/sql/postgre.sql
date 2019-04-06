@@ -125,8 +125,7 @@ CREATE TABLE items (
 
 CREATE TABLE reservations (
     resid       uuid DEFAULT uuid_generate_v4 (),
-    restime     time NOT NULL,
-    resdate     date NOT NULL,
+    restime     timestamp NOT NULL,
     numpeople   integer NOT NULL,
     --rid     char(36) NOT NULL,
     primary key (resid)
@@ -178,9 +177,89 @@ CREATE TABLE rate (
   primary key (resid, uid, rid)
 );
 
-INSERT INTO users (username, password_hash, first_name, last_name)
-VALUES ('spring', '$2b$10$13BWk/6YJ4JYlxPvkNTnqeT6J8zsPTe592QIen.Le7apc921uebUW', 'Sprint', 'Season');
-INSERT INTO users (username, password_hash, first_name, last_name)
-VALUES ('summer', '$2b$10$Pdcb3BDaN1wATBHyZ0Fymurw1Js01F9nv6xgff42NfOmTrdXT1A.i', 'Summer', 'Season');
-INSERT INTO users (username, password_hash, first_name, last_name)
-VALUES ('autumn', '$2b$10$vS4KkX8uenTCNooir9vyUuAuX5gUhSGVql8yQdsDDD4TG8bSUjkt.', 'Autumn', 'Season');
+CREATE OR REPLACE FUNCTION trig_addMenu()
+RETURNS TRIGGER AS
+$$
+DECLARE check_name uuid;
+BEGIN
+SELECT mid INTO check_name FROM menus WHERE name = NEW.name AND rid = NEW.rid;
+IF check_name IS NOT NULL THEN
+IF TG_OP = 'UPDATE' AND NEW.mid = check_name THEN
+RETURN NEW;
+END IF;
+RAISE NOTICE 'MENU NAME EXISTED !';
+RAISE EXCEPTION 'Menu name entered is already existed: %', NEW.name
+      USING HINT = 'Please check your entered name';
+RETURN NULL;
+ELSE
+RETURN NEW;
+END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER if_menu_name_existed
+BEFORE INSERT OR UPDATE ON menus
+FOR EACH ROW
+EXECUTE PROCEDURE trig_addMenu();
+
+
+CREATE OR REPLACE FUNCTION trig_addRestaurant()
+RETURNS TRIGGER AS
+$$
+DECLARE check_name uuid;
+BEGIN
+SELECT rid INTO check_name FROM restaurants WHERE name = NEW.name;
+IF check_name IS NOT NULL THEN
+IF TG_OP = 'UPDATE' AND NEW.rid = check_name THEN
+RETURN NEW;
+END IF;
+RAISE NOTICE 'RESTAURANT NAME EXISTED !';
+RAISE EXCEPTION 'Restaurant name entered is already existed: %', NEW.name
+      USING HINT = 'Please check your entered name';
+RETURN NULL;
+ELSE
+RETURN NEW;
+END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER if_restaurant_name_existed
+BEFORE INSERT OR UPDATE ON restaurants
+FOR EACH ROW
+EXECUTE PROCEDURE trig_addRestaurant();
+
+CREATE OR REPLACE FUNCTION trig_addItem()
+RETURNS TRIGGER AS
+$$
+DECLARE check_name uuid;
+BEGIN
+SELECT iid INTO check_name FROM items WHERE name = NEW.name and mid = NEW.mid;
+IF check_name IS NOT NULL THEN
+IF TG_OP = 'UPDATE' AND NEW.iid = check_name THEN
+RETURN NEW;
+END IF;
+RAISE NOTICE 'ITEM NAME EXISTED !';
+RAISE EXCEPTION 'Item name entered is already existed: %', NEW.name
+      USING HINT = 'Please check your entered name';
+RETURN NULL;
+ELSE
+RETURN NEW;
+END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER if_item_name_existed
+BEFORE INSERT OR UPDATE ON items
+FOR EACH ROW
+EXECUTE PROCEDURE trig_addItem();
+
+
+-- INSERT INTO users (username, password_hash, first_name, last_name)
+-- VALUES ('spring', '$2b$10$13BWk/6YJ4JYlxPvkNTnqeT6J8zsPTe592QIen.Le7apc921uebUW', 'Sprint', 'Season');
+-- INSERT INTO users (username, password_hash, first_name, last_name)
+-- VALUES ('summer', '$2b$10$Pdcb3BDaN1wATBHyZ0Fymurw1Js01F9nv6xgff42NfOmTrdXT1A.i', 'Summer', 'Season');
+-- INSERT INTO users (username, password_hash, first_name, last_name)
+-- VALUES ('autumn', '$2b$10$vS4KkX8uenTCNooir9vyUuAuX5gUhSGVql8yQdsDDD4TG8bSUjkt.', 'Autumn', 'Season');

@@ -37,6 +37,15 @@ var selectMenuRouter = require('./routes/restaurants/add_item/select_menus');
 var addMenuRouter = require('./routes/restaurants/add_menu');
 var addMenuItemRouter = require('./routes/restaurants/add_item/add_menu_item');
 var reEnterRouter = require('./routes/restaurants/add_item/re_enter_form');
+var updateRestaurantRouter = require('./routes/restaurants/edit_restaurant');
+var updateMenuRouter = require('./routes/restaurants/edit_menu/select_menus');
+var updateMenuNameRouter = require('./routes/restaurants/edit_menu/edit_name');
+var updateItem_SelectMenusRouter = require('./routes/restaurants/edit_item/select_menus');
+var updateItem_SelectItemsRouter = require('./routes/restaurants/edit_item/select_items');
+var updateItem_UpdateFieldsRouter = require('./routes/restaurants/edit_item/edit_fields');
+var reEditRouter = require('./routes/restaurants/edit_item/re_edit_form');
+// var addRestaurantErrorRouter = require('./routes/restaurants/add_restaurant');
+// var addMenuErrorRouter = require('./routes/restaurants/add_menu');
 
 /* --- reservations management --- */
 var reservationRouter = require('./routes/reservations/reservation');
@@ -88,6 +97,15 @@ app.use('/add_menu', addMenuRouter);
 app.use('/add_item/add_menu_item', addMenuItemRouter);
 app.use('/add_item/select_menus', selectMenuRouter)
 app.use('/add_item/re_enter_form', reEnterRouter);
+app.use('/edit_restaurant', updateRestaurantRouter);
+app.use('/edit_menu/select_menus', updateMenuRouter);
+app.use('/edit_menu/edit_name', updateMenuNameRouter);
+app.use('/edit_item/select_menus', updateItem_SelectMenusRouter);
+app.use('/edit_item/select_items', updateItem_SelectItemsRouter);
+app.use('/edit_item/edit_fields', updateItem_UpdateFieldsRouter);
+app.use('/edit_item/re_edit_form', reEditRouter);
+// app.use('/add_restaurant_error',addRestaurantErrorRouter);
+// app.use('/add_menu_error',addMenuErrorRouter);
 
 /* --- users management --- */
 // app.use('/register', registerRouter);

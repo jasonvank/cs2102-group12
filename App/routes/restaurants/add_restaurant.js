@@ -13,8 +13,15 @@ client.connect();
 // GET
 router.get('/', function(req, res, next) {
   if (!req.user) res.redirect('/login');
-  res.render('restaurants/add_restaurant', {user: req.user});
-});
+    client.query(sql_query.query.user_restaurant, [req.user.user_uid], function(err, data) {
+      if (err) return next(err);
+      if (data.rows[0]) {
+        return res.render('restaurants/error_page/add_restaurant_error');
+      } else {
+        res.render('restaurants/add_restaurant', {user: req.user});
+      }
+    });
+  });
 
 // post
 router.post('/', function(req, res, next) {
@@ -27,27 +34,29 @@ router.post('/', function(req, res, next) {
   var uid = req.user.user_uid;
   var menu_name = req.body.menu_name;
 
-  var rollback = function(client) {
+  var rollback = function(client, err) {
     //terminating a client connection will
     //automatically rollback any uncommitted transactions
     //so while it's not technically mandatory to call
     //ROLLBACK it is cleaner and more correct
     client.query('ROLLBACK', function() {
+      // console.log("Wrong");
+      return res.render('restaurants/error_page/operation_error', {data: err.message});
       client.end();
     });
   };
 
   client.query('BEGIN', function(err, data) {
-    if(err) return rollback(client);
+    if(err) return rollback(client, err);
     client.query(sql_query.query.add_restaurant, [uid, name, address, open_time, close_time, contacts], function(err, data) {
-          if (err) return rollback(client);
+          if (err) return rollback(client, err);
           var rid = data.rows[0].rid;
           client.query(sql_query.query.register_restaurant, [uid, rid], function(err, data) {
-            if (err) rollback(client);
+            if (err) rollback(client, err);
             client.query(sql_query.query.add_menu, [rid, menu_name], function(err, data) {
-              if (err) rollback(client);
+              if (err) rollback(client, err);
               client.query('COMMIT', client.end.bind(client));
-              res.redirect('/profile');
+              return res.redirect('/profile');
             })
           })
         })

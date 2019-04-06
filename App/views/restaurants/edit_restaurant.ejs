@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Edit Restaurants</title>
+	<!-- Mobile Specific Metas -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<!-- Font-->
+	<link rel="stylesheet" type="text/css" href="stylesheets/roboto-font.css">
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5/css/fontawesome-all.min.css">
+	<!-- Main Style Css -->
+    <link rel="stylesheet" href="stylesheets/register_style.css"/>
+</head>
+<body class="form-v5">
+	<div class="page-content">
+		<div class="form-v5-content">
+			<form class="form-detail" action="" method="post">
+				<h2>Edit Restaurant Form</h2>
+				<div class="form-row">
+					<label for="your-restaurant-name">name</label>
+					<input type="text" name="name" id="name" class="input-text" placeholder="Your new restaurant name" required>
+					<i class="fas fa-user"></i>
+				</div>
+
+				<div class="form-row">
+					<label for="your restaurant address">address</label>
+					<input type="text" name="address" id="address" class="input-text" placeholder="Your new restaurant's address" required>
+					<!-- <i class="fas fa-user"></i> -->
+        </div>
+
+        <div class="form-row">
+          <label for="Choose your opening time">open_time</label>
+          <input type="time" id="open_time" name="open_time" min="6:00" max="18:00" required>
+          <!-- <i class="fas fa-user"></i> -->
+          <!-- <span class="note">Office hours are 9am to 6pm</span> -->
+				</div>
+
+        <div class="form-row">
+          <label for="Choose your closing time:">close_time</label>
+          <input type="time" id="close_time" name="close_time">
+          <!-- <i class="fas fa-user"></i> -->
+          <!-- <span class="note">Office hours are 9am to 6pm</span> -->
+        </div>
+
+				<div class="form-row">
+					<label for="Your restaurant contact">contacts</label>
+          <input type="tel" name="contacts" id="contacts" maxlength="10" placeholder="Your new restaurant's contact" required>
+          <!-- <i class="fas fa-lock"></i> -->
+        </div>
+
+        <!-- <div class="row">
+          <input class="radio col s6" type="radio" id="customer" name="usertype" value="customer">
+          <label class="radio-label" for="customer">Customer</label>
+
+          <input class="radio col s6" type="radio" id="branch_manager" name="usertype" value="branch_manager">
+					<label class="radio-label" for="manager">Branch Manager</label>
+
+					<input class="radio col s6" type="radio" id="restaurant_manager" name="usertype" value="restaurant_manager">
+					<label class="radio-label" for="manager">Restaurant Manager</label>
+
+        </div> -->
+
+				<div class="form-row-last">
+					<input type="submit" name="register" class="register" value="Update">
+				</div>
+      </form>
+
+		</div>
+
+    <script>
+        var name = "<%= data.name %>";
+        var address = "<%= data.address %>";
+        var open_time = "<%= data.open_time %>";
+        var close_time = "<%= data.close_time %>";
+        var contacts = "<%= data.contacts %>";
+        document.getElementById("name").value = name;
+        document.getElementById("address").value = address;
+        document.getElementById("open_time").value = open_time;
+        document.getElementById("close_time").value = close_time;
+        document.getElementById("contacts").value = contacts;
+    </script>
+
+	</div>
+</body>
+</html>

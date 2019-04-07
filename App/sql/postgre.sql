@@ -258,6 +258,17 @@ BEFORE INSERT OR UPDATE ON items
 FOR EACH ROW
 EXECUTE PROCEDURE trig_addItem();
 
+-- Categories
+INSERT INTO categories (cid, name)
+VALUES (1, 'chinese');
+INSERT INTO categories (cid, name)
+VALUES (2, 'korean');
+INSERT INTO categories (cid, name)
+VALUES (3, 'indian');
+INSERT INTO categories (cid, name)
+VALUES (4, 'wesetern');
+INSERT INTO categories (cid, name)
+VALUES (5, 'japanese');
 
 --Users
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name)

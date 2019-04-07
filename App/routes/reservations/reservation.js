@@ -71,11 +71,15 @@ router.post('/', function(req, res, next) {
 	var reserve_query = 'insert into reservations (resid, restime, resdate, numpeople) values (' + resid + ',' + restime + ',' + resdate + ',' + numpeople + ')';
 	var book_query = 'insert into books (resid, uid) values (' + resid + ', ' + uid + ')';
 	var process_query = 'insert into processes (resid, bid) values(' + resid + ', ' + bid + ')';
-	var get_rewid = 'select rewid from rewards where uid = ' + uid;
+	var get_rewid = 'select rewid from earns where uid = ' + uid;
 	var rewid;
 	pool.query(get_rewid, (err, data) => {
-		rewid = data.rows[0].rewid;
-		console.log("rewid:" + rewid);
+		if (err) {
+			console.log("each customer should be mapped to a reward in the rewards and earns tables");
+		} else {
+			rewid = data.rows[0].rewid;
+			console.log("rewid:" + rewid);
+		}
 	});
 	var usereward_query = 'insert into uses (rewid, resid) values (' + rewid + ',' + resid + ')';
 	var update_reward_pt = 'update rewards set value = value - 100 where uid = ' + uid;
@@ -89,7 +93,7 @@ router.post('/', function(req, res, next) {
 		});
 	}
 	
-	var callback = res.redirect('/profile'); 
+	var callback = res.redirect('/user/' + req.user.username); 
 	//insert into Reservations table
 	pool.query(reserve_query, function(err, data) {
 		if (err) {return "ERROR";}

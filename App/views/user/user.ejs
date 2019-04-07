@@ -55,11 +55,11 @@
                             restaurant</a></div>
                     <div class="row"><a href="/user/<%= data.username %>/add_menu"
                                         class="btn btn-default btn-sm btn-length">Add menu</a>
-                        <a href="/user/edit_menu/select_menus" class="btn btn-default btn-sm btn-length">Edit menu</a>
+                        <a href="/user/<%= data.username %>/edit_menu/select_menus" class="btn btn-default btn-sm btn-length">Edit menu</a>
                     </div>
-                    <div class="row"><a href="/user/add_item/select_menus" class="btn btn-default btn-sm btn-length">Add
+                    <div class="row"><a href="/user/<%= data.username %>/add_item/select_menus" class="btn btn-default btn-sm btn-length">Add
                             item</a>
-                        <a href="/user/edit_item/select_menus" class="btn btn-default btn-sm btn-length">Edit item</a>
+                        <a href="/user/<%= data.username %>/edit_item/select_menus" class="btn btn-default btn-sm btn-length">Edit item</a>
                     </div>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                 <td><%= current_reservations[i].address %></td>
                 <td><%= current_reservations[i].categories %></td>
                 <td><%= current_reservations[i].rating %></td>
-                <td><a href='/user/<%= current_reservations[i].reservation_id %>/cancel'>Cancel</a></td>
+                <td><a href='/user/<%= data.username %>/<%= current_reservations[i].reservation_id %>/cancel'>Cancel</a></td>
             </tr>
             <% } %>
             <% } else { %>
@@ -106,6 +106,7 @@
                 <th>Contact</th>
                 <th>First Name</th>
                 <th>Last Name</th>
+                <th>Action</th>
             </tr>
             <% for(var i = 0; new_bookings !== undefined && i < new_bookings.length; i++) { %>
             <tr>
@@ -117,7 +118,7 @@
                 <td><%= new_bookings[i].contact_number %></td>
                 <td><%= new_bookings[i].last_name %></td>
                 <td><%= new_bookings[i].first_name %></td>
-                <td><a href='/user/<%= new_bookings[i].reservation_id %>/reject'>Reject</a></td>
+                <td><a href='/user/<%= data.username %>/<%= new_bookings[i].reservation_id %>/reject'>Reject</a></td>
             </tr>
             <% } %>
             <% } %>

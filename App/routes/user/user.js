@@ -30,21 +30,20 @@ router.get('/:userId', function (req, res, next) {
   pool.query(sql_query.query.user_info, [req.user.username], (err, data) => {
     if (err) {
       res.redirect('/login');
-    } else {
-      var user_uid = req.user.user_uid;
-      // if user is customer
-      pool.query(sql_query.query.check_usertype, [user_uid], (err, data) => {
-        if (err) {
-          return res.redirect('/login');
-        } else {
-          if (data.rows.length != 0) {
-            return new_bookings(user_uid, req, res)
-          } else {
-            return current_reservations(user_uid, req, res);
-          }
-        }
-      })
     }
+    var user_uid = req.user.user_uid;
+    // if user is customer
+    return pool.query(sql_query.query.check_usertype, [user_uid], (err, data) => {
+      if (err) {
+        return res.redirect('/login');
+      } else {
+        if (data.rows.length != 0) {
+          return new_bookings(user_uid, req, res)
+        } else {
+          return current_reservations(user_uid, req, res);
+        }
+      }
+    })
   });
 });
 // End user profile page -----------------------------------------------------------------------------------
@@ -192,7 +191,7 @@ router.post('/:userId/add_menu', function (req, res, next) {
   pool.query(sql_query.query.user_restaurant, [req.user.user_uid], (err, data) => {
     if (err) return next(err);
     var errorMessage = {
-      message: "Plase register your restaurant first!",
+      message: "Please register your restaurant first!",
       user_name: req.user.username
     };
     if (!data.rows[0]) return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
@@ -293,11 +292,10 @@ function customer_history(user_uid, req, res) {
 
 function manager_history(user_uid, req, res) {
   pool.query(sql_query.query.manager_history, [user_uid], (err, data) => {
-    console.log(JSON.stringify(data));
     if (err) {
-      res.redirect('/user/' + req.user.username);
+      return res.redirect('/user/' + req.user.username);
     } else {
-      res.render('user/history', {data: data[0]});
+      return res.render('user/history', {data: data[0]});
     }
   });
 }
@@ -308,10 +306,10 @@ function new_bookings(user_uid, req, res) {
   pool.query(sql_query.query.new_bookings, [restaurant_id], (err, data) => {
     console.log(JSON.stringify(data));
     if (err) {
-      res.redirect('/user/' + req.user.username);
+      return res.redirect('/user/' + req.user.username);
     } else {
       console.log(JSON.stringify(data));
-      res.render('user/user', {
+      return res.render('user/user', {
         // data: data[0],
         new_bookings: data.rows,
         data: req.user,

@@ -11,7 +11,7 @@ const { Pool } = require('pg')
 const pool = new Pool({connectionString: process.env.DATABASE_URL});
 
 router.get('/', function(req, res, next) {
-  res.render('users/login', { message: req.flash('info') });
+  res.render('user/login', { message: req.flash('info') });
 });
 
 router.post('/', passport.authenticate('local', {

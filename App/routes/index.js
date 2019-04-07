@@ -1,17 +1,14 @@
 const sql_query = require('../sql');
 var express = require('express');
 var router = express.Router();
-var express = require('express');
-var router = express.Router();
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var path = require('path');
-var flash = require('connect-flash');
 
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const { Pool } = require('pg')
 const pool = new Pool({connectionString: process.env.DATABASE_URL});
+
+var userRouter = require('./user/user');
+router.use('/user', userRouter);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -20,7 +17,7 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/login', function(req, res, next) {
-  res.render('users/login', { message: req.flash('loginMessage') });
+  res.render('user/login', { message: req.flash('loginMessage') });
 });
 
 router.get('/flash', function(req, res) {
@@ -29,30 +26,14 @@ router.get('/flash', function(req, res) {
 
 // GET
 router.get('/register', function(req, res, next) {
-	res.render('users/register', { title: 'Logging System' });
+	res.render('user/register', { title: 'Logging System' });
 });
 
-// GET route after registering
-router.get('/profile', isLoggedIn, function (req, res, next) {
-  if (!req.user.username) {
-    res.redirect('/login');
-  }
-  pool.query(sql_query.query.user_info, [req.user.username], (err, data) => {
-    if(err) {
-      res.redirect('/login');
-    } else { 
-      res.render('users/profile', {
-        data : data.rows[0]
-      });
-    }
-  });
-});	
-
-router.post('/login', passport.authenticate('local', {
-		successRedirect: '/profile',
-		failureRedirect: '/login',
-		failureFlash: 'Incorrect Password or username'
-}));
+router.post('/login', passport.authenticate('local'), function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    res.redirect('/user/' + req.user.username);
+});
 
 
 router.post('/register', function (req, res, next) {
@@ -62,7 +43,7 @@ router.post('/register', function (req, res, next) {
 	var last_name       = req.body.last_name;
 	var first_name      = req.body.first_name;
   var user_type       = req.body.usertype;
-
+ 
   pool.query(sql_query.query.user_register, [username, password_hash, last_name, first_name],  (err, data) => {
     var user_uid;
     if(err || !data.rows || data.rows.length == 0) {
@@ -76,14 +57,8 @@ router.post('/register', function (req, res, next) {
           return next();
         }
       });
-    } else if (user_type == "branch_manager") {
-      pool.query(sql_query.query.branch_manager_register, [user_uid], (err2, data2) => {
-        if(err || !data.rows || data.rows.length == 0) {
-          return next();
-        }
-      });
-    } else if (user_type == "restaurant_manager") {
-      pool.query(sql_query.query.restaurant_manager_register, [user_uid], (err2, data2) => {
+    } else {
+      pool.query(sql_query.query.manager_register, [user_uid], (err2, data2) => {
         if(err || !data.rows || data.rows.length == 0) {
           return next();
         }
@@ -97,7 +72,7 @@ router.post('/register', function (req, res, next) {
       if(err) {
         return res.redirect('/login');
       } else {
-        return res.redirect('/profile');
+        return res.redirect('/user/' + username);
       }
     });
   });

@@ -21,13 +21,9 @@ var formsRouter = require('./routes/forms');
 var indexRouter = require('./routes/index');
 var aboutRouter = require('./routes/about');
 
-/* --- users management --- */
-// var registerRouter = require('./routes/users/register');
-// var loginRouter = require('./routes/users/login');
-// var forgotRouter = require('./routes/users/forgot');
+var userRouter  = require('./routes/user/user');
+
 var adminRouter = require('./routes/users/admin');
-// var profileRouter = require('./routes/users/profile');
-var usersRouter = require('./routes/users/users');
 
 /* --- restarants management --- */
 var menuRouter = require('./routes/restaurants/menu');
@@ -78,6 +74,7 @@ app.use('/forms', formsRouter);
 
 
 app.use('/', indexRouter);
+
 app.use('/about', aboutRouter);
 
 /* --- restaurants management --- */
@@ -90,12 +87,8 @@ app.use('/add_item/select_menus', selectMenuRouter)
 app.use('/add_item/re_enter_form', reEnterRouter);
 
 /* --- users management --- */
-// app.use('/register', registerRouter);
-// app.use('/login', loginRouter);
-// app.use('/profile', profileRouter);
 app.use('/admin', adminRouter);
-// app.use('/users', usersRouter);
-// app.use('/forgot', forgotRouter);
+app.use('/user', userRouter);
 
 /* --- reservation management --- */
 app.use('/services', servicesRouter);
@@ -105,6 +98,11 @@ app.use('/reservation', reservationRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
+});
+
+// catch 500 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(500));
 });
 
 // error handler

@@ -32,7 +32,8 @@ sql.query = {
   user_item: 'SELECT * FROM items WHERE mid =$1',
   item_name_to_iid: 'SELECT iid FROM items WHERE mid = $1 AND name = $2',
   user_item_by_iid: 'SELECT * FROM items WHERE iid = $1',
-
+	cat_name_to_cid: 'SELECT cid FROM categories WHERE name = $1',
+	add_category: 'INSERT INTO belongs (cid, rid) VALUES ($1, $2)',
 
   //update Restaurant
   update_restaurant: 'UPDATE restaurants SET name=$2, address=$3, open_time=$4, close_time=$5, contacts=$6 WHERE rid=$1',

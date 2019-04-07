@@ -151,7 +151,7 @@ CREATE TABLE books (
 
 CREATE TABLE rewards (
     rewid   uuid DEFAULT uuid_generate_v4 (),
-    value   NUMERIC(3,2) NOT NULL,
+    value   NUMERIC(5,2) NOT NULL,
     primary key (rewid)
 );
 
@@ -168,7 +168,7 @@ CREATE TABLE ratings (
     ave_Rating   NUMERIC(2,1) NOT NULL DEFAULT 5.0,
     CHECK (ave_Rating >= 0.0 and ave_Rating <= 5.0),
     primary key (rid),
-    foreign key (rid) references b (rid) on delete cascade
+    foreign key (rid) references restaurants (rid) on delete cascade
 );
 
 CREATE TABLE rate (
@@ -178,9 +178,39 @@ CREATE TABLE rate (
   primary key (resid, uid, rid)
 );
 
-INSERT INTO users (username, password_hash, first_name, last_name)
-VALUES ('spring', '$2b$10$13BWk/6YJ4JYlxPvkNTnqeT6J8zsPTe592QIen.Le7apc921uebUW', 'Sprint', 'Season');
-INSERT INTO users (username, password_hash, first_name, last_name)
-VALUES ('summer', '$2b$10$Pdcb3BDaN1wATBHyZ0Fymurw1Js01F9nv6xgff42NfOmTrdXT1A.i', 'Summer', 'Season');
+
+--Users
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name)
+VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', 'spring', '$2b$10$13BWk/6YJ4JYlxPvkNTnqeT6J8zsPTe592QIen.Le7apc921uebUW', 'Sprint', 'Season');
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name)
+VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e', 'summer', '$2b$10$Pdcb3BDaN1wATBHyZ0Fymurw1Js01F9nv6xgff42NfOmTrdXT1A.i', 'Summer', 'Season');
 INSERT INTO users (username, password_hash, first_name, last_name)
 VALUES ('autumn', '$2b$10$vS4KkX8uenTCNooir9vyUuAuX5gUhSGVql8yQdsDDD4TG8bSUjkt.', 'Autumn', 'Season');
+--customers
+INSERT INTO customers (uid)
+VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e');
+
+--customer reward
+INSERT INTO rewards (rewid, value)
+VALUES ('fe6400b3-1e84-405e-a340-dbc539b5f41a', 100);
+
+INSERT INTO earns (rewid, uid)
+VALUES ('fe6400b3-1e84-405e-a340-dbc539b5f41a', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e');
+
+--managers
+INSERT INTO managers (uid)
+VALUES ('d0a7f883-36fc-4094-9330-7c932381662a');
+
+--restaurants
+INSERT INTO restaurants (rid, name, uid, address, open_time, close_time, contacts)
+VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'Parks Chicken Rice', 'd0a7f883-36fc-4094-9330-7c932381662a', 'Prince Georges Park', '01:30', '04:00', 98765432);
+
+--reservations
+INSERT INTO reservations (resid, restime, resdate, numpeople)
+VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', '01:00', '2019-06-02', 3);
+
+INSERT INTO books (resid, uid)
+VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e');
+
+INSERT INTO processes (resid, rid)
+VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', '7b49a151-dacd-49c5-b49e-116d3889ed38');

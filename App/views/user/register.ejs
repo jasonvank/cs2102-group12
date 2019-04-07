@@ -2,7 +2,6 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Register Account</title>
 	<!-- Mobile Specific Metas -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<!-- Font-->
@@ -39,15 +38,11 @@
         </div>
         
         <div class="row">
-          <input class="radio col s6" type="radio" id="customer" name="usertype" value="customer">
+          <input class="radio col s6" type="radio" id="customer" name="usertype" value="customer" required>
           <label class="radio-label" for="customer">Customer</label>
       
-          <input class="radio col s6" type="radio" id="branch_manager" name="usertype" value="branch_manager">
-					<label class="radio-label" for="manager">Branch Manager</label>
-					
-					<input class="radio col s6" type="radio" id="restaurant_manager" name="usertype" value="restaurant_manager">
-					<label class="radio-label" for="manager">Restaurant Manager</label>
-					
+          <input class="radio col s6" type="radio" id="manager" name="usertype" value="manager">
+					<label class="radio-label" for="manager">Manager</label>
         </div>
 
 				<div class="form-row-last">

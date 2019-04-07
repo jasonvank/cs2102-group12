@@ -21,29 +21,26 @@ var formsRouter = require('./routes/forms');
 var indexRouter = require('./routes/index');
 var aboutRouter = require('./routes/about');
 
-/* --- users management --- */
-// var registerRouter = require('./routes/users/register');
-// var loginRouter = require('./routes/users/login');
-// var forgotRouter = require('./routes/users/forgot');
+var userRouter  = require('./routes/user/user');
+
 var adminRouter = require('./routes/users/admin');
-// var profileRouter = require('./routes/users/profile');
-var usersRouter = require('./routes/users/users');
 
 /* --- restarants management --- */
 var menuRouter = require('./routes/restaurants/menu');
 var specialtiesRouter = require('./routes/restaurants/specialties');
-var addRestaurantRouter = require('./routes/restaurants/add_restaurant');
-var selectMenuRouter = require('./routes/restaurants/add_item/select_menus');
-var addMenuRouter = require('./routes/restaurants/add_menu');
-var addMenuItemRouter = require('./routes/restaurants/add_item/add_menu_item');
-var reEnterRouter = require('./routes/restaurants/add_item/re_enter_form');
-var updateRestaurantRouter = require('./routes/restaurants/edit_restaurant');
-var updateMenuRouter = require('./routes/restaurants/edit_menu/select_menus');
-var updateMenuNameRouter = require('./routes/restaurants/edit_menu/edit_name');
-var updateItem_SelectMenusRouter = require('./routes/restaurants/edit_item/select_menus');
-var updateItem_SelectItemsRouter = require('./routes/restaurants/edit_item/select_items');
-var updateItem_UpdateFieldsRouter = require('./routes/restaurants/edit_item/edit_fields');
-var reEditRouter = require('./routes/restaurants/edit_item/re_edit_form');
+
+// var addRestaurantRouter = require('./routes/user/restaurants/add_restaurant');
+var selectMenuRouter = require('./routes/user/add_item/select_menus');
+// var addMenuRouter = require('./routes/restaurants/add_menu');
+var addMenuItemRouter = require('./routes/user/add_item/add_menu_item');
+var reEnterRouter = require('./routes/user/add_item/re_enter_form');
+// var updateRestaurantRouter = require('./routes/restaurants/edit_restaurant');
+var updateMenuRouter = require('./routes/user/edit_menu/select_menus');
+var updateMenuNameRouter = require('./routes/user/edit_menu/edit_name');
+var updateItem_SelectMenusRouter = require('./routes/user/edit_item/select_menus');
+var updateItem_SelectItemsRouter = require('./routes/user/edit_item/select_items');
+var updateItem_UpdateFieldsRouter = require('./routes/user/edit_item/edit_fields');
+var reEditRouter = require('./routes/user/edit_item/re_edit_form');
 // var addRestaurantErrorRouter = require('./routes/restaurants/add_restaurant');
 // var addMenuErrorRouter = require('./routes/restaurants/add_menu');
 
@@ -87,33 +84,31 @@ app.use('/forms', formsRouter);
 
 
 app.use('/', indexRouter);
+
 app.use('/about', aboutRouter);
 
 /* --- restaurants management --- */
 app.use('/menu', menuRouter);
 app.use('/specialties', specialtiesRouter);
-app.use('/add_restaurant', addRestaurantRouter);
-app.use('/add_menu', addMenuRouter);
-app.use('/add_item/add_menu_item', addMenuItemRouter);
-app.use('/add_item/select_menus', selectMenuRouter)
-app.use('/add_item/re_enter_form', reEnterRouter);
-app.use('/edit_restaurant', updateRestaurantRouter);
-app.use('/edit_menu/select_menus', updateMenuRouter);
-app.use('/edit_menu/edit_name', updateMenuNameRouter);
-app.use('/edit_item/select_menus', updateItem_SelectMenusRouter);
-app.use('/edit_item/select_items', updateItem_SelectItemsRouter);
-app.use('/edit_item/edit_fields', updateItem_UpdateFieldsRouter);
-app.use('/edit_item/re_edit_form', reEditRouter);
+
+// app.use('/add_restaurant', addRestaurantRouter);
+// app.use('/add_menu', addMenuRouter);
+app.use('/user/add_item/add_menu_item', addMenuItemRouter);
+app.use('/user/add_item/select_menus', selectMenuRouter)
+app.use('/user/add_item/re_enter_form', reEnterRouter);
+// app.use('/edit_restaurant', updateRestaurantRouter);
+app.use('/user/edit_menu/select_menus', updateMenuRouter);
+app.use('/user/edit_menu/edit_name', updateMenuNameRouter);
+app.use('/user/edit_item/select_menus', updateItem_SelectMenusRouter);
+app.use('/user/edit_item/select_items', updateItem_SelectItemsRouter);
+app.use('/user/edit_item/edit_fields', updateItem_UpdateFieldsRouter);
+app.use('/user/edit_item/re_edit_form', reEditRouter);
 // app.use('/add_restaurant_error',addRestaurantErrorRouter);
 // app.use('/add_menu_error',addMenuErrorRouter);
 
 /* --- users management --- */
-// app.use('/register', registerRouter);
-// app.use('/login', loginRouter);
-// app.use('/profile', profileRouter);
 app.use('/admin', adminRouter);
-// app.use('/users', usersRouter);
-// app.use('/forgot', forgotRouter);
+app.use('/user', userRouter);
 
 /* --- reservation management --- */
 app.use('/services', servicesRouter);
@@ -123,6 +118,11 @@ app.use('/reservation', reservationRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
+});
+
+// catch 500 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(500));
 });
 
 // error handler

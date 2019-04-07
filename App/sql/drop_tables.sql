@@ -20,6 +20,6 @@ drop table restaurants;
 drop table categories;
 drop table customers;
 drop table reservations;
-drop table restaurant_managers;
+drop table managers;
 drop table rewards;
 drop table users;

@@ -15,9 +15,9 @@ router.post('/', enterItem);
 
 function processPassedVariable(req, res, next) {
   var passedVariable = req.query.valid;
-  if (passedVariable == No) return res.redirect('/profile');
+  if (passedVariable == No) return res.redirect('/user/' + req.user.username);
   if (passedVariable != Yes) passedName = passedVariable;
-  res.render('restaurants/add_item/add_menu_item');
+  res.render('user/restaurants/add_item/add_menu_item');
 }
 
 function enterItem(req, res, next) {
@@ -30,8 +30,12 @@ function enterItem(req, res, next) {
     var mid;
     mid = data.rows[0].mid;
     pool.query(sql_query.query.add_menu_item, [name, price, description, mid], (err, data) => {
-      if (err) return res.render('restaurants/error_page/operation_error', {data: err.message});
-      res.redirect('/add_item/re_enter_form');
+      var errorMessage = {
+      message: err,
+      user_name: req.user.username
+    };
+      if (err) return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
+      res.redirect('/user/add_item/re_enter_form');
     });
   });
 }

@@ -10,7 +10,7 @@ CREATE TABLE users (
     unique(username)
 );
 
-CREATE TABLE restaurant_managers (
+CREATE TABLE managers (
 	uid     uuid primary key references users on delete cascade
 );
 
@@ -31,7 +31,7 @@ CREATE TABLE restaurants (
     close_time   TIME NOT NULL,
     contacts     NUMERIC(10,0) NOT NULL,
     primary key (rid),
-    foreign key (uid) references restaurant_managers (uid)
+    foreign key (uid) references managers (uid)
     -- foreign key (name) references restaurants (name) on delete cascade on update cascade
 );
 
@@ -71,7 +71,7 @@ CREATE TABLE registers (
     uid     uuid NOT NULL,
     rid     uuid NOT NULL,
     primary key (uid, rid),
-    foreign key (uid) references restaurant_managers (uid),
+    foreign key (uid) references managers (uid),
     foreign key (rid) references restaurants (rid)
 );
 

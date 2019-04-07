@@ -13,14 +13,20 @@
 <div class="container">
 
     <div class="page-header text-center">
-        <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+        <h1><span class="glyphicon glyphicon-user"></span> User Profile</h1>
+        <row>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-        <a href="/add_restaurant" class="btn btn-default btn-sm">Add restaurant</a>
-        <a href="/add_menu" class="btn btn-default btn-sm">Add menu</a>
-        <a href="/add_item/select_menus" class="btn btn-default btn-sm">Add item</a>
-        <a href="/edit_restaurant" class="btn btn-default btn-sm">Edit restaurant</a>
-        <a href="/edit_menu/select_menus" class="btn btn-default btn-sm">Edit menu</a>
-        <a href="/edit_item/select_menus" class="btn btn-default btn-sm">Edit item</a>
+        <a href="/user/<%= data.username %>/reset_password" class="btn btn-default btn-sm">Reset Password</a>
+        <a href="/user/<%= data.username %>/update_info" class="btn btn-default btn-sm">Update Info</a>
+        <a href="/user/<%= data.username %>/history" class="btn btn-default btn-sm">History</a>
+    </div>
+    <div class="text-center">
+        <a href="/user/<%= data.username %>/add_restaurant" class="btn btn-default btn-sm">Add restaurant</a>
+        <a href="/user/<%= data.username %>/add_menu" class="btn btn-default btn-sm">Add menu</a>
+        <a href="/user/add_item/select_menus" class="btn btn-default btn-sm">Add item</a>
+        <a href="/user/<%= data.username %>/edit_restaurant" class="btn btn-default btn-sm">Edit restaurant</a>
+        <a href="/user/edit_menu/select_menus" class="btn btn-default btn-sm">Edit menu</a>
+        <a href="/user/edit_item/select_menus" class="btn btn-default btn-sm">Edit item</a>
     </div>
 
     <div>

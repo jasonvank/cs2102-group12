@@ -1,15 +1,24 @@
 const sql = {}
 
+// CREATE VIEW CustomerHistory as SELECT * from (customers C NATURAL JOIN reservations R1 NATURAL JOIN Processes P NATURAL JOIN books B) LEFT JOIN rate R2 on R1.resid = R2.resid and C.uid = R2.uid and R2.rid = P.rid
+
 sql.query = {
-	// Users
-	user_info: 'SELECT * FROM users WHERE username=$1',
-	user_register: 'INSERT INTO users (username, password_hash, last_name, first_name) VALUES ($1,$2,$3,$4) returning user_uid',
-	branch_manager_register: 'INSERT INTO branch_managers (uid) VALUES ($1)',
-	restaurant_manager_register: 'INSERT INTO restaurant_managers (uid) VALUES ($1)',
+	// Register
+	user_info: 'SELECT * FROM users WHERE username = $1',
+	user_register: 'INSERT INTO users (username, password_hash, last_name, first_name) VALUES ($1,$2,$3,$4) RETURNING user_uid',
+	manager_register: 'INSERT INTO managers (uid) VALUES ($1)',
 	customer_register: 'INSERT INTO customers (uid) VALUES ($1)',
+	reset_password: 'UPDATE users SET password_hash = $2 WHERE user_uid = $1',
+	update_info: 'UPDATE users SET first_name = $2, last_name=$3 where user_uid = $1',
+    check_usertype: 'SELECT * FROM managers WHERE uid = $1',
+	// User
+	customer_history: 'CREATE VIEW CustomerHistory as SELECT * from (customers C NATURAL JOIN reservations R1 NATURAL JOIN Processes P NATURAL JOIN books B) LEFT JOIN rate R2 on R1.resid = R2.resid and C.uid = R2.uid and R2.rid = P.rid',
+	manager_history: 'CREATE VIEW ManagerHistory as SELECT * from (customers C NATURAL JOIN reservations R1 NATURAL JOIN Processes P NATURAL JOIN books B)',
+	rate_reservation: '',
+
 
 	// Update
-	update_info: 'UPDATE users SET first_name=$2, last_name=$3 WHERE username=$1',
+	// update_info: 'UPDATE users SET first_name=$2, last_name=$3 WHERE username=$1',
 	update_pass: 'UPDATE users SET password=$2 WHERE username=$1',
 
   // Restaurants
@@ -30,5 +39,7 @@ sql.query = {
   update_menu: 'UPDATE menus SET name=$2 WHERE mid=$1',
   update_item: 'UPDATE items SET name=$2, price=$3, description=$4 WHERE iid=$1',
 }
+
+
 
 module.exports = sql

@@ -14,7 +14,7 @@ var passedName;
 
 function processPassedVariable(req, res, next) {
   passedName = req.query.valid;
-  res.render('restaurants/edit_menu/edit_name');
+  res.render('user/restaurants/edit_menu/edit_name');
 }
 
 function enterName(req, res, next) {
@@ -28,8 +28,13 @@ function enterName(req, res, next) {
     // console.log(data.rows[0]);
     var mid = data.rows[0].mid;
     pool.query(sql_query.query.update_menu, [mid, name], (err, data) => {
-      if (err) return res.render('restaurants/error_page/operation_error', {data: err.message});
-      res.redirect('/profile');
+
+      var errorMessage = {
+      message: err,
+      user_name: req.user.username
+    };
+      if (err) return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
+      res.redirect('/user/' + req.user.username);
     });
   });
 }

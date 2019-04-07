@@ -17,10 +17,10 @@
 			<form class="form-detail" action="" method="post">
 				<h2>Error</h2>
 				<div class="form-row">
-					<label for="your-Menu-name"><%= data%></label>
+					<label for="your-Menu-name"><%= data.message%></label>
 				</div>
 				<div class="buttons">
-					<input class="button" type="button" onclick="location.href='/profile';" value="Go to profile" />
+					<input class="button" type="button" onclick="location.href='/user/<%= data.user_name%>'" value="Go to profile" />
 				</div>
       </form>
 

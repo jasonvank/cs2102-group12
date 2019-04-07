@@ -9,7 +9,7 @@ const pool = new Pool({connectionString: process.env.DATABASE_URL});
 
 // GET
 router.get('/', function(req, res, next) {
-	res.render('users/register', { title: 'Logging System' });
+	res.render('user/register', { title: 'Logging System' });
 });
 
 // POST

@@ -172,9 +172,7 @@ router.post('/:userId/add_restaurant', function (req, res, next) {
           })
         })
       })
-    })
   });
-});
 // End of Add Restaurant--------------------------------------------------------------------------
 
 

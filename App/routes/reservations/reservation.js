@@ -11,7 +11,7 @@ const { Pool } = require('pg')
 const pool = new Pool({connectionString: process.env.DATABASE_URL});
 
 var uid;
-var bid;
+var rid;
 
 /* GET reservation page. */
 
@@ -41,13 +41,13 @@ router.get('/', function(req, res, next) {
  	});
 
     /*
-    //get bid of branch. (get redirect parameter value)
+    //get rid of restaurant. (get redirect parameter value)
     var params = req.query;
-		//if no bid in params
-		if (!params.bid) {
-			//alert("please find a restaurant branch first");
+		//if no rid in params
+		if (!params.rid) {
+			//alert("please find a restaurant first");
 		} else {
-			bid = params.bid;
+			rid = params.rid;
 		}
 	*/
 }, function(req, res, next) {
@@ -65,45 +65,48 @@ router.post('/', function(req, res, next) {
 	var resid;
 	pool.query('select uuid_generate_v4 ()', (err, data) => {
 		resid = data.rows[0].uuid_generate_v4;
-		console.log(resid);
-	});
-
-	var reserve_query = 'insert into reservations (resid, restime, resdate, numpeople) values (' + resid + ',' + restime + ',' + resdate + ',' + numpeople + ')';
-	var book_query = 'insert into books (resid, uid) values (' + resid + ', ' + uid + ')';
-	var process_query = 'insert into processes (resid, bid) values(' + resid + ', ' + bid + ')';
-	var get_rewid = 'select rewid from earns where uid = ' + uid;
-	var rewid;
-	pool.query(get_rewid, (err, data) => {
-		if (err) {
-			console.log("each customer should be mapped to a reward in the rewards and earns tables");
-		} else {
-			rewid = data.rows[0].rewid;
-			console.log("rewid:" + rewid);
-		}
-	});
-	var usereward_query = 'insert into uses (rewid, resid) values (' + rewid + ',' + resid + ')';
-	var update_reward_pt = 'update rewards set value = value - 100 where uid = ' + uid;
-	
-	if (usereward == 'on') {
-		pool.query(usereward_query, (err, data) => {
-			if (err) {return "ERROR";}
-			pool.query(update_reward_pt, (err,data) => {
-				if (err) {return "ERROR";}
-			});
+		console.log("resid: " + resid);
+		var reserve_query = 'insert into reservations (resid, restime, resdate, numpeople) values (' + "'" + resid + "'" + ',' + "'" + restime + "'" + ',' + "'" + resdate + "'" + ',' + numpeople + ')';
+		var book_query = 'insert into books (resid, uid) values (' + "'" + resid + "'" + ', ' + "'" + uid + "'" + ')';
+		var process_query = 'insert into processes (resid, rid) values(' + "'" + resid + "'" + ', ' + "'" + rid + "'" + ')';
+		var get_rewid = 'select rewid from earns where uid = ' + "'" + uid + "'";
+		var rewid;
+		pool.query(get_rewid, (err, data) => {
+			if (err) {
+				console.log("each customer should be mapped to a reward in the rewards and earns tables");
+			} else {
+				rewid = data.rows[0].rewid;
+				console.log("rewid:" + rewid);
+				if (usereward == 'on') {
+					pool.query(usereward_query, (err, data) => {
+						if (err) {return console.log("ERROR");}
+						pool.query(update_reward_pt, (err,data) => {
+							if (err) {return console.log("ERROR");}
+						});
+					});
+				}
+				var usereward_query = 'insert into uses (rewid, resid) values (' + "'" + rewid + "'" + ',' + "'" + resid + "'" + ')';
+				var update_reward_pt = 'update rewards set value = value - 100 where uid = ' + "'" + uid + "'";
+				
+				//insert into Reservations table
+				pool.query(reserve_query, function(err, data) {
+					if (err) {return console.log("reserve ERROR");}
+					//insert into Books table
+					pool.query(book_query, function(err, data) {
+						if (err) {return console.log("book ERROR");}
+						// insert into processes table
+						console.log(process_query);
+						pool.query(process_query, function(err, data) {
+							if (err) {return console.log("process ERROR");}
+							else {res.redirect('/user/' + req.user.username); }
+						});
+					});
+				});
+			}
 		});
-	}
-	
-	var callback = res.redirect('/user/' + req.user.username); 
-	//insert into Reservations table
-	pool.query(reserve_query, function(err, data) {
-		if (err) {return "ERROR";}
-		//insert into Books table
-		pool.query(book_query, function(err, data) {
-			if (err) {return "ERROR";}
-			// insert into processes table
-			pool.query(process_query, callback);
-		});
+		
 	});
+	
 });
 
 

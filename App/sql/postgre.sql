@@ -76,13 +76,13 @@ CREATE TABLE registers (
 );
 
 CREATE TABLE categories (
-    cid     uuid DEFAULT uuid_generate_v4 (),
+    cid     integer,
     name    varchar(50) NOT NULL,
     primary key (cid)
 );
 
 CREATE TABLE belongs (
-    cid     uuid NOT NULL,
+    cid     integer NOT NULL,
     rid     uuid NOT NULL,
     primary key (cid, rid),
     foreign key (cid) references categories (cid),
@@ -266,7 +266,7 @@ VALUES (2, 'korean');
 INSERT INTO categories (cid, name)
 VALUES (3, 'indian');
 INSERT INTO categories (cid, name)
-VALUES (4, 'wesetern');
+VALUES (4, 'western');
 INSERT INTO categories (cid, name)
 VALUES (5, 'japanese');
 

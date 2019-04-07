@@ -35,6 +35,7 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
   var contacts = req.body.contacts;
   var uid = req.user.user_uid;
   var menu_name = req.body.menu_name;
+  var cuisines = req.body.cuisines;
 
   var rollback = function(client, err) {
     client.query('ROLLBACK', function() {
@@ -46,17 +47,37 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
       client.end();
     });
   };
+  var rid;
   client.query('BEGIN', function(err, data) {
     if(err) return rollback(client, err);
     client.query(sql_query.query.add_restaurant, [uid, name, address, open_time, close_time, contacts], function(err, data) {
           if (err) return rollback(client, err);
-          var rid = data.rows[0].rid;
+          rid = data.rows[0].rid;
+          console.log("rid0: " + rid);
           client.query(sql_query.query.register_restaurant, [uid, rid], function(err, data) {
             if (err) rollback(client, err);
             client.query(sql_query.query.add_menu, [rid, menu_name], function(err, data) {
               if (err) rollback(client, err);
-              client.query('COMMIT', client.end.bind(client));
-              return res.redirect('/user/' + req.user.username);
+              // To add Categories
+              var cid;
+              for (var i = 0; i < cuisines.length; i++) {
+                 // console.log(cuisines[i]);
+                 var cuisine_name = cuisines[i];
+                 console.log("cuisine_name: " + cuisine_name);
+                 client.query(sql_query.query.cat_name_to_cid, [cuisine_name], function(err, data) {
+                   if (err) return console.log('Cannot get CID');
+                   cid = data.rows[0].cid;
+                   console.log("cid: " + cid);
+                   console.log("rid: " + rid);
+                   var belong = 'INSERT INTO belongs (cid, rid) VALUES (' + cid + ", " + "'"+ rid + "'" +')';
+                   console.log(belong);
+                   client.query(belong, function(err, data) {
+                     if (err) return console.log('Cannot add categories');
+                   });
+                 });
+               }
+               client.query('COMMIT', client.end.bind(client));
+               return res.redirect('/user/' + req.user.username);
             })
           })
         })

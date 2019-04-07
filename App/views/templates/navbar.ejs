@@ -16,8 +16,8 @@
         </ul>
         <ul class="nav navbar-nav">
             <%if (user) { %>
-                <strong>Welcome </strong>: <%= user.username %><br>
-                <li class="nav-item"><a href="logout" class="nav-link">Logout</a></li>
+                <li class="nav-item" ><a href="/user/<%= user.username %>" class="nav-link" style="color: gold">Welcome : <%= user.username %><br></a></li>
+                <li class="nav-item"><a href="logout" class="nav-link" >Logout</a></li>
             <% } else { %>
                 <li class="nav-item"><a href="login" class="nav-link">Login</a></li>
                 <li class="nav-item"><a href="register" class="nav-link">Register</a></li>

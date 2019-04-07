@@ -2,3 +2,4 @@ App/node_modules/
 env/
 .history/
 .vscode/
+.idea/

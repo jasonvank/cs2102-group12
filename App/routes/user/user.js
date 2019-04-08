@@ -42,7 +42,7 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
       var errorMessage = {
       message: err,
       user_name: req.user.username
-    };
+      };
       return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
       client.end();
     });
@@ -60,29 +60,46 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
               if (err) rollback(client, err);
               // To add Categories
               var cid;
-              for (var i = 0; i < cuisines.length; i++) {
-                 // console.log(cuisines[i]);
-                 var cuisine_name = cuisines[i];
-                 console.log("cuisine_name: " + cuisine_name);
-                 client.query(sql_query.query.cat_name_to_cid, [cuisine_name], function(err, data) {
-                   if (err) return console.log('Cannot get CID');
-                   cid = data.rows[0].cid;
-                   console.log("cid: " + cid);
-                   console.log("rid: " + rid);
-                   var belong = 'INSERT INTO belongs (cid, rid) VALUES (' + cid + ", " + "'"+ rid + "'" +')';
-                   console.log(belong);
-                   client.query(belong, function(err, data) {
-                     if (err) return console.log('Cannot add categories');
+              if (typeof cuisines === 'string' || cuisines instanceof String) {
+                console.log("only 1 category selected");
+                client.query(sql_query.query.cat_name_to_cid, [cuisines], function(err, data) {
+                  if (err) rollback(client, err);
+                  cid = data.rows[0].cid;
+                  console.log("cid: " + cid);
+                  console.log("rid: " + rid);
+                  client.query(sql_query.query.add_category, [cid, rid], function(err, data) {
+                    if (err) {rollback(client, err);}
+                    else {
+                      console.log("added to belongs");
+                      client.query('COMMIT', client.end.bind(client));
+                      return res.redirect('/user/' + req.user.username);
+                    }
+                  });
+                });
+              } else {
+                for (var i = 0; i < cuisines.length; i++) {
+                  console.log("multiple cat selected");
+                   // console.log(cuisines[i]);
+                   var cuisine_name = cuisines[i];
+                   console.log("cuisine_name: " + cuisine_name);
+                   client.query(sql_query.query.cat_name_to_cid, [cuisine_name], function(err, data) {
+                     if (err) rollback(client, err);
+                     cid = data.rows[0].cid;
+                     console.log("cid: " + cid);
+                     console.log("rid: " + rid);
+                     client.query(sql_query.query.add_category, [cid, rid], function(err, data) {
+                       if (err) rollback(client, err);
+                       client.query('COMMIT', client.end.bind(client));
+                       return res.redirect('/user/' + req.user.username);
+                     });
                    });
-                 });
-               }
-               client.query('COMMIT', client.end.bind(client));
-               return res.redirect('/user/' + req.user.username);
-            })
-          })
-        })
-      })
-  });
+                 }
+              }
+            });
+          });
+        });
+      });
+    });
 // End of Add Restaurant--------------------------------------------------------------------------
 
 

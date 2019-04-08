@@ -6,54 +6,123 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <style>
-        body        { padding-top:80px; word-wrap:break-word; }
+        body {
+            padding-top: 80px;
+            word-wrap: break-word;
+        }
+
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+            height: 200px; /* Should be removed. Only for demonstration */
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .btn-length {
+            width: 150px;
+        }
     </style>
 </head>
 <body>
 <div class="container">
 
+
     <div class="page-header text-center">
-        <h1><span class="glyphicon glyphicon-user"></span> User Profile</h1>
-        <row>
-        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-        <a href="/user/<%= data.username %>/reset_password" class="btn btn-default btn-sm">Reset Password</a>
-        <a href="/user/<%= data.username %>/update_info" class="btn btn-default btn-sm">Update Info</a>
-        <a href="/user/<%= data.username %>/history" class="btn btn-default btn-sm">History</a>
-    </div>
-    <div class="text-center">
-        <a href="/user/<%= data.username %>/add_restaurant" class="btn btn-default btn-sm">Add restaurant</a>
-        <a href="/user/<%= data.username %>/add_menu" class="btn btn-default btn-sm">Add menu</a>
-        <a href="/user/add_item/select_menus" class="btn btn-default btn-sm">Add item</a>
-        <a href="/user/<%= data.username %>/edit_restaurant" class="btn btn-default btn-sm">Edit restaurant</a>
-        <a href="/user/edit_menu/select_menus" class="btn btn-default btn-sm">Edit menu</a>
-        <a href="/user/edit_item/select_menus" class="btn btn-default btn-sm">Edit item</a>
-    </div>
-
-    <div>
-      <table class="table">
-        124
-        <tbody>
-             <tr>
-                  <td><%= data.username%></td>
-                  <td><%= data.last_name%></td>
-                  <td><%= data.first_name%></td>
-             </tr>
-       </tbody>
-   </table>
-    </div>
-    <div class="row">
-
-        <!-- LOCAL INFORMATION -->
-        <div class="col-sm-6">
-            <div class="well">
-                <h3><span class="fa fa-user"></span> Local</h3>
-                    <p>
-                        <strong>username</strong>: <%= data.username %><br>
-                        <strong>Last Name</strong>: <%= data.last_name %><br>
-                        <strong>First Name</strong>: <%= data.first_name %>
-                    </p>
+        <div class="well" style="height:300px">
+            <h1><span class="glyphicon glyphicon-user"></span> Welcome <%= data.username %></h1>
+            <div class="column" style="background-color:#aaa;">
+                <div class="row"><a href="/" class="btn btn-default btn-sm btn-length">Home Page</a>
+                    <a href="/logout" class="btn btn-default btn-sm btn-length">Logout</a>
+                </div>
+                <div class="row"><a href="/user/<%= data.username %>/reset_password" class="btn btn-default btn-sm btn-length">Reset Password</a>
+                    <a href="/user/<%= data.username %>/update_info" class="btn btn-default btn-sm btn-length">Update Info</a>
+                </div>
+                <div class="row"><a href="/user/<%= data.username %>/history" class="btn btn-default btn-sm btn-length">History</a>
+                </div>
+            </div>
+            <div class="column" style="background-color:#bbb;">
+                <div class="text-center">
+                    <div class="row"><a href="/user/<%= data.username %>/add_restaurant"
+                                        class="btn btn-default btn-sm btn-length">Add restaurant</a>
+                        <a href="/user/<%= data.username %>/edit_restaurant" class="btn btn-default btn-sm btn-length">Edit
+                            restaurant</a></div>
+                    <div class="row"><a href="/user/<%= data.username %>/add_menu"
+                                        class="btn btn-default btn-sm btn-length">Add menu</a>
+                        <a href="/user/<%= data.username %>/edit_menu/select_menus" class="btn btn-default btn-sm btn-length">Edit menu</a>
+                    </div>
+                    <div class="row"><a href="/user/<%= data.username %>/add_item/select_menus" class="btn btn-default btn-sm btn-length">Add
+                            item</a>
+                        <a href="/user/<%= data.username %>/edit_item/select_menus" class="btn btn-default btn-sm btn-length">Edit item</a>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+
+
+    <div>
+        <table class="table" style="margin-top: 50px">
+            <% if (usertype == 'customer') { %>
+            <caption style="font-size:20px">Current Reservations</caption>
+            <tr>
+                <th>Res. No.</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Number of people</th>
+                <th>Restaurant name</th>
+                <th>Restaurant address</th>
+                <th>Categories</th>
+                <th>Rating</th>
+                <th>Action</th>
+            </tr>
+            <% for(var i = 0; current_reservations !== undefined && i < current_reservations.length; i++) { %>
+            <tr>
+                <td><%= i + 1 %></td>
+                <td><%= new Date(current_reservations[i].date).toDateString() %></td>
+                <td><%= current_reservations[i].time %></td>
+                <td><%= current_reservations[i].numpeople %></td>
+                <td><%= current_reservations[i].restaurant_name %></td>
+                <td><%= current_reservations[i].address %></td>
+                <td><%= current_reservations[i].categories %></td>
+                <td><%= current_reservations[i].rating %></td>
+                <td><a href='/user/<%= data.username %>/<%= current_reservations[i].reservation_id %>/cancel'>Cancel</a></td>
+            </tr>
+            <% } %>
+            <% } else { %>
+            <caption style="font-size:20px">New Bookings</caption>
+            <tr>
+                <th>Booking No.</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Customer username</th>
+                <th>Number of people</th>
+                <th>Contact</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Action</th>
+            </tr>
+            <% for(var i = 0; new_bookings !== undefined && i < new_bookings.length; i++) { %>
+            <tr>
+                <td><%= i + 1 %></td>
+                <td><%= new Date(new_bookings[i].date).toDateString() %></td>
+                <td><%= new_bookings[i].time %></td>
+                <td><%= new_bookings[i].customer_username %></td>
+                <td><%= new_bookings[i].numpeople %></td>
+                <td><%= new_bookings[i].contact_number %></td>
+                <td><%= new_bookings[i].last_name %></td>
+                <td><%= new_bookings[i].first_name %></td>
+                <td><a href='/user/<%= data.username %>/<%= new_bookings[i].reservation_id %>/reject'>Reject</a></td>
+            </tr>
+            <% } %>
+            <% } %>
+        </table>
     </div>
 
 </div>

@@ -3,7 +3,7 @@ var express = require('express');
 var router = express.Router();
 var isLoggedIn = require('../index.js');// import isLoggedIn from index.js
 const bcrypt = require('bcrypt');
-const { Pool } = require('pg')
+const {Pool} = require('pg');
 const pool = new Pool({connectionString: process.env.DATABASE_URL});
 
 var historyRouter = require('./history.js');
@@ -13,6 +13,96 @@ router.use('/history', historyRouter);
 var Client = require('pg').Client;
 var client = new Client({connectionString: process.env.DATABASE_URL});
 client.connect();
+
+
+// User Profile Page -----------------------------------------------------------------------------------
+router.get('/', function (req, res, next) {
+  res.render('user', {title: 'Express'});
+});
+
+router.get('/:userId', function (req, res, next) {
+  if (!req.user.username) {
+    res.redirect('/login');
+  }
+  if (req.user.username != req.params.userId) {
+    res.redirect('/user/' + req.user.username);
+  }
+  pool.query(sql_query.query.user_info, [req.user.username], (err, data) => {
+    if (err) {
+      res.redirect('/login');
+    }
+    var user_uid = req.user.user_uid;
+    // if user is customer
+    return pool.query(sql_query.query.check_usertype, [user_uid], (err, data) => {
+      if (err) {
+        return res.redirect('/login');
+      } else {
+        if (data.rows.length != 0) {
+          return new_bookings(user_uid, req, res)
+        } else {
+          return current_reservations(user_uid, req, res);
+        }
+      }
+    })
+  });
+});
+// End user profile page -----------------------------------------------------------------------------------
+
+
+// User information and password updates -------------------------------------------------------------------
+router.get('/:userId/reset_password', function (req, res, next) {
+  if (!req.user.username) {
+    res.redirect('/login');
+  }
+  if (req.user.username != req.params.userId) {
+    res.redirect('/user/' + req.user.username);
+  }
+  res.render('user/reset_password', {title: 'Express'});
+});
+
+router.post('/:userId/reset_password', function (req, res, next) {
+  if (req.user.username != req.params.userId) {
+    res.redirect('/login');
+  }
+
+  var password_hash = bcrypt.hashSync(req.body.password, 10);
+
+  pool.query(sql_query.query.reset_password, [req.user.user_uid, password_hash], (err, data) => {
+    if (err) {
+      res.redirect('/login');
+    } else {
+      res.redirect('/user/' + req.user.username);
+    }
+  });
+})
+
+router.get('/:userId/update_info', function (req, res, next) {
+  if (!req.user.username) {
+    res.redirect('/login');
+  }
+  if (req.user.username != req.params.userId) {
+    res.redirect('/user/' + req.user.username);
+  }
+  res.render('user/update_info', {data: req.user});
+});
+
+router.post('/:userId/update_info', function (req, res, next) {
+  if (!req.user.username) {
+    res.redirect('/login');
+  }
+  var first_name = req.body.first_name;
+  var last_name = req.body.last_name;
+
+  pool.query(sql_query.query.update_info, [req.user.user_uid, first_name, last_name], (err, data) => {
+    if (err) {
+      res.redirect('/login');
+    } else {
+      res.redirect('/user/' + req.user.username);
+    }
+  });
+})
+// End user information and passwords updates --------------------------------------------------------------
+
 
 // Add Restaurant---------------------------------------------------------------------
 router.get('/:userId/add_restaurant', function(req, res, next) {
@@ -209,13 +299,13 @@ router.get('/:userId/history', function(req, res, next) {
   }
   var user_uid = req.user.user_uid;
   pool.query(sql_query.query.check_usertype, [user_uid], (err, data) => {
-    if(err) {
+    if (err) {
       return res.redirect('/login');
     } else {
       if (data.rows.length == 0) {
-        return customer_history(user_uid, res)
+        return customer_history(user_uid, req, res)
       } else {
-        return manager_history(user_uid, res);
+        return manager_history(user_uid, req, res);
       }
     }
   })
@@ -236,7 +326,7 @@ router.post('/:userId/reset_password', function(req, res, next) {
     res.redirect('/login');
   }
 
-	var password_hash   = bcrypt.hashSync(req.body.password, 10);
+  var password_hash   = bcrypt.hashSync(req.body.password, 10);
 
   pool.query(sql_query.query.reset_password, [req.user.user_uid, password_hash], (err, data) => {
     if(err) {
@@ -247,37 +337,8 @@ router.post('/:userId/reset_password', function(req, res, next) {
   });
 })
 
-router.get('/:userId/update_info', function(req, res, next) {
-  if (!req.user.username) {
-    res.redirect('/login');
-  }
-  if (req.user.username != req.params.userId) {
-    res.redirect('/user/' + req.user.username);
-  }
-  res.render('user/update_info', { title: 'Express' });
-});
-
-router.post('/:userId/update_info', function(req, res, next) {
-  if (!req.user.username) {
-    res.redirect('/login');
-  }
-	var first_name = req.body.first_name;
-	var last_name  = req.body.last_name;
-
-  console.log("user uid " + req.user.user_uid);
-  console.log("new first name " + first_name);
-  console.log("new last name " + last_name);
-
-  pool.query(sql_query.query.update_info, [req.user.user_uid, first_name, last_name], (err, data) => {
-    if(err) {
-      res.redirect('/login');
-    } else {
-      res.redirect('/user/' + req.user.username);
-    }
-  });
-})
-
-function isManager (user_uid, res) {
+// Supplementary functions for user queries ------------------------------------------------------------
+function isManager(user_uid, res) {
   console.log(user_uid)
   pool.query(sql_query.query.check_usertype, [user_uid], (err, data) => {
     if(err) {
@@ -309,5 +370,40 @@ function manager_history (user_uid, res) {
     }
   });
 }
+
+function new_bookings(user_uid, req, res) {
+  // TODO:
+  restaurant_id = '31aa07d3-a0ab-4fb2-ab52-f58070acf393';
+  pool.query(sql_query.query.new_bookings, [restaurant_id], (err, data) => {
+    console.log(JSON.stringify(data));
+    if (err) {
+      return res.redirect('/user/' + req.user.username);
+    } else {
+      console.log(JSON.stringify(data));
+      return res.render('user/user', {
+        // data: data[0],
+        new_bookings: data.rows,
+        data: req.user,
+        usertype: 'manager',
+      });
+    }
+  });
+}
+
+function current_reservations(user_uid, req, res) {
+  console.log("customer");
+  console.log("user uid: " + user_uid);
+
+  pool.query(sql_query.query.current_reservations, [user_uid], (err, data) => {
+    return res.render('user/user', {
+      current_reservations: data.rows,
+      data: req.user,
+      usertype: 'customer',
+    });
+    // }
+  });
+}
+
+// End supplementary functions for user queries -------------------------------------------------------
 
 module.exports = router;

@@ -34,7 +34,7 @@ router.get('/', function(req, res, next) {
 	    	return next();
 	    } else if (isNotCustomer == 1) {
 			console.log("Only customers can make reservations");
-			return res.redirect('/');
+			return res.render('reservations/notcustomererror');
 	    } else {
 	    	return next();
     	}

@@ -2,13 +2,23 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<title>Edit Restaurants</title>
 	<!-- Mobile Specific Metas -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<!-- Font-->
-	<link rel="stylesheet" type="text/css" href="stylesheets/roboto-font.css">
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5/css/fontawesome-all.min.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/roboto-font.css">
+	<link rel="stylesheet" type="text/css" href="/fonts/font-awesome-5/css/fontawesome-all.min.css">
 	<!-- Main Style Css -->
-    <link rel="stylesheet" href="stylesheets/register_style.css"/>
+	<link rel="stylesheet" href="/stylesheets/register_style.css"/>
+	<style>
+		input:invalid {
+			box-shadow: 0 0 5px 1px cornflowerblue;
+		}
+
+		input:focus:invalid {
+			box-shadow: none;
+		}
+	</style>
 </head>
 <body class="form-v5">
 	<div class="page-content">
@@ -32,7 +42,7 @@
 				</div>
 				<div class="form-row">
 					<label for="contact-number">Contact Number</label>
-					<input type="text" name="contact_number" id="contact_number" class="input-text" placeholder="Your Contact Number" required>
+					<input type="tel" name="contact_number" id="contact_number" class="input-text" placeholder="Your Contact Number" pattern="[0-9]{8}" required>
 					<i class="fas fa-user"></i>
 				</div>
 
@@ -41,11 +51,12 @@
 					<input type="password" name="password" id="password" class="input-text" placeholder="Your Password" required>
 					<i class="fas fa-lock"></i>
         </div>
-        
+
+
         <div class="row">
           <input class="radio col s6" type="radio" id="customer" name="usertype" value="customer" required>
           <label class="radio-label" for="customer">Customer</label>
-      
+
           <input class="radio col s6" type="radio" id="manager" name="usertype" value="manager">
 					<label class="radio-label" for="manager">Manager</label>
         </div>

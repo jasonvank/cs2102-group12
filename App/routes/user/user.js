@@ -17,10 +17,7 @@ client.connect();
 
 // User Profile Page -----------------------------------------------------------------------------------
 router.get('/', function (req, res, next) {
-  res.render('user', {
-    title: 'Express',
-    user: req.user,
-  });
+  res.render('user', {user: req.user});
 });
 
 router.get('/:userId', function (req, res, next) {
@@ -30,7 +27,6 @@ router.get('/:userId', function (req, res, next) {
   if (req.user.username != req.params.userId) {
     res.redirect('/user/' + req.user.username);
   }
-  console.log(JSON.stringify(req.user));
   pool.query(sql_query.query.user_info, [req.user.username], (err, data) => {
     if (err) {
       res.redirect('/login');
@@ -42,17 +38,6 @@ router.get('/:userId', function (req, res, next) {
       } else {
         return current_reservations(user_uid, req, res);
       }
-      // pool.query(sql_query.query.check_usertype, [user_uid], (err, data) => {
-      //   if (err) {
-      //     return res.redirect('/login');
-      //   } else {
-      //     if (data.rows.length != 0) {
-      //
-      //     } else {
-      //
-      //     }
-      //   }
-      // })
     }
   });
 });
@@ -283,17 +268,6 @@ router.get('/:userId/history', function (req, res, next) {
   } else {
     return customer_history(user_uid, req, res)
   }
-  // pool.query(sql_query.query.check_usertype, [user_uid], (err, data) => {
-  //   if (err) {
-  //     return res.redirect('/login');
-  //   } else {
-  //     if (data.rows.length == 0) {
-  //
-  //     } else {
-  //
-  //     }
-  //   }
-  // })
 });
 
 
@@ -364,9 +338,6 @@ function new_bookings(user_uid, req, res) {
 }
 
 function current_reservations(user_uid, req, res) {
-  console.log("customer");
-  console.log("user uid: " + user_uid);
-
   pool.query(sql_query.query.current_reservations, [user_uid], (err, data) => {
     return res.render('user/user', {
       current_reservations: data.rows,

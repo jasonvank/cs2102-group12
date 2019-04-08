@@ -2,13 +2,23 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<title>Edit Restaurants</title>
 	<!-- Mobile Specific Metas -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<!-- Font-->
-	<link rel="stylesheet" type="text/css" href="stylesheets/roboto-font.css">
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-5/css/fontawesome-all.min.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/roboto-font.css">
+	<link rel="stylesheet" type="text/css" href="/fonts/font-awesome-5/css/fontawesome-all.min.css">
 	<!-- Main Style Css -->
-    <link rel="stylesheet" href="stylesheets/register_style.css"/>
+	<link rel="stylesheet" href="/stylesheets/register_style.css"/>
+	<style>
+		input:invalid {
+			box-shadow: 0 0 5px 1px cornflowerblue;
+		}
+
+		input:focus:invalid {
+			box-shadow: none;
+		}
+	</style>
 </head>
 <body class="form-v5">
 	<div class="page-content">
@@ -27,12 +37,12 @@
 				</div>
 				<div class="form-row">
 					<label for="last-name">Contact Number</label>
-					<input type="text" name="contact_number" id="contact_number" class="input-text" value=<%= data.contact_number%> required>
+					<input type="text" name="contact_number" id="contact_number" class="input-text" value=<%= data.contact_number%> pattern="[0-9]{8}" required>
 					<i class="fas fa-user"></i>
 				</div>
 
 				<div class="form-row-last">
-					<input type="submit" name="update_user_info" class="update_user_info" value="update_user_info">
+					<input type="submit" name="update_user_info" class="update_user_info" value="Update">
 				</div>
       		</form>
       

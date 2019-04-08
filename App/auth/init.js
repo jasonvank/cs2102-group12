@@ -12,7 +12,7 @@ const { Pool } = require('pg');
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 function findUser (username, callback) {
-	pool.query(sql_query.query.user_info, [username], (err, data) => {
+    pool.query(sql_query.query.user_info, [username], (err, data) => {
 		if(err) {
 			console.error("Cannot find user");
 			return callback(null);
@@ -22,13 +22,26 @@ function findUser (username, callback) {
 			console.error("User does not exists?");
 			return callback(null)
 		} else if(data.rows.length == 1) {
-			return callback(null, {
-				username     : data.rows[0].username,
-        password_hash: data.rows[0].password_hash,
-        user_uid     : data.rows[0].user_uid,
-        last_name    : data.rows[0].last_name,
-        first_name   : data.rows[0].first_name
-      });
+      var isManager;
+      var user_uid = data.rows[0].user_uid
+      pool.query(sql_query.query.check_usertype, [user_uid], (err2, data2) => {
+        if(err2) return callback(null);
+        if (data2.rows.length == 1) {
+          isManager = true;
+        }
+        else {
+          isManager = false;
+        }
+        return callback(null, {
+          username      : data.rows[0].username,
+          password_hash : data.rows[0].password_hash,
+          user_uid      : data.rows[0].user_uid,
+          last_name     : data.rows[0].last_name,
+          first_name    : data.rows[0].first_name,
+          contact_number: data.rows[0].contact_number,
+          isManager     : isManager,
+        });
+      })
 		} else {
 			console.error("More than one user?");
 			return callback(null);
@@ -51,7 +64,6 @@ function initPassport () {
         if (err) {
           return done(err);
         }
-
         // User not found
         if (!user) {
           console.error('User not found');

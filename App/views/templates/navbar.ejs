@@ -1,7 +1,7 @@
 <!-- Header -->
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
-        <a class="navbar-brand" href="index.html">Tasty</a>
+        <a class="navbar-brand" href="index.html">EatLah</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
         </button>
@@ -16,8 +16,8 @@
         </ul>
         <ul class="nav navbar-nav">
             <%if (user) { %>
-                <strong>Welcome </strong>: <%= user.username %><br>
-                <li class="nav-item"><a href="logout" class="nav-link">Logout</a></li>
+                <li class="nav-item" ><a href="/user/<%= user.username %>" class="nav-link" style="color: gold">Welcome : <%= user.username %><br></a></li>
+                <li class="nav-item"><a href="logout" class="nav-link" >Logout</a></li>
             <% } else { %>
                 <li class="nav-item"><a href="login" class="nav-link">Login</a></li>
                 <li class="nav-item"><a href="register" class="nav-link">Register</a></li>

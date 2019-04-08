@@ -20,7 +20,12 @@ router.get('/:userId/add_restaurant', function(req, res, next) {
     client.query(sql_query.query.user_restaurant, [req.user.user_uid], function(err, data) {
       if (err) return next(err);
       if (data.rows[0]) {
-        return res.render('user/restaurants/error_page/add_restaurant_error', {data: req.user.username});
+        var errorMessage = {
+        message: "You have already registered your restaurant!",
+        user_name: req.user.username
+      };
+        res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
+        return;
       } else {
         res.render('user/restaurants/add_restaurant', {user: req.user});
       }
@@ -71,7 +76,7 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
                     if (err) {rollback(client, err);}
                     else {
                       console.log("added to belongs");
-                      client.query('COMMIT', client.end.bind(client));
+                      client.query('COMMIT');
                       return res.redirect('/user/' + req.user.username);
                     }
                   });
@@ -89,7 +94,7 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
                      console.log("rid: " + rid);
                      client.query(sql_query.query.add_category, [cid, rid], function(err, data) {
                        if (err) rollback(client, err);
-                       client.query('COMMIT', client.end.bind(client));
+                       client.query('COMMIT');
                        return res.redirect('/user/' + req.user.username);
                      });
                    });

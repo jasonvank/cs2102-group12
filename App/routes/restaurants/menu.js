@@ -26,7 +26,8 @@ function processPassedVariable(req, res, next) {
         passedData: data
       };
       res.render('restaurants/menu', {
-          data : passedData
+          data : passedData,
+          rid : restaurantRid
         });
     })
   // });

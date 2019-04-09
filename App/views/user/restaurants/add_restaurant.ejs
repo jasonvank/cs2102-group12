@@ -17,61 +17,64 @@
 			<form class="form-detail" action="" method="post">
 				<h2>Add Restaurant Form</h2>
 				<div class="form-row">
-					<label for="your-restaurant-name">name</label>
+					<label for="name">Your restaurant name</label>
 					<input type="text" name="name" id="name" class="input-text" placeholder="Your new restaurant name" required>
 					<i class="fas fa-user"></i>
 				</div>
 
 				<div class="form-row">
-					<label for="your restaurant address">address</label>
+					<label for="address">Your restaurant address</label>
 					<input type="text" name="address" id="address" class="input-text" placeholder="Your new restaurant's address" required>
 					<!-- <i class="fas fa-user"></i> -->
         </div>
 
 				<div class="form-row">
-					<label for="Which part of Singapore are you located?">location</label>
-					<select name="location">
+					<label for="location">Which part of Singapore are you located?</label>
+					<select class="locationbox" name="location">
 						<option class="selectcontents" value="West">West</option>
 						<option class="selectcontents" value="East">East</option>
 						<option class="selectcontents" value="North">North</option>
 						<option class="selectcontents" value="South">South</option>
 						<option class="selectcontents" value="Central">Central</option>
+					</select>
 				</div>
 
         <div class="form-row">
-          <label for="Choose your opening time">open_time</label>
+          <label for="open_time">Choose your opening time</label>
           <input type="time" id="open_time" name="open_time" min="6:00" max="18:00" required>
           <!-- <i class="fas fa-user"></i> -->
           <!-- <span class="note">Office hours are 9am to 6pm</span> -->
 				</div>
 
         <div class="form-row">
-          <label for="Choose your closing time:">close_time</label>
+          <label for="close_time">Choose your closing time:</label>
           <input type="time" id="close_time" name="close_time">
           <!-- <i class="fas fa-user"></i> -->
           <!-- <span class="note">Office hours are 9am to 6pm</span> -->
         </div>
 
 				<div class="form-row">
-					<label for="Your restaurant contact">contacts</label>
+					<label for="contacts">Your restaurant contact number</label>
           <input type="tel" name="contacts" maxlength="10" placeholder="Your new restaurant's contact" required>
           <!-- <i class="fas fa-lock"></i> -->
         </div>
 
         <div class="form-row">
-					<label for="Your firt menu name">Your firt menu name</label>
+					<label for="menu_name">Your first menu name</label>
         	<input type="text" name="menu_name" id="menu_name" class="input-text" placeholder="Your firt menu name" required>
         </div>
 
 				<div class="form-row">
-					<label for="Cuisines you serve">Cuisines</label>
+					<label for="cuisines">Cuisines you serve</label>
 
-					<select name="cuisines" multiple>
+					<select class="selectbox" name="cuisines" multiple>
 						<option class="selectcontents" value="Chinese">Chinese</option>
 						<option class="selectcontents" value="Western">Western</option>
 						<option class="selectcontents" value="Korean">Korean</option>
 						<option class="selectcontents" value="Indian">Indian</option>
 						<option class="selectcontents" value="Japanese">Japanese</option>
+					</select>
+
 				</div>
         <!-- <div class="row">
           <input class="radio col s6" type="radio" id="customer" name="usertype" value="customer">

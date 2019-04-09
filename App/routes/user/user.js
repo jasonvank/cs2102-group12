@@ -75,7 +75,7 @@ router.post('/:userId/reset_password', function (req, res, next) {
       res.redirect('/user/' + req.user.username);
     }
   });
-})
+});
 
 router.get('/:userId/update_info', function (req, res, next) {
   if (!req.user.username) {
@@ -101,7 +101,7 @@ router.post('/:userId/update_info', function (req, res, next) {
       res.redirect('/user/' + req.user.username);
     }
   });
-})
+});
 // End user information and passwords updates --------------------------------------------------------------
 
 
@@ -348,7 +348,7 @@ router.get('/:userId/:resId/cancel', function (req, res, next) {
 });
 
 
-router.post('/:userId/history/:reservationId/rate', function(req, res, next) {
+router.post('/:userId/history/:reservationId/rate', function (req, res, next) {
   console.log('reservation history');
 
   if (!req.user.username) {
@@ -362,12 +362,31 @@ router.post('/:userId/history/:reservationId/rate', function(req, res, next) {
   pool.query(sql_query.query.rate_reservation_restaurant, [reservation_id, rating_value], (err, data) => {
     console.log(sql_query.query.rate_reservation_restaurant, [reservation_id, rating_value]);
     console.log(JSON.stringify(data));
-    if(err) {
+    if (err) {
       console.log(err);
       // var goback_url = '/user/' + req.user.username + '/history';
       res.status(404).send("You have rate for this reservation already. <a href= '/user/ + req.user.username + /history'>Go back</a>")
     }
     console.log(JSON.stringify(req.body));
+  });
+});
+
+
+router.post('/:userId/:resId/cancel', function (req, res, next) {
+  var resid = req.params.resId;
+  client.query('BEGIN', (err, data) => {
+    if (err) return rollback(client);
+    client.query(sql_query.query.remove_processes, [resid], (err, data) => {
+      if (err) return rollback(client);
+      client.query(sql_query.query.remove_books, [resid], (err, data) => {
+        if (err) return rollback(client);
+        client.query(sql_query.query.remove_reservation, [resid], (err, data) => {
+          if (err) return rollback(client);
+          client.query('COMMIT');
+          return res.redirect('/user/' + req.user.username);
+        });
+      });
+    });
   });
 });
 

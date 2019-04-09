@@ -28,9 +28,12 @@ router.post('/', selectRestaurant);
 
 function selectRestaurant(req, res, next) {
   var restaurant_name = req.body.restaurant_name;
-
-  var string = encodeURIComponent(restaurant_name);
-  res.redirect('/menu?valid=' + string);
+  pool.query(sql_query.query.restaurant_rid, [restaurant_name], (err, data) => {
+    if(err) return(next);
+    restaurantRid = data.rows[0].rid;
+    var string = encodeURIComponent(restaurantRid);
+    res.redirect('/menu?valid=' + string);
+  });
 }
 
 module.exports = router;

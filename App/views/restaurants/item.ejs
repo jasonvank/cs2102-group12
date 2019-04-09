@@ -1,93 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
   <%- include ../templates/header.ejs %>
-
   <body>
-    
-    <%- include ../templates/navbar.ejs %>
-    
+    <%- include ../templates/navbar_for_restaurants.ejs %>
     <section class="home-slider owl-carousel">
       <div class="slider-item" style="background-image: url('images/bg_1.jpg');" data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
         <div class="container">
           <div class="row slider-text align-items-center justify-content-center">
             <div class="col-md-10 col-sm-12 ftco-animate text-center">
-              <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Reservation</span></p>
-              <h1 class="mb-3">Make a Reservation</h1>
+              <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Menu</span></p>
+              <h1 class="mb-3">Choose your restaurants</h1>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="ftco-section">
+    <div class="ftco-section-reservation">
       <div class="container">
-        <div class="row no-gutters justify-content-center mb-5 pb-5">
-          <div class="col-md-7 text-center heading-section ftco-animate">
-            <h2>Make a Reservation</h2>
-          </div>
-        </div>
-        <div class="row d-flex">
-          <div class="col-md-4 ftco-animate img" style="background-image: url(images/bg_1.jpg);"></div>
-          <div class="col-md-8 ftco-animate makereservation p-5 bg-light">
-            <form action="" method="post">
-              <div class="row">
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="">Date</label>
-                    <input type="text" class="form-control" name="book_date" id="book_date" placeholder="Date">
+        <div class="row">
+          <div class="col-md-12 reservation pt-5 px-5">
+            <div class="block-17">
+              <form action="" method="post" class="d-block d-lg-flex">
+                <div class="fields d-block d-lg-flex">
+
+                  <div class="textfield-name one-third"><input type="text" class="form-control" placeholder="Name"></div>
+
+                  <div class="textfield-phone one-third"><input type="text" class="form-control" placeholder="Phone"></div>
+
+                  <div class="book-date one-third"><input type="text" id="book_date" class="form-control" placeholder="M/D/YYYY"></div>
+
+                  <div class="book-time one-third">
+                    <input type="text" id="book_time" class="form-control" placeholder="Time">
+                  </div>
+
+                  <div class="select-wrap one-third">
+                    <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                    <select name="" id="" class="form-control">
+                      <option value="">Person</option>
+                      <option value="">1</option>
+                      <option value="">2</option>
+                      <option value="">3</option>
+                      <option value="">4+</option>
+                    </select>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="">Time</label>
-                    <input type="text" class="form-control" name="book_time" id="book_time" placeholder="Time">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="">Number of People</label>
-                    <div class="select-wrap one-third">
-                      <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                      <select name="numpeople" id="numpeople" class="form-control">
-                        <option value="">Person</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11+</option>
-                      </select>
-                    </div>
-                  </div>  
-                </div>
-                
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="">Use Reward points for 10% off?</label>
-                    <input type="checkbox" class="form-control" name="usereward" id="usereward"> 
-                  </div>
-                </div>
-                
-                <div class="col-md-12 mt-3">
-                  <div class="form-group">
-                    <input type="submit" value="Make a Reservation" class="btn btn-primary py-3 px-5">
-                  </div>
-                </div>
-              </div>
-            </form>
+                <input type="submit" class="search-submit btn btn-primary" value="Book a table">
+              </form>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <section class="ftco-section bg-light">
+      <div class="container">
+        <div class="row justify-content-center mb-5 pb-5">
+          <div class="col-md-7 text-center heading-section ftco-animate">
+            <span class="subheading">Our Items</span>
+            <h2>Here are the items</h2>
+          </div>
+        </div>
+
+      <table class='table table-bordered table-condensed table-striped table-hover'>
+       <thead>
+            <tr >
+              <th scope="col"> Item name</th>
+              <th scope="col"> Item price</th>
+              <th scope="col"> Item description</th>
+            </tr>
+       </thead>
+       <tbody>
+         <tbody >
+            <% for(var i=0; i<data.passedData.rows.length; i++) { %>
+            <tr>
+              <td id = 'td1' ><%= data.passedData.rows[i].name%></td>
+              <td id = 'td2' ><%= data.passedData.rows[i].price%></td>
+              <td id = 'td2' ><%= data.passedData.rows[i].description%></td>
+            </tr>
+            <% } %>
+       </tbody>
+  </table>
+
+      </div>
     </section>
 
-    <!--<section class="instagram">
+    <section class="instagram">
       <div class="container-fluid">
         <div class="row no-gutters justify-content-center pb-5">
           <div class="col-md-7 text-center heading-section ftco-animate">
@@ -189,15 +188,15 @@
         <div class="row">
           <div class="col-md-12 text-center">
 
-            <p> Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. 
+            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
   Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-   Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0.</p>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
           </div>
         </div>
       </div>
     </footer>
-    -->
-  
+
+
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
@@ -219,6 +218,6 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
-    
+
   </body>
 </html>

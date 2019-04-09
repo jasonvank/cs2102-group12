@@ -9,15 +9,15 @@
         <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active"><a href="/" class="nav-link">Home</a></li>
-            <li class="nav-item"><a href="../restaurant" class="nav-link">Menu</a></li>
-            <li class="nav-item"><a href="../specialties" class="nav-link">Specialties</a></li>
-            <li class="nav-item"><a href="../reservation" class="nav-link">Reservation</a></li>
-            <li class="nav-item"><a href="../about" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="restaurant" class="nav-link">Restaurants</a></li>
+            <li class="nav-item"><a href="specialties" class="nav-link">Specialties</a></li>
+            <li class="nav-item"><a href="reservation" class="nav-link">Reservation</a></li>
+            <li class="nav-item"><a href="about" class="nav-link">About</a></li>
         </ul>
         <ul class="nav navbar-nav">
-            <%if (user) { %>
-                <li class="nav-item" ><a href="/user/<%= user.username %>" class="nav-link" style="color: gold">Welcome : <%= user.username %><br></a></li>
-                <li class="nav-item"><a href="../logout" class="nav-link" >Logout</a></li>
+            <%if (data.user) { %>
+                <li class="nav-item" ><a href="/user/<%= data.user.username %>" class="nav-link" style="color: gold">Welcome : <%= data.user.username %><br></a></li>
+                <li class="nav-item"><a href="logout" class="nav-link" >Logout</a></li>
             <% } else { %>
                 <li class="nav-item"><a href="login" class="nav-link">Login</a></li>
                 <li class="nav-item"><a href="register" class="nav-link">Register</a></li>

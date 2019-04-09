@@ -149,16 +149,17 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
           // To add Categories
           var cid;
           if (typeof cuisines === 'string' || cuisines instanceof String) {
-            console.log("only 1 category selected");
+            console.log("Only 1 category selected");
             client.query(sql_query.query.cat_name_to_cid, [cuisines], function(err, data) {
               if (err) rollback(client, err);
               cid = data.rows[0].cid;
               console.log("cid: " + cid);
               console.log("rid: " + rid);
               client.query(sql_query.query.add_category, [cid, rid], function(err, data) {
-                if (err) {rollback(client, err);}
-                else {
-                  console.log("added to belongs");
+                if (err) {
+                  rollback(client, err);
+                } else {
+                  console.log("Added to belongs");
                   client.query('COMMIT');
                   return res.redirect('/user/' + req.user.username);
                 }
@@ -166,7 +167,7 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
             });
           } else {
             for (var i = 0; i < cuisines.length; i++) {
-              console.log("multiple cat selected");
+              console.log("multiple categories selected");
               // console.log(cuisines[i]);
               var cuisine_name = cuisines[i];
               console.log("cuisine_name: " + cuisine_name);
@@ -177,11 +178,11 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
                 console.log("rid: " + rid);
                 client.query(sql_query.query.add_category, [cid, rid], function(err, data) {
                   if (err) rollback(client, err);
-                  client.query('COMMIT');
-                  return res.redirect('/user/' + req.user.username);
                 });
               });
             }
+            client.query('COMMIT');
+            return res.redirect('/user/' + req.user.username);
           }
         });
       });
@@ -298,7 +299,32 @@ router.post('/:userId/reset_password', function(req, res, next) {
       res.redirect('/user/' + req.user.username);
     }
   });
-})
+});
+
+router.get('/:resId/reject', function(req, res, next) {
+  if (!req.user.isManager) {
+    res.redirect('/login');
+  }
+  res.render('user/reject');
+});
+
+router.post('/:resId/reject', function(req, res, next) {
+  var resid = req.params.resId;
+  client.query('BEGIN', (err, data) => {
+    if (err) return rollback(client);
+    client.query(sql_query.query.remove_processes, [resid], (err, data) => {
+      if (err) return rollback(client);
+      client.query(sql_query.query.remove_books, [resid], (err, data) => {
+        if (err) return rollback(client);
+        client.query(sql_query.query.remove_reservation, [resid], (err, data) => {
+          if (err) return rollback(client);
+          client.query('COMMIT');
+          return res.redirect('/user/' + req.user.username);
+        });
+      });
+    });
+  });
+});
 
 // Supplementary functions for user queries ------------------------------------------------------------
 function customer_history(user_uid, req, res) {

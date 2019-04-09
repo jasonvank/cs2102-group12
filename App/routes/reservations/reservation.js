@@ -10,6 +10,10 @@ const bcrypt = require('bcrypt');
 const { Pool } = require('pg')
 const pool = new Pool({connectionString: process.env.DATABASE_URL});
 
+var Client = require('pg').Client;
+var client = new Client({connectionString: process.env.DATABASE_URL});
+client.connect();
+
 var uid;
 var rid;
 
@@ -26,19 +30,14 @@ router.get('/', function(req, res, next) {
     uid = req.user.user_uid;
     console.log("uid:" + uid);
 
-    var checkCustQuery = 'select case when not exists(select * from customers where uid = ' + "'" + uid + "'" + ') then 1 else 0 end as result';
-    pool.query(checkCustQuery, (err, data) => {
-    	var isNotCustomer = data.rows[0].result;
-    	var error = err;
-    	if (err) {
-	    	return next();
-	    } else if (isNotCustomer == 1) {
-			console.log("Only customers can make reservations");
-			return res.render('reservations/notcustomererror');
-	    } else {
-	    	return next();
-    	}
- 	});
+	var isNotCustomer = req.user.isManager;
+	if (isNotCustomer == true) {
+		console.log("Only customers can make reservations");
+		return res.render('reservations/notcustomererror');
+    } else {
+    	return next();
+	}
+
 
     /*
     //get rid of restaurant. (get redirect parameter value)
@@ -63,51 +62,67 @@ router.post('/', function(req, res, next) {
 
 	console.log("form: " + resdate + ", " + restime + "," + numpeople);
 	var resid;
-	pool.query('select uuid_generate_v4 ()', (err, data) => {
-		resid = data.rows[0].uuid_generate_v4;
-		console.log("resid: " + resid);
-		var reserve_query = 'insert into reservations (resid, restime, resdate, numpeople) values (' + "'" + resid + "'" + ',' + "'" + restime + "'" + ',' + "'" + resdate + "'" + ',' + numpeople + ')';
-		var book_query = 'insert into books (resid, uid) values (' + "'" + resid + "'" + ', ' + "'" + uid + "'" + ')';
-		var process_query = 'insert into processes (resid, rid) values(' + "'" + resid + "'" + ', ' + "'" + rid + "'" + ')';
-		var get_rewid = 'select rewid from earns where uid = ' + "'" + uid + "'";
-		var rewid;
-		pool.query(get_rewid, (err, data) => {
+	var reserve_query = 'insert into reservations (restime, resdate, numpeople) values (' + "'" + restime + "'" + ',' + "'" + resdate + "'" + ',' + numpeople + ') returning resid';
+	var get_rewid = 'select rewid from earns where uid = ' + "'" + uid + "'";
+	var rewid;
+	client.query('BEGIN', (err, data) => {
+		if (err) return rollback(client);
+		client.query(get_rewid, (err, data) => {
 			if (err) {
 				console.log("each customer should be mapped to a reward in the rewards and earns tables");
+				return rollback(client);
 			} else {
 				rewid = data.rows[0].rewid;
 				console.log("rewid:" + rewid);
-				if (usereward == 'on') {
-					pool.query(usereward_query, (err, data) => {
-						if (err) {return console.log("ERROR");}
-						pool.query(update_reward_pt, (err,data) => {
-							if (err) {return console.log("ERROR");}
-						});
-					});
-				}
 				var usereward_query = 'insert into uses (rewid, resid) values (' + "'" + rewid + "'" + ',' + "'" + resid + "'" + ')';
 				var update_reward_pt = 'update rewards set value = value - 100 where uid = ' + "'" + uid + "'";
 				
+				if (usereward == 'on') {
+					client.query(usereward_query, (err, data) => {
+						if (err) {return rollback(client);}
+						client.query(update_reward_pt, (err,data) => {
+							if (err) {return rollback(client);}
+						});
+					});
+				}
 				//insert into Reservations table
-				pool.query(reserve_query, function(err, data) {
-					if (err) {return console.log("reserve ERROR");}
+				client.query(reserve_query, function(err, data) {
+					if (err) {
+					    console.log("reserve ERROR");
+					    return rollback(client);
+					}
+					resid = data.rows[0].resid;
+					console.log("resid: " + resid);
+					var book_query = 'insert into books (resid, uid) values (' + "'" + resid + "'" + ', ' + "'" + uid + "'" + ')';
+					var process_query = 'insert into processes (resid, rid) values(' + "'" + resid + "'" + ', ' + "'" + rid + "'" + ')';
 					//insert into Books table
-					pool.query(book_query, function(err, data) {
-						if (err) {return console.log("book ERROR");}
+					client.query(book_query, function(err, data) {
+						if (err) {
+							console.log("book ERROR");
+							return rollback(client);
+						}
 						// insert into processes table
 						console.log(process_query);
-						pool.query(process_query, function(err, data) {
-							if (err) {return console.log("process ERROR");}
-							else {res.redirect('/user/' + req.user.username); }
+						client.query(process_query, function(err, data) {
+							if (err) {
+								console.log("process ERROR");
+								return rollback(client);
+							}
+							else {
+								client.query('COMMIT');
+								return res.redirect('/user/' + req.user.username); }
 						});
 					});
 				});
 			}
 		});
-		
 	});
-	
 });
 
+var rollback = function (client) {
+  client.query('ROLLBACK', function () {
+    client.end();
+  });
+};
 
 module.exports = router;

@@ -2,127 +2,100 @@
 <html lang="en">
   <%- include ../templates/header.ejs %>
   <body>
-    <%- include ../templates/navbar.ejs %>
-    
+    <%- include ../templates/navbar_for_restaurants.ejs %>
     <section class="home-slider owl-carousel">
       <div class="slider-item" style="background-image: url('images/bg_1.jpg');" data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
         <div class="container">
           <div class="row slider-text align-items-center justify-content-center">
             <div class="col-md-10 col-sm-12 ftco-animate text-center">
-              <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Specialties</span></p>
-              <h1 class="mb-3">Our Specialties</h1>
+              <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Menu</span></p>
+              <h1 class="mb-3">Choose your restaurants</h1>
             </div>
           </div>
         </div>
       </div>
     </section>
 
+    <div class="ftco-section-reservation">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 reservation pt-5 px-5">
+            <div class="block-17">
+              <form action="" method="post" class="d-block d-lg-flex">
+                <div class="fields d-block d-lg-flex">
+
+                  <div class="textfield-name one-third"><input type="text" class="form-control" placeholder="Name"></div>
+
+                  <div class="textfield-phone one-third"><input type="text" class="form-control" placeholder="Phone"></div>
+
+                  <div class="book-date one-third"><input type="text" id="book_date" class="form-control" placeholder="M/D/YYYY"></div>
+
+                  <div class="book-time one-third">
+                    <input type="text" id="book_time" class="form-control" placeholder="Time">
+                  </div>
+
+                  <div class="select-wrap one-third">
+                    <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                    <select name="" id="" class="form-control">
+                      <option value="">Person</option>
+                      <option value="">1</option>
+                      <option value="">2</option>
+                      <option value="">3</option>
+                      <option value="">4+</option>
+                    </select>
+                  </div>
+                </div>
+                <input type="submit" class="search-submit btn btn-primary" value="Book a table">
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <section class="ftco-section bg-light">
       <div class="container">
-        <div class="row no-gutters justify-content-center mb-5 pb-5">
+        <div class="row justify-content-center mb-5 pb-5">
           <div class="col-md-7 text-center heading-section ftco-animate">
-            <h2>Our Specialties</h2>
+            <span class="subheading">Our Restaurants</span>
+            <h2>Choose your restaurants</h2>
           </div>
         </div>
-        <div class="row d-flex no-gutters">
-          <div class="col-lg-6">
-            <div class="block-3 d-md-flex ftco-animate">
-              <div class="image order-last" style="background-image: url(images/dish-3.jpg);"></div>
-              <div class="text text-center order-first">
-                <h2 class="heading">Beef Steak</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts</p>
-                <span class="price">from $10.00</span>
-              </div>
-            </div>
-            <div class="block-3 d-md-flex ftco-animate">
-              <div class="image order-first" style="background-image: url(images/dish-4.jpg);"></div>
-              <div class="text text-center order-first">
-                <h2 class="heading">Beef Ribs Steak</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts</p>
-                <span class="price">from $10.00</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="block-3 d-md-flex ftco-animate">
-              <div class="image order-last" style="background-image: url(images/dish-5.jpg);"></div>
-              <div class="text text-center order-first">
-                <h2 class="heading">Chopsuey</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts</p>
-                <span class="price">from $10.00</span>
-              </div>
-            </div>
-            <div class="block-3 d-md-flex ftco-animate">
-              <div class="image order-first" style="background-image: url(images/dish-6.jpg);"></div>
-              <div class="text text-center order-first">
-                <h2 class="heading">Roasted Chieken</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts</p>
-                <span class="price">from $10.00</span>
-              </div>
-            </div>
-          </div>
 
-          <div class="col-lg-6">
-            <div class="block-3 d-md-flex ftco-animate">
-              <div class="image order-last" style="background-image: url(images/dish-7.jpg);"></div>
-              <div class="text text-center order-first">
-                <h2 class="heading">Beef Steak</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts</p>
-                <span class="price">from $10.00</span>
-              </div>
-            </div>
-            <div class="block-3 d-md-flex ftco-animate">
-              <div class="image order-first" style="background-image: url(images/dish-8.jpg);"></div>
-              <div class="text text-center order-first">
-                <h2 class="heading">Beef Ribs Steak</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts</p>
-                <span class="price">from $10.00</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="block-3 d-md-flex ftco-animate">
-              <div class="image order-last" style="background-image: url(images/dish-9.jpg);"></div>
-              <div class="text text-center order-first">
-                <h2 class="heading">Chopsuey</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts</p>
-                <span class="price">from $10.00</span>
-              </div>
-            </div>
-            <div class="block-3 d-md-flex ftco-animate">
-              <div class="image order-first" style="background-image: url(images/dish-10.jpg);"></div>
-              <div class="text text-center order-first">
-                <h2 class="heading">Roasted Chieken</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts</p>
-                <span class="price">from $10.00</span>
-              </div>
-            </div>
-          </div>
+      <table class='table table-bordered table-condensed table-striped table-hover'>
+       <thead>
+            <tr >
+                 <th scope="col"> Restaurant name</th>
+            </tr>
+       </thead>
+       <tbody>
+         <tbody style="cursor:pointer" >
+            <% for(var i=0; i<data.passedData.rows.length; i++) { %>
+            <tr>
+                 <td id = 'td1' onclick="content(this)" ><%= data.passedData.rows[i].name%></td>
+            </tr>
+            <% } %>
+       </tbody>
+  </table>
 
-          <div class="col-lg-6">
-            <div class="block-3 d-md-flex ftco-animate">
-              <div class="image order-last" style="background-image: url(images/dish-11.jpg);"></div>
-              <div class="text text-center order-first">
-                <h2 class="heading">Beef Steak</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts</p>
-                <span class="price">from $10.00</span>
-              </div>
-            </div>
-          </div>
+  <script>
+  function content(elem) {
+    document.getElementById("restaurant_name").value = elem.innerHTML;
+  }
+  </script>
 
-          <div class="col-lg-6">
-            <div class="block-3 d-md-flex ftco-animate">
-              <div class="image order-last" style="background-image: url(images/dish-3.jpg);"></div>
-              <div class="text text-center order-first">
-                <h2 class="heading">Beef Steak</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts</p>
-                <span class="price">from $10.00</span>
-              </div>
-            </div>
-          </div>
+  <form class="form-detail" action="" method="post">
+<div class="form-row">
+<label for="Enter the restaurant name">Selected restaurant name</label>
+<input type="name" id="restaurant_name" name="restaurant_name" placeholder="restaurant name from above"  style="width: 300px" required="required">
+</div>
 
-        </div>
+<div class="form-row-last">
+<input type="submit" name="submit" class="submit" value="submit">
+</div>
+    </form>
+
       </div>
     </section>
 
@@ -235,8 +208,8 @@
         </div>
       </div>
     </footer>
-    
-  
+
+
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
@@ -258,6 +231,6 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
-    
+
   </body>
 </html>

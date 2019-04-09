@@ -76,8 +76,8 @@
        <tbody>
          <tbody style="cursor:pointer" >
             <% for(var i=0; i<data.passedData.rows.length; i++) { %>
-            <tr>
-                 <td id = 'td1' onclick="content(this)" ><%= data.passedData.rows[i].name%></td>
+            <tr onclick=content(this)>
+                 <td id = 'td1'><%= data.passedData.rows[i].name%></td>
                  <td id = 'td1'><%= data.passedData.rows[i].address%></td>
                  <td id = 'td1'><%= data.passedData.rows[i].open_time%></td>
                  <td id = 'td1'><%= data.passedData.rows[i].close_time%></td>
@@ -89,7 +89,10 @@
 
   <script>
   function content(elem) {
-    document.getElementById("restaurant_name").value = elem.innerHTML;
+    var startingPosition = elem.innerHTML.indexOf("1") + 3;
+    var endPosition = elem.innerHTML.indexOf("</td>");
+    var name = elem.innerHTML.substring(startingPosition, endPosition);
+    document.getElementById("restaurant_name").value = name;
   }
   </script>
 

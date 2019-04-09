@@ -260,11 +260,22 @@ EXECUTE PROCEDURE trig_addItem();
 
 --Users
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
-VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', 'customer', '$2b$10$9uZM9JHNZZ4lzlqit8IYDulxGnsyk8fjBDJ4yRfMNLrnjCQl77.1m', 'customer', 'customer', '84508450');
+VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', 'customer', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'customer', 'customer', '84508450');
+
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
-VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e', 'summer', '$2b$10$Pdcb3BDaN1wATBHyZ0Fymurw1Js01F9nv6xgff42NfOmTrdXT1A.i', 'Summer', 'Season', '77554433');
+VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e', 'summer', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'Summer', 'Season', '77554433');
+
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
-VALUES ('9873068e-c0ae-4d68-932e-22a9c91c0fa8', 'autumn', '$2b$10$vS4KkX8uenTCNooir9vyUuAuX5gUhSGVql8yQdsDDD4TG8bSUjkt.', 'Autumn', 'Season', '33445566');
+VALUES ('cc659a63-df54-4922-80e0-950105c98d29', 'autumn', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'Autumn', 'Season', '33445566');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('f58a8552-cfe6-4669-a098-8d6fd533c157', 'manager', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'manager', 'Lee', '84508450');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('aca97eca-337d-4b0e-b1bc-789f5acdff87', 'manager1', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'manager', 'Zhang', '84508450');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('0b6a7521-788a-4430-9614-9cd379ba9fde', 'manager2', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'manager', 'Chen', '84508450');
 
 --customers
 INSERT INTO customers (uid)
@@ -282,14 +293,64 @@ INSERT INTO managers (uid)
 VALUES ('d0a7f883-36fc-4094-9330-7c932381662a');
 
 INSERT INTO managers (uid)
-VALUES ('9873068e-c0ae-4d68-932e-22a9c91c0fa8');
+VALUES ('f58a8552-cfe6-4669-a098-8d6fd533c157');
+
+INSERT INTO managers (uid)
+VALUES ('aca97eca-337d-4b0e-b1bc-789f5acdff87');
+
+INSERT INTO managers (uid)
+VALUES ('cc659a63-df54-4922-80e0-950105c98d29');
+
+INSERT INTO managers (uid)
+VALUES ('0b6a7521-788a-4430-9614-9cd379ba9fde');
 
 --restaurants
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
 VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'Parks Chicken Rice', 'd0a7f883-36fc-4094-9330-7c932381662a', 'Prince Georges Park', 'West', '01:30', '04:00', 98765432);
 
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'KFC', '9873068e-c0ae-4d68-932e-22a9c91c0fa8', 'Toa Payoh', 'Central', '07:30', '01:00', 88505532);
+VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'KFC', 'f58a8552-cfe6-4669-a098-8d6fd533c157', 'Toa Payoh', 'Central', '07:30', '01:00', 88505532);
+
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('22459a9b-80d6-429d-a65a-af0b883160b0', 'Mc Donalds', '0b6a7521-788a-4430-9614-9cd379ba9fde', 'Toa Payoh', 'Central', '07:30', '23:00', 88505532);
+
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('609cace1-6b36-45b1-868d-f4fa463f358a', 'Burger King', 'aca97eca-337d-4b0e-b1bc-789f5acdff87', 'Orchard', 'Central', '07:30', '23:00', 88505532);
+
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('e2b4cfea-8358-4f8b-bae8-cfaab688376f', 'Jumbo', 'cc659a63-df54-4922-80e0-950105c98d29', 'East Coast', 'East', '07:30', '23:00', 88505532);
+
+--menus
+INSERT INTO menus (rid, name)
+VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'dinner');
+
+INSERT INTO menus (rid, name)
+VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'breakfast');
+
+INSERT INTO menus (rid, name)
+VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'dinner');
+
+INSERT INTO menus (rid, name)
+VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'breakfast');
+
+INSERT INTO menus (rid, name)
+VALUES ('22459a9b-80d6-429d-a65a-af0b883160b0', 'dinner');
+
+INSERT INTO menus (rid, name)
+VALUES ('22459a9b-80d6-429d-a65a-af0b883160b0', 'breakfast');
+
+INSERT INTO menus (rid, name)
+VALUES ('609cace1-6b36-45b1-868d-f4fa463f358a', 'dinner');
+
+INSERT INTO menus (rid, name)
+VALUES ('609cace1-6b36-45b1-868d-f4fa463f358a', 'breakfast');
+
+INSERT INTO menus (rid, name)
+VALUES ('e2b4cfea-8358-4f8b-bae8-cfaab688376f', 'dinner');
+
+INSERT INTO menus (rid, name)
+VALUES ('e2b4cfea-8358-4f8b-bae8-cfaab688376f', 'breakfast');
+
 
 --reservations
 INSERT INTO reservations (resid, restime, resdate, numpeople)
@@ -334,6 +395,15 @@ VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', '8f87cee1-d078-429d-807a-e4e4db2
 
 INSERT INTO belongs (rid, cid)
 VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', '3b688933-e5ae-483a-87b1-3c3c99be8749');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('22459a9b-80d6-429d-a65a-af0b883160b0', '54321535-9cc0-457f-94b8-39edb9eb891b');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('609cace1-6b36-45b1-868d-f4fa463f358a', '54321535-9cc0-457f-94b8-39edb9eb891b');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('e2b4cfea-8358-4f8b-bae8-cfaab688376f', '3b688933-e5ae-483a-87b1-3c3c99be8749');
 
 --ratings
 INSERT INTO ratings (resid, rating)

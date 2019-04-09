@@ -19,7 +19,7 @@ var rid;
 
 /* GET reservation page. */
 
-router.get('/', function(req, res, next) {
+router.get('/:rid', function(req, res, next) {
 	if (!req.isAuthenticated()){ // if not logged in, redirect to login page
         return res.redirect('/login');
 	} else {
@@ -29,7 +29,8 @@ router.get('/', function(req, res, next) {
     //get user_id of current user
     uid = req.user.user_uid;
     console.log("uid:" + uid);
-
+    rid = req.params.rid;
+    console.log("rid:" + rid);
 	var isNotCustomer = req.user.isManager;
 	if (isNotCustomer == true) {
 		console.log("Only customers can make reservations");
@@ -37,24 +38,12 @@ router.get('/', function(req, res, next) {
     } else {
     	return next();
 	}
-
-
-    /*
-    //get rid of restaurant. (get redirect parameter value)
-    var params = req.query;
-		//if no rid in params
-		if (!params.rid) {
-			//alert("please find a restaurant first");
-		} else {
-			rid = params.rid;
-		}
-	*/
 }, function(req, res, next) {
     res.render('reservations/reservation', {user: req.user, /*points: req.user.points*/}); //the user is for navbar, points for displaying use points button
 });	    
 
 // POST reservation
-router.post('/', function(req, res, next) {
+router.post('/:rid', function(req, res, next) {
 	var resdate = req.body.book_date;
 	var restime = req.body.book_time;
 	var numpeople = req.body.numpeople;

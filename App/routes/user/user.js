@@ -72,7 +72,7 @@ router.post('/:userId/reset_password', function (req, res, next) {
       res.redirect('/user/' + req.user.username);
     }
   });
-})
+});
 
 router.get('/:userId/update_info', function (req, res, next) {
   if (!req.user.username) {
@@ -98,7 +98,7 @@ router.post('/:userId/update_info', function (req, res, next) {
       res.redirect('/user/' + req.user.username);
     }
   });
-})
+});
 // End user information and passwords updates --------------------------------------------------------------
 
 
@@ -261,7 +261,8 @@ router.post('/:userId/edit_restaurant', function (req, res, next) {
 
 // Router to user past reservations or bookings page -------------------------------------------------------
 router.get('/:userId/history', function (req, res, next) {
-  if (!req.user.username) {
+  console.log("hey");
+  if (!req.user) {
     res.redirect('/login');
   }
   if (req.user.username != req.params.userId) {
@@ -269,8 +270,10 @@ router.get('/:userId/history', function (req, res, next) {
   }
   var user_uid = req.user.user_uid;
   if (req.user.isManager) {
+    console.log("is Manager ");
     return manager_history(user_uid, req, res);
   } else {
+    console.log("is Customer ");
     return customer_history(user_uid, req, res)
   }
 });
@@ -302,14 +305,44 @@ router.post('/:userId/reset_password', function(req, res, next) {
   });
 });
 
-router.get('/:resId/reject', function(req, res, next) {
+router.get('/:userId/:resId/reject', function(req, res, next) {
   if (!req.user.isManager) {
+    res.redirect('/login');
+  } if (req.user.username != req.params.userId) {
     res.redirect('/login');
   }
   res.render('user/reject');
 });
 
-router.post('/:resId/reject', function(req, res, next) {
+
+router.post('/:userId/:resId/reject', function(req, res, next) {
+  var resid = req.params.resId;
+  client.query('BEGIN', (err, data) => {
+    if (err) return rollback(client);
+    client.query(sql_query.query.remove_processes, [resid], (err, data) => {
+      if (err) return rollback(client);
+      client.query(sql_query.query.remove_books, [resid], (err, data) => {
+        if (err) return rollback(client);
+        client.query(sql_query.query.remove_reservation, [resid], (err, data) => {
+          if (err) return rollback(client);
+          client.query('COMMIT');
+          return res.redirect('/user/' + req.user.username);
+        });
+      });
+    });
+  });
+});
+
+router.get('/:userId/:resId/cancel', function(req, res, next) {
+  if (req.user.isManager) {
+    res.redirect('/login');
+  } if (req.user.username != req.params.userId) {
+    res.redirect('/login');
+  }
+  res.render('user/cancel');
+});
+
+router.post('/:userId/:resId/cancel', function(req, res, next) {
   var resid = req.params.resId;
   client.query('BEGIN', (err, data) => {
     if (err) return rollback(client);
@@ -329,30 +362,38 @@ router.post('/:resId/reject', function(req, res, next) {
 
 // Supplementary functions for user queries ------------------------------------------------------------
 function customer_history(user_uid, req, res) {
-  pool.query(sql_query.query.customer_history, [user_uid], (err, data) => {
+  console.log("user uid", user_uid);
+  pool.query(sql_query.query.display_customer_history, [user_uid], (err, data) => {
     if (err) {
-      res.redirect('/login');
+      console.log(err);
+      return res.redirect('/user/' + req.user.username);
     } else {
-      res.render('user/history', {data: data[0]});
+
+      return res.render('user/history', {
+        history_reservations: data.rows,
+        user: req.user,
+      });
     }
   });
 }
 
 function manager_history(user_uid, req, res) {
-  pool.query(sql_query.query.manager_history, [user_uid], (err, data) => {
+  pool.query(sql_query.query.display_manager_history, [user_uid], (err, data) => {
     console.log(JSON.stringify(data));
     if (err) {
-      res.redirect('/user/' + req.user.username);
+      return res.redirect('/user/' + req.user.username);
     } else {
-      res.render('user/history', {data: data[0]});
+      return res.render('user/history', {
+        history_reservations: data.rows,
+        user: req.user,
+      });
     }
   });
 }
 
 function new_bookings(user_uid, req, res) {
   // TODO:
-  restaurant_id = '31aa07d3-a0ab-4fb2-ab52-f58070acf393';
-  pool.query(sql_query.query.new_bookings, [restaurant_id], (err, data) => {
+  pool.query(sql_query.query.display_new_bookings, [user_uid], (err, data) => {
     console.log(JSON.stringify(data));
     if (err) {
       return res.redirect('/user/' + req.user.username);
@@ -368,7 +409,7 @@ function new_bookings(user_uid, req, res) {
 }
 
 function current_reservations(user_uid, req, res) {
-  pool.query(sql_query.query.current_reservations, [user_uid], (err, data) => {
+  pool.query(sql_query.query.display_current_reservations, [user_uid], (err, data) => {
     if (err) {
       console.log(err);
       return res.redirect('/user/' + req.user.username);

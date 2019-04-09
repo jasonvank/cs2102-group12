@@ -125,6 +125,13 @@
     
     \draw[link] (registers) edge (restaur);
     
+    \node[relationship] (belongs) [above left=3cm of restaur] {Belongs} edge (restaur);
+    \node[attribute] (cid) [right=0.5cm of belongs] {\key{cid}} edge (belongs);
+    \node[attribute] (rid) [above=0.5cm of belongs] {\key{rid}} edge (belongs);
+    
+    \node[entity] (cat) [left= 2cm of belongs] {Categories} edge (belongs);
+    \node[attribute] (cid) [above=0.5cm of cat] {\key{cid}} edge (cat);
+    \node[attribute] (name) [left=0.5cm of cat] {name} edge (cat);
   
 \end{tikzpicture}
 }

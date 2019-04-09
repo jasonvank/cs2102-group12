@@ -295,7 +295,32 @@ router.post('/:userId/reset_password', function(req, res, next) {
       res.redirect('/user/' + req.user.username);
     }
   });
-})
+});
+
+router.get('/:resId/reject', function(req, res, next) {
+  if (!req.user.isManager) {
+    res.redirect('/login');
+  }
+  res.render('user/reject');
+});
+
+router.post('/:resId/reject', function(req, res, next) {
+  var resid = req.params.resId;
+  client.query('BEGIN', (err, data) => {
+    if (err) return rollback(client);
+    client.query(sql_query.query.remove_processes, [resid], (err, data) => {
+      if (err) return rollback(client);
+      client.query(sql_query.query.remove_books, [resid], (err, data) => {
+        if (err) return rollback(client);
+        client.query(sql_query.query.remove_reservation, [resid], (err, data) => {
+          if (err) return rollback(client);
+          client.query('COMMIT');
+          return res.redirect('/user/' + req.user.username);
+        });
+      });
+    });
+  });
+});
 
 // Supplementary functions for user queries ------------------------------------------------------------
 function customer_history(user_uid, req, res) {

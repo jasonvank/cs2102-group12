@@ -198,9 +198,21 @@ input.radio {
 	overflow:auto;
 }
 
+
 .locationbox {
 	width: 200px;
-	overflow:auto;
+	padding-top:10px;
+  padding-bottom: 10px;
+  text-align-last: center;
+  background-color: white;
+}
+.locationbox option {
+  text-align: center;
+}
+.locationform {
+  width: 200px;
+  position: relative;
+  margin-bottom: 20px;
 }
 
 .selectcontents {

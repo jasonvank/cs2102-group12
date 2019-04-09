@@ -1,11 +1,11 @@
 const sql = {}
 
-// CREATE VIEW CustomerHistory as SELECT * from (customers C NATURAL JOIN reservations R1 NATURAL JOIN Processes P NATURAL JOIN books B) LEFT JOIN rate R2 on R1.resid = R2.resid and C.uid = R2.uid and R2.rid = P.rid
+// CREATE VIEW CustomerHistory AS SELECT * from (customers C NATURAL JOIN reservations R1 NATURAL JOIN Processes P NATURAL JOIN books B) LEFT JOIN rate R2 ON R1.resid = R2.resid and C.uid = R2.uid and R2.rid = P.rid
 
 // const current_reservations = "" +
 // 	"CREATE VIEW current_reservations AS" +
-// 	"SELECT resdate as date, restime as time, numpeople, name as restaurant_name, address, C.name as categories, R.ave_rating as rating " +
-//     "FROM reservations NATURAL JOIN processes NATURAL JOIN restaurants NATURAL JOIN belongs B INNER JOIN categories C on C.cid = B.cid inner join Ratings R on R.rid = B.rid" +
+// 	"SELECT resdate AS date, restime AS time, numpeople, name AS restaurant_name, address, C.name AS categories, R.ave_rating AS rating " +
+//     "FROM reservations NATURAL JOIN processes NATURAL JOIN restaurants NATURAL JOIN belongs B INNER JOIN categories C ON C.cid = B.cid inner join Ratings R ON R.rid = B.rid" +
 //     "WHERE uid = $1"
 
 sql.query = {
@@ -16,25 +16,43 @@ sql.query = {
   customer_register: 'INSERT INTO customers (uid) VALUES ($1)',
   reset_password: 'UPDATE users SET password_hash = $2 WHERE user_uid = $1',
   update_info: 'UPDATE users SET first_name = $2, last_name=$3 where user_uid = $1',
-  check_user_status: 'SELECT sum(value) as total from rewards NATURAL JOIN earns NATURAL JOIN customers GROUP BY uid HAVING uid = $1',
+  check_user_status: 'SELECT sum(value) AS total from rewards NATURAL JOIN earns NATURAL JOIN customers GROUP BY uid HAVING uid = $1',
   // User
-  customer_history: 'CREATE VIEW CustomerHistory as SELECT * from (customers C NATURAL JOIN reservations R1 NATURAL JOIN Processes P NATURAL JOIN books B) LEFT JOIN rate R2 on R1.resid = R2.resid and C.uid = R2.uid and R2.rid = P.rid',
-  manager_history: 'CREATE VIEW ManagerHistory as SELECT * from (customers C NATURAL JOIN reservations R1 NATURAL JOIN Processes P NATURAL JOIN books B)',
-
-  current_reservations: "" +
-  "WITH current_reservations AS (" +
-  "SELECT R.uid as customer_uid, resid as reservation_id, resdate as date, restime as time, numpeople, R.name as restaurant_name, address, C.name as categories, RA.ave_rating as rating " +
-  "FROM restaurants R NATURAL JOIN books B NATURAL JOIN ratings RA NATURAL JOIN reservations INNER JOIN belongs BE ON BE.rid = R.rid INNER JOIN categories C ON C.cid = BE.cid " +
+  display_customer_history:  "" +
+  "WITH current_reservations AS ( " +
+  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, address, C.name AS categories " +
+  "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN  processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid " +
   ") " +
   "SELECT * " +
   "FROM current_reservations " +
-  "WHERE customer_uid = $1",
+  "WHERE customer_uid = $1 AND date < (select now()) " +
+  "ORDER BY date, time, numpeople ",
+
+  display_manager_history: "" +
+  "WITH current_reservations AS ( " +
+  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, address, C.name AS categories " +
+  "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN  processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid " +
+  ") " +
+  "SELECT * " +
+  "FROM current_reservations " +
+  "WHERE customer_uid = $1 AND date < (select now()) " +
+  "ORDER BY date, time, numpeople ",
+
+  display_current_reservations: "" +
+  "WITH current_reservations AS ( " +
+  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, address, C.name AS categories " +
+  "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN  processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid " +
+  ") " +
+  "SELECT * " +
+  "FROM current_reservations " +
+  "WHERE customer_uid = $1 AND date >= (select now()) " +
+  "ORDER BY date, time, numpeople ",
 
 
-  new_bookings: "" +
+  display_new_bookings: "" +
   "WITH new_bookings AS (" +
-  "SELECT resid AS reservation_id, RE.restime as time, RE.resdate as data, M.uid as manager_uid, C.uid as customer_uid, numpeople, name as restaurant_name, address, open_time, close_time, U.contact_number as customer_contact " +
-  "FROM reservations RE NATURAL JOIN books B NATURAL JOIN customers C NATURAL JOIN processes P inner join (restaurants R natural join managers M) on R.rid = P.rid inner join users U on C.uid = U.user_uid" +
+  "SELECT resid AS reservation_id, RE.restime AS time, RE.resdate AS data, M.uid AS manager_uid, C.uid AS customer_uid, numpeople, name AS restaurant_name, address, open_time, close_time, U.contact_number AS customer_contact " +
+  "FROM reservations RE NATURAL JOIN books B NATURAL JOIN customers C NATURAL JOIN processes P inner join (restaurants R natural join managers M) ON R.rid = P.rid inner join users U ON C.uid = U.user_uid" +
   ") " +
   "SELECT * " +
   "FROM new_bookings " +
@@ -59,7 +77,7 @@ sql.query = {
   register_restaurant: 'INSERT INTO registers (uid, rid) VALUES ($1, $2)',
   add_menu: 'INSERT INTO menus (rid, name) VALUES ($1, $2)',
   user_menu: 'SELECT * FROM menus M1 WHERE M1.rid = (SELECT R1.rid FROM restaurants R1 WHERE R1.uid=($1))',
-  menu_name_to_mid: 'SELECT mid from (SELECT * FROM menus M1 WHERE M1.rid = (SELECT R1.rid FROM restaurants R1 WHERE R1.uid=$1)) as Temp WHERE name=$2',
+  menu_name_to_mid: 'SELECT mid from (SELECT * FROM menus M1 WHERE M1.rid = (SELECT R1.rid FROM restaurants R1 WHERE R1.uid=$1)) AS Temp WHERE name=$2',
   add_menu_item: 'INSERT INTO items (name, price, description, mid) VALUES ($1, $2, $3, $4)',
   user_item: 'SELECT * FROM items WHERE mid =$1',
   item_name_to_iid: 'SELECT iid FROM items WHERE mid = $1 AND name = $2',

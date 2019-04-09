@@ -302,14 +302,43 @@ router.post('/:userId/reset_password', function(req, res, next) {
   });
 });
 
-router.get('/:resId/reject', function(req, res, next) {
+router.get('/:userId/:resId/reject', function(req, res, next) {
   if (!req.user.isManager) {
+    res.redirect('/login');
+  } if (req.user.username != req.params.userId) {
     res.redirect('/login');
   }
   res.render('user/reject');
 });
 
-router.post('/:resId/reject', function(req, res, next) {
+router.post('/:userId/:resId/reject', function(req, res, next) {
+  var resid = req.params.resId;
+  client.query('BEGIN', (err, data) => {
+    if (err) return rollback(client);
+    client.query(sql_query.query.remove_processes, [resid], (err, data) => {
+      if (err) return rollback(client);
+      client.query(sql_query.query.remove_books, [resid], (err, data) => {
+        if (err) return rollback(client);
+        client.query(sql_query.query.remove_reservation, [resid], (err, data) => {
+          if (err) return rollback(client);
+          client.query('COMMIT');
+          return res.redirect('/user/' + req.user.username);
+        });
+      });
+    });
+  });
+});
+
+router.get('/:userId/:resId/cancel', function(req, res, next) {
+  if (req.user.isManager) {
+    res.redirect('/login');
+  } if (req.user.username != req.params.userId) {
+    res.redirect('/login');
+  }
+  res.render('user/cancel');
+});
+
+router.post('/:userId/:resId/cancel', function(req, res, next) {
   var resid = req.params.resId;
   client.query('BEGIN', (err, data) => {
     if (err) return rollback(client);

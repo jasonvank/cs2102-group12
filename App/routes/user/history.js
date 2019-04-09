@@ -10,12 +10,25 @@ const pool = new Pool({connectionString: process.env.DATABASE_URL});
 
 // GET route after registering
 router.get('/', function(req, res, next) {
-    console.log('hehre');
-  res.render('user/history', { title: 'Express' });
+  console.log("hey");
+  if (!req.user) {
+    res.redirect('/login');
+  }
+  if (req.user.username != req.params.userId) {
+    res.redirect('/user/' + req.user.username);
+  }
+  var user_uid = req.user.user_uid;
+  if (req.user.isManager) {
+    console.log("is Manager ");
+    // return manager_history(user_uid, req, res);
+  } else {
+    console.log("is Customer ");
+    // return customer_history(user_uid, req, res)
+  }
 });
 
-router.get('/:userId/history', function(req, res, next) {
-    console.log('hehre history');
+router.post('/:reservationId/rate', function(req, res, next) {
+  console.log('reservation history');
 
   if (!req.user.username) {
     res.redirect('/login');
@@ -23,12 +36,43 @@ router.get('/:userId/history', function(req, res, next) {
   pool.query(sql_query.query.user_info, [req.user.username], (err, data) => {
     if(err) {
       res.redirect('/history');
-    } else { 
+    } else {
       res.render('user/user', {
         data : data.rows[0]
       });
     }
   });
 });
+
+// Supplementary functions for user queries ------------------------------------------------------------
+function customer_history(user_uid, req, res) {
+  console.log("user uid", user_uid);
+  pool.query(sql_query.query.display_customer_history, [user_uid], (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.redirect('/user/' + req.user.username);
+    } else {
+
+      return res.render('user/history', {
+        history_reservations: data.rows,
+        user: req.user,
+      });
+    }
+  });
+}
+
+function manager_history(user_uid, req, res) {
+  pool.query(sql_query.query.display_manager_history, [user_uid], (err, data) => {
+    console.log(JSON.stringify(data));
+    if (err) {
+      return res.redirect('/user/' + req.user.username);
+    } else {
+      return res.render('user/history', {
+        history_reservations: data.rows,
+        user: req.user,
+      });
+    }
+  });
+}
 
 module.exports = router;

@@ -27,7 +27,7 @@ body {
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
 	top: 50%;
-	transform: translateY(-50%);
+	transform: translateY(-35%);
 	font-family: 'Roboto', sans-serif;
 	color: #333;
 	font-weight: 400;
@@ -190,4 +190,16 @@ input.radio {
 	.form-v5-content {
 	    margin: 175px 20px;
 	}
+}
+
+.selectbox {
+	width: 200px;
+	height: 200px;
+	overflow:auto;
+}
+
+.selectcontents {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
 }

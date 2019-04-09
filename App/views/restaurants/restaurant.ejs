@@ -78,10 +78,10 @@
             <% for(var i=0; i<data.passedData.rows.length; i++) { %>
             <tr>
                  <td id = 'td1' onclick="content(this)" ><%= data.passedData.rows[i].name%></td>
-                 <td id = 'td1' onclick="content(this)" ><%= data.passedData.rows[i].address%></td>
-                 <td id = 'td1' onclick="content(this)" ><%= data.passedData.rows[i].open_time%></td>
-                 <td id = 'td1' onclick="content(this)" ><%= data.passedData.rows[i].close_time%></td>
-                 <td id = 'td1' onclick="content(this)" ><%= data.passedData.rows[i].contacts%></td>
+                 <td id = 'td1'><%= data.passedData.rows[i].address%></td>
+                 <td id = 'td1'><%= data.passedData.rows[i].open_time%></td>
+                 <td id = 'td1'><%= data.passedData.rows[i].close_time%></td>
+                 <td id = 'td1'><%= data.passedData.rows[i].contacts%></td>
             </tr>
             <% } %>
        </tbody>

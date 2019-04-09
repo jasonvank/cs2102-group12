@@ -26,8 +26,10 @@ var userRouter = require('./routes/user/user');
 
 /* --- restarants management --- */
 var menuRouter = require('./routes/restaurants/menu');
+var restaurantRouter = require('./routes/restaurants/restaurant');
 var specialtiesRouter = require('./routes/restaurants/specialties');
 
+var itemRouter = require('./routes/restaurants/item');
 // var addRestaurantRouter = require('./routes/user/restaurants/add_restaurant');
 var selectMenuRouter = require('./routes/user/add_item/select_menus');
 // var addMenuRouter = require('./routes/restaurants/add_menu');
@@ -88,7 +90,9 @@ app.use('/about', aboutRouter);
 
 /* --- restaurants management --- */
 app.use('/menu', menuRouter);
+app.use('/restaurant', restaurantRouter);
 app.use('/specialties', specialtiesRouter);
+app.use('/item', itemRouter);
 
 // app.use('/add_restaurant', addRestaurantRouter);
 // app.use('/add_menu', addMenuRouter);

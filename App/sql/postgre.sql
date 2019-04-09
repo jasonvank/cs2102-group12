@@ -87,7 +87,7 @@ CREATE TABLE belongs (
     rid     uuid NOT NULL,
     primary key (cid, rid),
     foreign key (cid) references categories (cid),
-    foreign key (rid) references restaurants (rid)
+    foreign key (rid) references restaurants (rid) on delete cascade
 );
 
 CREATE TABLE menus (

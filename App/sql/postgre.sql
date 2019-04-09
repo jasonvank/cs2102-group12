@@ -28,6 +28,7 @@ CREATE TABLE restaurants (
     name         varchar(50) UNIQUE NOT NULL,
     uid          uuid UNIQUE NOT NULL,
     address      varchar(50) NOT NULL,
+    location     varchar(50) NOT NULL,
     open_time    TIME NOT NULL,
     close_time   TIME NOT NULL,
     contacts     NUMERIC(10,0) NOT NULL,
@@ -35,8 +36,6 @@ CREATE TABLE restaurants (
     foreign key (uid) references managers (uid)
     -- foreign key (name) references restaurants (name) on delete cascade on update cascade
 );
-
-
 
 CREATE TABLE customers (
 	uid         uuid primary key references users on delete cascade
@@ -261,11 +260,11 @@ EXECUTE PROCEDURE trig_addItem();
 
 --Users
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
-VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', 'parkmanager', '$2b$10$Pdcb3BDaN1wATBHyZ0Fymurw1Js01F9nv6xgff42NfOmTrdXT1A.i', 'Park', 'SongJon', '84508450');
+VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', 'customer', '$2b$10$9uZM9JHNZZ4lzlqit8IYDulxGnsyk8fjBDJ4yRfMNLrnjCQl77.1m', 'customer', 'customer', '84508450');
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
 VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e', 'summer', '$2b$10$Pdcb3BDaN1wATBHyZ0Fymurw1Js01F9nv6xgff42NfOmTrdXT1A.i', 'Summer', 'Season', '77554433');
-INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
-VALUES ('3d6b65d8-a94c-4924-8af2-b17717284390', 'autumn', '$2b$10$vS4KkX8uenTCNooir9vyUuAuX5gUhSGVql8yQdsDDD4TG8bSUjkt.', 'Autumn', 'Season', '33445566');
+INSERT INTO users (username, password_hash, first_name, last_name, contact_number)
+VALUES ('autumn', '$2b$10$vS4KkX8uenTCNooir9vyUuAuX5gUhSGVql8yQdsDDD4TG8bSUjkt.', 'Autumn', 'Season', '33445566');
 
 --customers
 INSERT INTO customers (uid)
@@ -284,14 +283,14 @@ VALUES ('d0a7f883-36fc-4094-9330-7c932381662a');
 
 
 INSERT INTO managers (uid)
-VALUES ('3d6b65d8-a94c-4924-8af2-b17717284390');
+VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e');
 
 --restaurants
-INSERT INTO restaurants (rid, name, uid, address, open_time, close_time, contacts)
-VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'Parks Chicken Rice', 'd0a7f883-36fc-4094-9330-7c932381662a', 'Prince Georges Park', '01:30', '04:00', 98765432);
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'Parks Chicken Rice', 'd0a7f883-36fc-4094-9330-7c932381662a', 'Prince Georges Park', 'West', '01:30', '04:00', 98765432);
 
 INSERT INTO restaurants (rid, name, uid, address, open_time, close_time, contacts)
-VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'KFC', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e', 'Kent Ridge MRT', '07:30', '01:00', 88505532);
+VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'KFC', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e', 'Toa Payoh', 'Central', '07:30', '01:00', 88505532);
 
 --reservations
 INSERT INTO reservations (resid, restime, resdate, numpeople)

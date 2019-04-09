@@ -146,16 +146,17 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
           // To add Categories
           var cid;
           if (typeof cuisines === 'string' || cuisines instanceof String) {
-            console.log("only 1 category selected");
+            console.log("Only 1 category selected");
             client.query(sql_query.query.cat_name_to_cid, [cuisines], function(err, data) {
               if (err) rollback(client, err);
               cid = data.rows[0].cid;
               console.log("cid: " + cid);
               console.log("rid: " + rid);
               client.query(sql_query.query.add_category, [cid, rid], function(err, data) {
-                if (err) {rollback(client, err);}
-                else {
-                  console.log("added to belongs");
+                if (err) {
+                  rollback(client, err);
+                } else {
+                  console.log("Added to belongs");
                   client.query('COMMIT');
                   return res.redirect('/user/' + req.user.username);
                 }
@@ -163,7 +164,7 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
             });
           } else {
             for (var i = 0; i < cuisines.length; i++) {
-              console.log("multiple cat selected");
+              console.log("multiple categories selected");
               // console.log(cuisines[i]);
               var cuisine_name = cuisines[i];
               console.log("cuisine_name: " + cuisine_name);
@@ -174,11 +175,11 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
                 console.log("rid: " + rid);
                 client.query(sql_query.query.add_category, [cid, rid], function(err, data) {
                   if (err) rollback(client, err);
-                  client.query('COMMIT');
-                  return res.redirect('/user/' + req.user.username);
                 });
               });
             }
+            client.query('COMMIT');
+            return res.redirect('/user/' + req.user.username);
           }
         });
       });

@@ -77,13 +77,13 @@ CREATE TABLE registers (
 );
 
 CREATE TABLE categories (
-    cid     integer,
+    cid     uuid NOT NULL,
     name    varchar(50) NOT NULL,
     primary key (cid)
 );
 
 CREATE TABLE belongs (
-    cid     integer NOT NULL,
+    cid     uuid NOT NULL,
     rid     uuid NOT NULL,
     primary key (cid, rid),
     foreign key (cid) references categories (cid),
@@ -259,18 +259,6 @@ BEFORE INSERT OR UPDATE ON items
 FOR EACH ROW
 EXECUTE PROCEDURE trig_addItem();
 
--- Categories
-INSERT INTO categories (cid, name)
-VALUES (1, 'chinese');
-INSERT INTO categories (cid, name)
-VALUES (2, 'korean');
-INSERT INTO categories (cid, name)
-VALUES (3, 'indian');
-INSERT INTO categories (cid, name)
-VALUES (4, 'western');
-INSERT INTO categories (cid, name)
-VALUES (5, 'japanese');
-
 --Users
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
 VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', 'customer', '$2b$10$9uZM9JHNZZ4lzlqit8IYDulxGnsyk8fjBDJ4yRfMNLrnjCQl77.1m', 'customer', 'customer', '84508450');
@@ -317,13 +305,19 @@ VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', '7b49a151-dacd-49c5-b49e-116d388
 
 ---categories
 INSERT INTO categories (cid, name)
-VALUES ('54321535-9cc0-457f-94b8-39edb9eb891b', 'Mala Hotpot');
+VALUES ('54321535-9cc0-457f-94b8-39edb9eb891b', 'Western');
 
 INSERT INTO categories (cid, name)
 VALUES ('3b688933-e5ae-483a-87b1-3c3c99be8749', 'Chinese');
 
 INSERT INTO categories (cid, name)
-VALUES ('8f87cee1-d078-429d-807a-e4e4db2e3a36', 'Western Food');
+VALUES ('8f87cee1-d078-429d-807a-e4e4db2e3a36', 'Japanese');
+
+INSERT INTO categories (cid, name)
+VALUES ('74367fad-d083-4898-aa93-6c214870c460', 'Korean');
+
+INSERT INTO categories (cid, name)
+VALUES ('958407cf-8ef0-40ca-a537-801d7f92e684', 'Indian');
 
 --belongs
 INSERT INTO belongs (rid, cid)

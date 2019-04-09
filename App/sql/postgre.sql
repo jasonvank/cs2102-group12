@@ -289,7 +289,7 @@ VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e');
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
 VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'Parks Chicken Rice', 'd0a7f883-36fc-4094-9330-7c932381662a', 'Prince Georges Park', 'West', '01:30', '04:00', 98765432);
 
-INSERT INTO restaurants (rid, name, uid, address, open_time, close_time, contacts)
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
 VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'KFC', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e', 'Toa Payoh', 'Central', '07:30', '01:00', 88505532);
 
 --reservations

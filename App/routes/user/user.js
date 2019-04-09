@@ -115,6 +115,7 @@ router.get('/:userId/add_restaurant', function(req, res, next) {
 router.post('/:userId/add_restaurant', function(req, res, next) {
   var name = req.body.name;
   var address = req.body.address;
+  var location = req.body.location;
   var open_time = req.body.open_time;
   var close_time = req.body.close_time;
   var contacts = req.body.contacts;
@@ -135,7 +136,7 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
   var rid;
   client.query('BEGIN', function(err, data) {
     if(err) return rollback(client, err);
-    client.query(sql_query.query.add_restaurant, [uid, name, address, open_time, close_time, contacts], function(err, data) {
+    client.query(sql_query.query.add_restaurant, [uid, name, address, location, open_time, close_time, contacts], function(err, data) {
       if (err) return rollback(client, err);
       rid = data.rows[0].rid;
       console.log("rid0: " + rid);

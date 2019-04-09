@@ -41,7 +41,7 @@ sql.query = {
   menu_mid: 'SELECT mid FROM menus WHERE rid=$1 and name=$2',
   menu_item: 'SELECT * FROM items WHERE mid = $1',
   user_restaurant: 'SELECT * FROM restaurants WHERE uid=$1',
-  add_restaurant: 'INSERT INTO restaurants (uid, name, address, open_time, close_time, contacts) VALUES ($1, $2, $3, $4, $5, $6) RETURNING rid',
+  add_restaurant: 'INSERT INTO restaurants (uid, name, address, location, open_time, close_time, contacts) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING rid',
   register_restaurant: 'INSERT INTO registers (uid, rid) VALUES ($1, $2)',
   add_menu: 'INSERT INTO menus (rid, name) VALUES ($1, $2)',
   user_menu: 'SELECT * FROM menus M1 WHERE M1.rid = (SELECT R1.rid FROM restaurants R1 WHERE R1.uid=($1))',

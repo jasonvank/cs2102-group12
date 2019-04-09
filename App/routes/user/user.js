@@ -305,14 +305,17 @@ router.post('/:userId/reset_password', function(req, res, next) {
   });
 });
 
-router.get('/:resId/reject', function(req, res, next) {
+router.get('/:userId/:resId/reject', function(req, res, next) {
   if (!req.user.isManager) {
+    res.redirect('/login');
+  } if (req.user.username != req.params.userId) {
     res.redirect('/login');
   }
   res.render('user/reject');
 });
 
-router.post('/:resId/reject', function(req, res, next) {
+
+router.post('/:userId/:resId/reject', function(req, res, next) {
   var resid = req.params.resId;
   client.query('BEGIN', (err, data) => {
     if (err) return rollback(client);
@@ -329,6 +332,18 @@ router.post('/:resId/reject', function(req, res, next) {
     });
   });
 });
+
+router.get('/:userId/:resId/cancel', function(req, res, next) {
+  if (req.user.isManager) {
+    res.redirect('/login');
+  } if (req.user.username != req.params.userId) {
+    res.redirect('/login');
+  }
+  res.render('user/cancel');
+});
+
+router.post('/:userId/:resId/cancel', function(req, res, next) {
+
 
 // Supplementary functions for user queries ------------------------------------------------------------
 function customer_history(user_uid, req, res) {

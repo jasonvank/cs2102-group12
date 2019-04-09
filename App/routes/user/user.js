@@ -21,14 +21,17 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/:userId', function (req, res, next) {
-  if (!req.user.username) {
+  if (!req.user) {
+    res.status(500).send("<h3>Please <a href='/login'> login </a> first</h3>")
     res.redirect('/login');
   }
   if (req.user.username != req.params.userId) {
     res.redirect('/user/' + req.user.username);
   }
+  console.log(req.user);
   pool.query(sql_query.query.user_info, [req.user.username], (err, data) => {
     if (err) {
+      res.status(500).send("Please login first")
       res.redirect('/login');
     } else {
       var user_uid = req.user.user_uid;
@@ -366,6 +369,10 @@ function new_bookings(user_uid, req, res) {
 
 function current_reservations(user_uid, req, res) {
   pool.query(sql_query.query.current_reservations, [user_uid], (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.redirect('/user/' + req.user.username);
+    }
     return res.render('user/user', {
       current_reservations: data.rows,
       user: req.user,

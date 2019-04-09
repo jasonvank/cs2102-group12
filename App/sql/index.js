@@ -16,18 +16,32 @@ sql.query = {
   customer_register: 'INSERT INTO customers (uid) VALUES ($1)',
   reset_password: 'UPDATE users SET password_hash = $2 WHERE user_uid = $1',
   update_info: 'UPDATE users SET first_name = $2, last_name=$3 where user_uid = $1',
-  check_usertype: 'SELECT * FROM managers WHERE uid = $1',
+  check_user_status: 'SELECT sum(value) as total from rewards NATURAL JOIN earns NATURAL JOIN customers GROUP BY uid HAVING uid = $1',
   // User
   customer_history: 'CREATE VIEW CustomerHistory as SELECT * from (customers C NATURAL JOIN reservations R1 NATURAL JOIN Processes P NATURAL JOIN books B) LEFT JOIN rate R2 on R1.resid = R2.resid and C.uid = R2.uid and R2.rid = P.rid',
   manager_history: 'CREATE VIEW ManagerHistory as SELECT * from (customers C NATURAL JOIN reservations R1 NATURAL JOIN Processes P NATURAL JOIN books B)',
 
-  current_reservations: "SELECT resid as reservation_id, resdate as date, restime as time, numpeople, RE.name as restaurant_name, address, C.name as categories, R.ave_rating as rating " +
-  "FROM reservations NATURAL JOIN processes NATURAL JOIN restaurants RE NATURAL JOIN belongs B INNER JOIN categories C ON C.cid = B.cid inner join Ratings R on R.rid = B.rid " +
-  "WHERE uid = $1",
-  new_bookings: "SELECT R.resid as reservation_id, R.resdate as date, R.restime as time, numpeople, RE.name as restaurant_name, U.username as customer_username, U.contact_number as contact_number, U.last_name as last_name, U.first_name as first_name " +
-  "FROM restaurants RE NATURAL JOIN books B NATURAL JOIN reservations R INNER JOIN users U ON U.user_uid = uid " +
-  "WHERE RE.rid = $1",
-  reward_points: "SELECT * FROM rewards NATURAL JOIN earns where uid = $1",
+  current_reservations: "" +
+  "WITH current_reservations AS (" +
+  "SELECT R.uid as customer_uid, resid as reservation_id, resdate as date, restime as time, numpeople, R.name as restaurant_name, address, C.name as categories, RA.ave_rating as rating " +
+  "FROM restaurants R NATURAL JOIN books B NATURAL JOIN ratings RA NATURAL JOIN reservations INNER JOIN belongs BE ON BE.rid = R.rid INNER JOIN categories C ON C.cid = BE.cid " +
+  ") " +
+  "SELECT * " +
+  "FROM current_reservations " +
+  "WHERE customer_uid = $1",
+
+
+  new_bookings: "" +
+  "WITH new_bookings AS (" +
+  "SELECT resid AS reservation_id, RE.restime as time, RE.resdate as data, M.uid as manager_uid, C.uid as customer_uid, numpeople, name as restaurant_name, address, open_time, close_time, U.contact_number as customer_contact " +
+  "FROM reservations RE NATURAL JOIN books B NATURAL JOIN customers C NATURAL JOIN processes P inner join (restaurants R natural join managers M) on R.rid = P.rid inner join users U on C.uid = U.user_uid" +
+  ") " +
+  "SELECT * " +
+  "FROM new_bookings " +
+  "WHERE manager_uid = $1",
+
+  register_rewards: 'INSERT INTO rewards (value) VALUES ($1) RETURNING rewid',
+  customer_register_rewards: 'INSERT INTO earns (uid, rewid) VALUES ($1, $2)',
 
 
   // Update

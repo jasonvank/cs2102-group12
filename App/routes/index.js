@@ -35,25 +35,42 @@ router.post('/register', function (req, res, next) {
   var contact_number = req.body.contact_number;
   var user_type = req.body.usertype;
 
+  console.log("start to register");
   client.query('BEGIN', function (err, data) {
     if (err) return rollback(client);
-    client.query(sql_query.query.user_register, [username, password_hash, last_name, first_name, contact_number], (err, data) => {
+    client.query(sql_query.query.user_register, [username, password_hash, last_name, first_name, contact_number], (err2, data2) => {
       var user_uid;
-      if (err || !data.rows || data.rows.length == 0) {
+      if (err2 || !data2.rows || data2.rows.length == 0) {
         // show message duplicate user name
         res.status(400).send("This user name has been registered, please change!");
         return rollback(client);
       }
-      user_uid = data.rows[0].user_uid;
+      console.log("complete registration");
+      user_uid = data2.rows[0].user_uid;
+      console.log("get user uid "  + user_uid);
+      console.log("user is " + user_type);
       if (user_type == "customer") {
-        client.query(sql_query.query.customer_register, [user_uid], (err, data) => {
-          if (err || !data.rows || data.rows.length == 0) {
+        console.log("customer");
+        client.query(sql_query.query.customer_register, [user_uid], (err3, data3) => {
+          if (err3) {
             return rollback(client);
           }
+          client.query(sql_query.query.register_rewards, [100], (err4, data4) => {
+            if (err4 || !data4.rows || data4.rows.length == 0) {
+              return rollback(client);
+            }
+            var rewid = data4.rows[0].rewid;
+            client.query(sql_query.query.customer_register_rewards, [user_uid, rewid], (err5, data5) => {
+              if (err5) {
+                return rollback(client);
+              }
+            })
+          })
         });
       } else {
-        client.query(sql_query.query.manager_register, [user_uid], (err, data) => {
-          if (err || !data.rows || data.rows.length == 0) {
+        console.log("manager");
+        client.query(sql_query.query.manager_register, [user_uid], (err6, data6) => {
+          if (err6 || !data6.rows || data6.rows.length == 0) {
             return rollback(client);
           }
 
@@ -61,6 +78,7 @@ router.post('/register', function (req, res, next) {
       }
 
       client.query('COMMIT', client.end.bind(client), (err, res2) => {
+        console.log("going to login");
         req.login({
           username: username,
           passwordHash: bcrypt.hashSync(req.body.password, 10),
@@ -93,7 +111,7 @@ router.get('/logout', function (req, res, next) {
     // delete session object
     req.session.destroy(function (err) {
       if (err) {
-        return next(err);
+        return res.status(500).send(err);
       } else {
         return res.redirect('/');
       }

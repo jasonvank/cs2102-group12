@@ -29,6 +29,7 @@
         .btn-length {
             width: 150px;
         }
+
         .center {
             margin-left: auto;
             margin-right: auto;
@@ -44,8 +45,13 @@
     <%- include ../templates/navbar.ejs %>
 
     <div class="page-header text-center">
-        <h1 style="color:orange; margin: 30px"><span class="glyphicon glyphicon-user"></span>
-            Welcome <%= user.username %></h1>
+        <h2 style="color:orange; margin: 30px">
+            <% if (!user.isManager) { %>
+            You have total <%= user.reward_points %> points!
+            <% } %>
+        </h2>
+
+
         <div class="well center">
             <div class="row">
                 <span style="width: 200px; color: white">User Operation</span>
@@ -53,8 +59,14 @@
                     Password</a>
                 <a href="/user/<%= user.username %>/update_info" class="btn btn-default btn-sm btn-length">Update
                     User Info</a>
-                <a href="/user/<%= user.username %>/history" class="btn btn-default btn-sm btn-length">Reservation
-                    History</a>
+
+                <a href="/user/<%= user.username %>/history" class="btn btn-default btn-sm btn-length">
+                    <% if (user.isManager) { %>
+                    Booking History
+                    <% } else { %>
+                    Reservation History
+                    <% }%>
+                </a>
             </div>
 
             <% if (user.isManager) { %>
@@ -68,15 +80,15 @@
             </div>
             <div class="row">
                 <span style="width: 200px; color: white">Menu Operation</span>
-                <a href="/user/<%= user.username %>/add_menu" class="btn btn-default btn-sm btn-length">Add menu</a>
-                <a href="/user/edit_menu/select_menus" class="btn btn-default btn-sm btn-length">Edit menu</a>
-                <a href="/user/edit_menu/delete_menus" class="btn btn-default btn-sm btn-length">Delete menu</a>
+                <a href="/user/<%= user.username %>/add_menu" class="btn btn-default btn-sm btn-length">Add</a>
+                <a href="/user/edit_menu/select_menus" class="btn btn-default btn-sm btn-length">Edit</a>
+                <a href="/user/edit_menu/delete_menus" class="btn btn-default btn-sm btn-length">Delete</a>
             </div>
             <div class="row">
                 <span style="width: 200px; color: white">Item Operation</span>
-                <a href="/user/add_item/select_menus" class="btn btn-default btn-sm btn-length">Add item</a>
-                <a href="/user/edit_item/select_menus" class="btn btn-default btn-sm btn-length">Edit item</a>
-                <a href="/user/edit_item/delete_menus" class="btn btn-default btn-sm btn-length">Delete item</a>
+                <a href="/user/add_item/select_menus" class="btn btn-default btn-sm btn-length">Add</a>
+                <a href="/user/edit_item/select_menus" class="btn btn-default btn-sm btn-length">Edit</a>
+                <a href="/user/edit_item/delete_menus" class="btn btn-default btn-sm btn-length">Delete</a>
             </div>
         </div>
         <% } %>
@@ -84,67 +96,66 @@
     </div>
 
 
-
-<div>
-    <table class="table" style="margin-top: 50px; color: white">
-        <% if (!user.isManager) { %>
-        <caption style="font-size: 30px; color: white;">Current Reservations</caption>
-        <tr>
-            <th>Res. No.</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Number of people</th>
-            <th>Restaurant name</th>
-            <th>Restaurant address</th>
-            <th>Categories</th>
-            <th>Rating</th>
-            <th>Action</th>
-        </tr>
-        <% for(var i = 0; current_reservations !== undefined && i < current_reservations.length; i++) { %>
-        <tr>
-            <td><%= i + 1 %></td>
-            <td><%= new Date(current_reservations[i].date).toDateString() %></td>
-            <td><%= current_reservations[i].time %></td>
-            <td><%= current_reservations[i].numpeople %></td>
-            <td><%= current_reservations[i].restaurant_name %></td>
-            <td><%= current_reservations[i].address %></td>
-            <td><%= current_reservations[i].categories %></td>
-            <td><%= current_reservations[i].rating %></td>
-            <td>
-                <a href='/user/<%= data.username %>/<%= current_reservations[i].reservation_id %>/cancel'>Cancel</a>
-            </td>
-        </tr>
-        <% } %>
-        <% } else { %>
-        <caption style="font-size: 30px; color: white;">New Bookings</caption>
-        <tr>
-            <th>Booking No.</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Customer username</th>
-            <th>Number of people</th>
-            <th>Contact</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Action</th>
-        </tr>
-        <% for(var i = 0; new_bookings !== undefined && i < new_bookings.length; i++) { %>
-        <tr>
-            <td><%= i + 1 %></td>
-            <td><%= new Date(new_bookings[i].date).toDateString() %></td>
-            <td><%= new_bookings[i].time %></td>
-            <td><%= new_bookings[i].customer_username %></td>
-            <td><%= new_bookings[i].numpeople %></td>
-            <td><%= new_bookings[i].contact_number %></td>
-            <td><%= new_bookings[i].last_name %></td>
-            <td><%= new_bookings[i].first_name %></td>
-            <td><a href='/user/<%= user.username %>/<%= new_bookings[i].reservation_id %>/reject'>Reject</a>
-            </td>
-        </tr>
-        <% } %>
-        <% } %>
-    </table>
-</div>
+    <div>
+        <table class="table" style="margin-top: 50px; color: white">
+            <% if (!user.isManager) { %>
+            <caption style="font-size: 30px; color: white;">Current Reservations</caption>
+            <tr>
+                <th>Res. No.</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Number of people</th>
+                <th>Restaurant name</th>
+                <th>Restaurant address</th>
+                <th>Categories</th>
+                <th>Rating</th>
+                <th>Action</th>
+            </tr>
+            <% for(var i = 0; current_reservations !== undefined && i < current_reservations.length; i++) { %>
+            <tr>
+                <td><%= i + 1 %></td>
+                <td><%= new Date(current_reservations[i].date).toDateString() %></td>
+                <td><%= current_reservations[i].time %></td>
+                <td><%= current_reservations[i].numpeople %></td>
+                <td><%= current_reservations[i].restaurant_name %></td>
+                <td><%= current_reservations[i].address %></td>
+                <td><%= current_reservations[i].categories %></td>
+                <td><%= current_reservations[i].rating %></td>
+                <td>
+                    <a href='/user/<%= data.username %>/<%= current_reservations[i].reservation_id %>/cancel'>Cancel</a>
+                </td>
+            </tr>
+            <% } %>
+            <% } else { %>
+            <caption style="font-size: 30px; color: white;">New Bookings</caption>
+            <tr>
+                <th>Booking No.</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Customer username</th>
+                <th>Number of people</th>
+                <th>Contact</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Action</th>
+            </tr>
+            <% for(var i = 0; new_bookings !== undefined && i < new_bookings.length; i++) { %>
+            <tr>
+                <td><%= i + 1 %></td>
+                <td><%= new Date(new_bookings[i].date).toDateString() %></td>
+                <td><%= new_bookings[i].time %></td>
+                <td><%= new_bookings[i].customer_username %></td>
+                <td><%= new_bookings[i].numpeople %></td>
+                <td><%= new_bookings[i].contact_number %></td>
+                <td><%= new_bookings[i].last_name %></td>
+                <td><%= new_bookings[i].first_name %></td>
+                <td><a href='/user/<%= user.username %>/<%= new_bookings[i].reservation_id %>/reject'>Reject</a>
+                </td>
+            </tr>
+            <% } %>
+            <% } %>
+        </table>
+    </div>
 
 </div>
 </body>

@@ -26,19 +26,14 @@ router.get('/', function(req, res, next) {
     uid = req.user.user_uid;
     console.log("uid:" + uid);
 
-    var checkCustQuery = 'select case when not exists(select * from customers where uid = ' + "'" + uid + "'" + ') then 1 else 0 end as result';
-    pool.query(checkCustQuery, (err, data) => {
-    	var isNotCustomer = data.rows[0].result;
-    	var error = err;
-    	if (err) {
-	    	return next();
-	    } else if (isNotCustomer == 1) {
-			console.log("Only customers can make reservations");
-			return res.render('reservations/notcustomererror');
-	    } else {
-	    	return next();
-    	}
- 	});
+	var isNotCustomer = req.user.isManager;
+	if (isNotCustomer == true) {
+		console.log("Only customers can make reservations");
+		return res.render('reservations/notcustomererror');
+    } else {
+    	return next();
+	}
+
 
     /*
     //get rid of restaurant. (get redirect parameter value)

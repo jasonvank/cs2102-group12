@@ -20,6 +20,30 @@ router.get('/', function (req, res, next) {
   res.render('index', {user: req.user});
 });
 
+router.post('/', function (req, res, next) {
+  var res_name = req.body.rest_name;
+  var location = req.body.location;
+  var category = req.body.cuisines;
+  var book_time = req.body.book_time;
+
+  console.log(res_name == 0);
+  console.log(location);
+  console.log(category);
+  console.log(book_time == 0);
+
+  var searchInfo = {
+    name : res_name,
+    location : location,
+    category : category,
+    time : book_time
+  }
+
+  res.redirect(url.format({
+    pathname: "/results",
+    query: searchInfo
+  }));
+});
+
 
 router.get('/login', function (req, res, next) {
   res.render('user/login', {message: req.flash('loginMessage')});

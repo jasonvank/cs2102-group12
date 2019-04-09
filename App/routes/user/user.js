@@ -72,7 +72,7 @@ router.post('/:userId/reset_password', function (req, res, next) {
       res.redirect('/user/' + req.user.username);
     }
   });
-})
+});
 
 router.get('/:userId/update_info', function (req, res, next) {
   if (!req.user.username) {
@@ -98,7 +98,7 @@ router.post('/:userId/update_info', function (req, res, next) {
       res.redirect('/user/' + req.user.username);
     }
   });
-})
+});
 // End user information and passwords updates --------------------------------------------------------------
 
 
@@ -343,7 +343,22 @@ router.get('/:userId/:resId/cancel', function(req, res, next) {
 });
 
 router.post('/:userId/:resId/cancel', function(req, res, next) {
-
+  var resid = req.params.resId;
+  client.query('BEGIN', (err, data) => {
+    if (err) return rollback(client);
+    client.query(sql_query.query.remove_processes, [resid], (err, data) => {
+      if (err) return rollback(client);
+      client.query(sql_query.query.remove_books, [resid], (err, data) => {
+        if (err) return rollback(client);
+        client.query(sql_query.query.remove_reservation, [resid], (err, data) => {
+          if (err) return rollback(client);
+          client.query('COMMIT');
+          return res.redirect('/user/' + req.user.username);
+        });
+      });
+    });
+  });
+});
 
 // Supplementary functions for user queries ------------------------------------------------------------
 function customer_history(user_uid, req, res) {

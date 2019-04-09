@@ -338,8 +338,10 @@ function customer_history(user_uid, req, res) {
       console.log(err);
       return res.redirect('/user/' + req.user.username);
     } else {
+
       return res.render('user/history', {
-        data: data.rows
+        history_reservations: data.rows,
+        user: req.user,
       });
     }
   });

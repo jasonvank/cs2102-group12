@@ -108,7 +108,6 @@
                 <th>Restaurant name</th>
                 <th>Restaurant address</th>
                 <th>Categories</th>
-                <th>Rating</th>
                 <th>Action</th>
             </tr>
             <% for(var i = 0; current_reservations !== undefined && i < current_reservations.length; i++) { %>
@@ -120,7 +119,6 @@
                 <td><%= current_reservations[i].restaurant_name %></td>
                 <td><%= current_reservations[i].address %></td>
                 <td><%= current_reservations[i].categories %></td>
-                <td><%= current_reservations[i].rating %></td>
                 <td>
                     <a href='/user/<%= user.username %>/<%= current_reservations[i].reservation_id %>/cancel'>Cancel</a>
                 </td>

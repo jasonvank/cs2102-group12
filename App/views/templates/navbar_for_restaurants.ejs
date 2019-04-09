@@ -15,8 +15,8 @@
             <li class="nav-item"><a href="about" class="nav-link">About</a></li>
         </ul>
         <ul class="nav navbar-nav">
-            <%if (user) { %>
-                <li class="nav-item" ><a href="/user/<%= user.username %>" class="nav-link" style="color: gold">Welcome : <%= user.username %><br></a></li>
+            <%if (data.user) { %>
+                <li class="nav-item" ><a href="/user/<%= data.user.username %>" class="nav-link" style="color: gold">Welcome : <%= data.user.username %><br></a></li>
                 <li class="nav-item"><a href="logout" class="nav-link" >Logout</a></li>
             <% } else { %>
                 <li class="nav-item"><a href="login" class="nav-link">Login</a></li>

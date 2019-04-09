@@ -58,43 +58,30 @@
       <div class="container">
         <div class="row justify-content-center mb-5 pb-5">
           <div class="col-md-7 text-center heading-section ftco-animate">
-            <span class="subheading">Our Menu</span>
-            <h2>Choose your menu</h2>
+            <span class="subheading">Our Items</span>
+            <h2>Here are the items</h2>
           </div>
         </div>
 
       <table class='table table-bordered table-condensed table-striped table-hover'>
        <thead>
             <tr >
-                 <th scope="col"> Menu name</th>
+              <th scope="col"> Item name</th>
+              <th scope="col"> Item price</th>
+              <th scope="col"> Item description</th>
             </tr>
        </thead>
        <tbody>
-         <tbody style="cursor:pointer" >
+         <tbody >
             <% for(var i=0; i<data.passedData.rows.length; i++) { %>
             <tr>
-                 <td id = 'td1' onclick="content(this)" ><%= data.passedData.rows[i].name%></td>
+              <td id = 'td1' ><%= data.passedData.rows[i].name%></td>
+              <td id = 'td2' ><%= data.passedData.rows[i].price%></td>
+              <td id = 'td2' ><%= data.passedData.rows[i].description%></td>
             </tr>
             <% } %>
        </tbody>
   </table>
-
-  <script>
-  function content(elem) {
-    document.getElementById("menu_name").value = elem.innerHTML;
-  }
-  </script>
-
-  <form class="form-detail" action="" method="post">
-<div class="form-row">
-<label for="Enter the restaurant name">Selected menu name</label>
-<input type="name" id="menu_name" name="menu_name" placeholder="menu name from above"  style="width: 300px" required="required">
-</div>
-
-<div class="form-row-last">
-<input type="submit" name="submit" class="submit" value="submit">
-</div>
-    </form>
 
       </div>
     </section>

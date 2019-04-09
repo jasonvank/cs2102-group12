@@ -35,6 +35,11 @@ sql.query = {
   update_pass: 'UPDATE users SET password=$2 WHERE username=$1',
 
   // Restaurants
+  all_restaurants: 'SELECT * FROM restaurants',
+  restaurant_rid: 'SELECT rid FROM restaurants WHERE name=$1',
+  restaurant_menu: 'SELECT * FROM menus WHERE rid=$1',
+  menu_mid: 'SELECT mid FROM menus WHERE rid=$1 and name=$2',
+  menu_item: 'SELECT * FROM items WHERE mid = $1',
   user_restaurant: 'SELECT * FROM restaurants WHERE uid=$1',
   add_restaurant: 'INSERT INTO restaurants (uid, name, address, open_time, close_time, contacts) VALUES ($1, $2, $3, $4, $5, $6) RETURNING rid',
   register_restaurant: 'INSERT INTO registers (uid, rid) VALUES ($1, $2)',

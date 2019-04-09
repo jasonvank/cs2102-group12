@@ -273,11 +273,11 @@ VALUES (5, 'japanese');
 
 --Users
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
-VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', 'customer', '$2b$10$9uZM9JHNZZ4lzlqit8IYDulxGnsyk8fjBDJ4yRfMNLrnjCQl77.1m', 'customer', 'customer', '84508450');
+VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', 'parkmanager', '$2b$10$Pdcb3BDaN1wATBHyZ0Fymurw1Js01F9nv6xgff42NfOmTrdXT1A.i', 'Park', 'SongJon', '84508450');
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
 VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e', 'summer', '$2b$10$Pdcb3BDaN1wATBHyZ0Fymurw1Js01F9nv6xgff42NfOmTrdXT1A.i', 'Summer', 'Season', '77554433');
-INSERT INTO users (username, password_hash, first_name, last_name, contact_number)
-VALUES ('autumn', '$2b$10$vS4KkX8uenTCNooir9vyUuAuX5gUhSGVql8yQdsDDD4TG8bSUjkt.', 'Autumn', 'Season', '33445566');
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('3d6b65d8-a94c-4924-8af2-b17717284390', 'autumn', '$2b$10$vS4KkX8uenTCNooir9vyUuAuX5gUhSGVql8yQdsDDD4TG8bSUjkt.', 'Autumn', 'Season', '33445566');
 
 --customers
 INSERT INTO customers (uid)
@@ -296,7 +296,7 @@ VALUES ('d0a7f883-36fc-4094-9330-7c932381662a');
 
 
 INSERT INTO managers (uid)
-VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e');
+VALUES ('3d6b65d8-a94c-4924-8af2-b17717284390');
 
 --restaurants
 INSERT INTO restaurants (rid, name, uid, address, open_time, close_time, contacts)

@@ -164,18 +164,18 @@ CREATE TABLE earns (
 );
 
 CREATE TABLE ratings (
-    rid     uuid NOT NULL,
-    ave_Rating   NUMERIC(2,1) NOT NULL DEFAULT 5.0,
-    CHECK (ave_Rating >= 0.0 and ave_Rating <= 5.0),
-    primary key (rid),
-    foreign key (rid) references restaurants (rid) on delete cascade
+    resid     uuid NOT NULL,
+    rating   NUMERIC(2,1) NOT NULL DEFAULT 5.0,
+    CHECK (rating >= 0.0 and rating <= 5.0),
+    primary key (resid),
+    foreign key (resid) references reservations (resid) on delete cascade
 );
 
 CREATE TABLE rate (
   resid uuid NOT NULL references reservations(resid),
   uid uuid NOT NULL references customers(uid) on delete cascade,
   rid uuid NOT NULL references restaurants(rid),
-  primary key (resid, uid, rid)
+  primary key (resid)
 );
 
 
@@ -263,8 +263,8 @@ INSERT INTO users (user_uid, username, password_hash, first_name, last_name, con
 VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', 'customer', '$2b$10$9uZM9JHNZZ4lzlqit8IYDulxGnsyk8fjBDJ4yRfMNLrnjCQl77.1m', 'customer', 'customer', '84508450');
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
 VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e', 'summer', '$2b$10$Pdcb3BDaN1wATBHyZ0Fymurw1Js01F9nv6xgff42NfOmTrdXT1A.i', 'Summer', 'Season', '77554433');
-INSERT INTO users (username, password_hash, first_name, last_name, contact_number)
-VALUES ('autumn', '$2b$10$vS4KkX8uenTCNooir9vyUuAuX5gUhSGVql8yQdsDDD4TG8bSUjkt.', 'Autumn', 'Season', '33445566');
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('9873068e-c0ae-4d68-932e-22a9c91c0fa8', 'autumn', '$2b$10$vS4KkX8uenTCNooir9vyUuAuX5gUhSGVql8yQdsDDD4TG8bSUjkt.', 'Autumn', 'Season', '33445566');
 
 --customers
 INSERT INTO customers (uid)
@@ -281,21 +281,31 @@ VALUES ('fe6400b3-1e84-405e-a340-dbc539b5f41a', 'fa9d34a8-78e5-4e3e-a800-e5b5655
 INSERT INTO managers (uid)
 VALUES ('d0a7f883-36fc-4094-9330-7c932381662a');
 
-
 INSERT INTO managers (uid)
-VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e');
+VALUES ('9873068e-c0ae-4d68-932e-22a9c91c0fa8');
 
 --restaurants
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
 VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'Parks Chicken Rice', 'd0a7f883-36fc-4094-9330-7c932381662a', 'Prince Georges Park', 'West', '01:30', '04:00', 98765432);
 
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'KFC', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e', 'Toa Payoh', 'Central', '07:30', '01:00', 88505532);
+VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'KFC', '9873068e-c0ae-4d68-932e-22a9c91c0fa8', 'Toa Payoh', 'Central', '07:30', '01:00', 88505532);
 
 --reservations
 INSERT INTO reservations (resid, restime, resdate, numpeople)
-VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', '01:00', '2019-06-02', 3);
+VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', '01:00', '2019-03-02', 3);
 
+INSERT INTO reservations (resid, restime, resdate, numpeople)
+VALUES ('b2a5078d-df7a-46f2-a4c1-d60b9a168394', '07:00', '2019-04-05', 2);
+
+INSERT INTO reservations (resid, restime, resdate, numpeople)
+VALUES ('d2d3fa97-bb8f-450a-9f2a-fe58df40133c', '02:00', '2019-04-15', 5);
+
+INSERT INTO reservations (resid, restime, resdate, numpeople)
+VALUES ('235a555f-6c36-4b57-b34c-eb92db1276d2', '08:00', '2019-03-15', 15);
+
+
+--books
 INSERT INTO books (resid, uid)
 VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e');
 
@@ -326,8 +336,20 @@ INSERT INTO belongs (rid, cid)
 VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', '3b688933-e5ae-483a-87b1-3c3c99be8749');
 
 --ratings
-INSERT INTO ratings (rid)
-VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393');
+INSERT INTO ratings (resid, rating)
+VALUES ('b2a5078d-df7a-46f2-a4c1-d60b9a168394', 3.0);
 
-INSERT INTO ratings (rid)
-VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38');
+INSERT INTO ratings (resid, rating)
+VALUES ('235a555f-6c36-4b57-b34c-eb92db1276d2', 4.0);
+
+INSERT INTO ratings (resid, rating)
+VALUES ('d2d3fa97-bb8f-450a-9f2a-fe58df40133c', 4.0);
+
+
+--rate
+INSERT INTO rate (resid, uid, rid)
+VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e', '7b49a151-dacd-49c5-b49e-116d3889ed38');
+
+INSERT INTO rate (resid, uid, rid)
+VALUES ('235a555f-6c36-4b57-b34c-eb92db1276d2', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e', '31aa07d3-a0ab-4fb2-ab52-f58070acf393');
+

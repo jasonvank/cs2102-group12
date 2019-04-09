@@ -122,7 +122,7 @@
                 <td><%= current_reservations[i].categories %></td>
                 <td><%= current_reservations[i].rating %></td>
                 <td>
-                    <a href='/user/<%= data.username %>/<%= current_reservations[i].reservation_id %>/cancel'>Cancel</a>
+                    <a href='/user/<%= user.username %>/<%= current_reservations[i].reservation_id %>/cancel'>Cancel</a>
                 </td>
             </tr>
             <% } %>

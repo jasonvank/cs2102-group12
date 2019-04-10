@@ -8,17 +8,13 @@ const pool = new Pool({connectionString: process.env.DATABASE_URL});
 /* GET menu page. */
 router.get('/', function(req, res, next) {
   // console.log("HEREER!!!!");
-  pool.query(sql_query.query.all_restaurants, [], (err, data) => {
-    if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
-    if(err) return(next);
-    var passedData = {
-      user: req.user,
-      // user_name: req.user.username
-      passedData: data
-    };
-    // if(! data.rows[0]) return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
-    res.render('restaurants/restaurant', {
-        data : passedData
+  pool.query(sql_query.query.display_restaurant_attributes, [], (err, data) => {
+    if (err) return next(err);
+    // console.log(data.rows[0].name);
+    if (!data.rows) return res.render('restaurants/empty_selections', {user : req.user});
+    return res.render('restaurants/restaurant', {
+        attributes: data.rows,
+        user: req.user,
       });
   });
 });

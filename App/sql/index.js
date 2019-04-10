@@ -60,6 +60,8 @@ sql.query = {
   "FROM new_bookings " +
   "WHERE manager_uid = $1",
 
+  display_restaurant_attributes: 'SELECT name, address, open_time, close_time, contacts, COALESCE(rating, 0 ) AS rating FROM restaurants r1 LEFT JOIN (SELECT P.rid, ROUND(AVG(rating)::numeric,2) AS rating FROM processes P NATURAL JOIN ratings R GROUP BY rid) AS rating ON r1.rid = rating.rid',
+
   register_rewards: 'INSERT INTO rewards (value) VALUES ($1) RETURNING rewid',
   customer_register_rewards: 'INSERT INTO earns (uid, rewid) VALUES ($1, $2)',
 

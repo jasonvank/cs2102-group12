@@ -89,6 +89,8 @@ sql.query = {
 	cat_name_to_cid: 'SELECT cid FROM categories WHERE name = $1',
 	add_category: 'INSERT INTO belongs (cid, rid) VALUES ($1, $2)',
 
+  //search Restaurants
+  search: 'SELECT restaurants.name as name, restaurants.rid, location, categories.name as cname, belongs.cid, open_time, close_time FROM restaurants LEFT JOIN belongs ON restaurants.rid = belongs.rid LEFT JOIN categories on belongs.cid = categories.cid WHERE restaurants.name LIKE $1 AND location=$2 AND cname=$3 AND open_time <= $4 AND close_time >= $5',
 
   //Reservations
   get_rewards: 'SELECT value FROM earns LEFT JOIN rewards ON earns.rewid = rewards.rewid WHERE uid = $1',

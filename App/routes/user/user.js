@@ -355,6 +355,8 @@ router.post('/:userId/reset_password', function (req, res, next) {
   });
 });
 
+
+//manager reject reservation
 router.get('/:userId/:resId/reject', function (req, res, next) {
   if (!req.user.isManager) {
     res.redirect('/login');
@@ -384,6 +386,8 @@ router.post('/:userId/:resId/reject', function (req, res, next) {
   });
 });
 
+
+//customer cancel reservation
 router.get('/:userId/:resId/cancel', function (req, res, next) {
   if (req.user.isManager) {
     res.redirect('/login');
@@ -392,6 +396,54 @@ router.get('/:userId/:resId/cancel', function (req, res, next) {
     res.redirect('/login');
   }
   res.render('user/cancel');
+});
+
+router.post('/:userId/:resId/cancel', function (req, res, next) {
+  var resid = req.params.resId;
+  client.query('BEGIN', (err, data) => {
+    if (err) return rollback(client);
+    client.query(sql_query.query.remove_processes, [resid], (err, data) => {
+      if (err) return rollback(client);
+      client.query(sql_query.query.remove_books, [resid], (err, data) => {
+        if (err) return rollback(client);
+        client.query(sql_query.query.remove_reservation, [resid], (err, data) => {
+          if (err) return rollback(client);
+          client.query('COMMIT');
+          return res.redirect('/user/' + req.user.username);
+        });
+      });
+    });
+  });
+});
+
+//customer edit reservation
+router.get('/:userId/:resId/edit', function (req, res, next) {
+  if (req.user.isManager) {
+    res.redirect('/login');
+  }
+  if (req.user.username != req.params.userId) {
+    res.redirect('/login');
+  }
+  pool.query(sql_query.query.get_reservation, [req.params.resId], (err, data) => {
+    if (err) return res.status(500).send("Cannot find reservation");
+    var reserv = data.rows[0];
+    console.log("date" + reserv.resdate.toISOString().split('T')[0]);
+    console.log(reserv.restime);
+    console.log(reserv.numpeople);
+    res.render('user/edit_reserv', {data: reserv});
+  });
+});
+
+router.post('/:userId/:resId/edit', function (req, res, next) {
+  var resid = req.params.resId;
+  var resdate = req.body.book_date;
+  var restime = req.body.book_time;
+  var numpeople = req.body.numpeople;
+  console.log("form: " + resdate + ", " + restime + "," + numpeople);
+  pool.query(sql_query.query.update_reservation, [resdate, restime, numpeople, resid], (err, data) => {
+    if (err) return res.status(500).send("Cannot update reservation");
+    res.redirect('/user/' + req.user.username);
+  });
 });
 
 
@@ -418,24 +470,6 @@ router.post('/:userId/history/:reservationId/rate', function (req, res, next) {
   });
 });
 
-
-router.post('/:userId/:resId/cancel', function (req, res, next) {
-  var resid = req.params.resId;
-  client.query('BEGIN', (err, data) => {
-    if (err) return rollback(client);
-    client.query(sql_query.query.remove_processes, [resid], (err, data) => {
-      if (err) return rollback(client);
-      client.query(sql_query.query.remove_books, [resid], (err, data) => {
-        if (err) return rollback(client);
-        client.query(sql_query.query.remove_reservation, [resid], (err, data) => {
-          if (err) return rollback(client);
-          client.query('COMMIT');
-          return res.redirect('/user/' + req.user.username);
-        });
-      });
-    });
-  });
-});
 
 // Supplementary functions for user queries ------------------------------------------------------------
 function customer_history(user_uid, req, res) {

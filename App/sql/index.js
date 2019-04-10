@@ -113,6 +113,10 @@ sql.query = {
   remove_processes: 'DELETE FROM processes WHERE resid=$1',
   remove_books: 'DELETE FROM books WHERE resid=$1',
   remove_reservation: 'DELETE FROM reservations WHERE resid=$1',
+
+  //edit reservation
+  get_reservation: 'SELECT * FROM reservations WHERE resid=$1',
+  update_reservation: 'UPDATE reservations SET resdate=$1, restime=$2, numpeople=$3 WHERE resid=$4',
 }
 
 

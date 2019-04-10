@@ -172,12 +172,17 @@ CREATE TABLE ratings (
     foreign key (resid) references reservations (resid) on delete cascade
 );
 
-CREATE TABLE rate (
-  resid uuid NOT NULL references reservations(resid),
-  uid uuid NOT NULL references customers(uid) on delete cascade,
-  rid uuid NOT NULL references restaurants(rid),
-  primary key (resid)
-);
+--CREATE TABLE rates (
+--  ratid     uuid DEFAULT uuid_generate_v4 (),
+--  uid       uuid NOT NULL references customers(uid) on delete cascade,
+--  primary key (resid)
+--);
+
+--CREATE TABLE receives (
+--  ratid     uuid NOT NULL references rates on delete cascade,
+--  rid       uuid NOT NULL references restaurants(rid),
+--  primary key (ratid)
+--)
 
 
 CREATE OR REPLACE FUNCTION trig_addMenu()
@@ -313,7 +318,7 @@ VALUES ('0b6a7521-788a-4430-9614-9cd379ba9fde');
 
 --restaurants
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'Parks Chicken Rice', 'd0a7f883-36fc-4094-9330-7c932381662a', 'Prince Georges Park', 'West', '01:30', '04:00', 98765432);
+VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'Parks Chicken Rice', 'd0a7f883-36fc-4094-9330-7c932381662a', 'Prince Georges Park', 'West', '13:30', '04:00', 98765432);
 
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
 VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'KFC', 'f58a8552-cfe6-4669-a098-8d6fd533c157', 'Toa Payoh', 'Central', '07:30', '01:00', 88505532);
@@ -459,10 +464,10 @@ INSERT INTO ratings (resid, rating)
 VALUES ('d2d3fa97-bb8f-450a-9f2a-fe58df40133c', 4.0);
 
 
---rate
-INSERT INTO rate (resid, uid, rid)
-VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e', '7b49a151-dacd-49c5-b49e-116d3889ed38');
-
-INSERT INTO rate (resid, uid, rid)
-VALUES ('235a555f-6c36-4b57-b34c-eb92db1276d2', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e', '31aa07d3-a0ab-4fb2-ab52-f58070acf393');
-
+----rates
+--INSERT INTO rates (resid, uid, rid)
+--VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e', '7b49a151-dacd-49c5-b49e-116d3889ed38');
+--
+--INSERT INTO rates (resid, uid, rid)
+--VALUES ('235a555f-6c36-4b57-b34c-eb92db1276d2', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e', '31aa07d3-a0ab-4fb2-ab52-f58070acf393');
+--

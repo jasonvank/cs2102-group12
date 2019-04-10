@@ -1,13 +1,5 @@
 const sql = {}
 
-// CREATE VIEW CustomerHistory AS SELECT * from (customers C NATURAL JOIN reservations R1 NATURAL JOIN Processes P NATURAL JOIN books B) LEFT JOIN rate R2 ON R1.resid = R2.resid and C.uid = R2.uid and R2.rid = P.rid
-
-// const current_reservations = "" +
-// 	"CREATE VIEW current_reservations AS" +
-// 	"SELECT resdate AS date, restime AS time, numpeople, name AS restaurant_name, address, C.name AS categories, R.ave_rating AS rating " +
-//     "FROM reservations NATURAL JOIN processes NATURAL JOIN restaurants NATURAL JOIN belongs B INNER JOIN categories C ON C.cid = B.cid inner join Ratings R ON R.rid = B.rid" +
-//     "WHERE uid = $1"
-
 sql.query = {
   // Register
   user_info: 'SELECT * FROM users WHERE username = $1',
@@ -16,30 +8,15 @@ sql.query = {
   customer_register: 'INSERT INTO customers (uid) VALUES ($1)',
   reset_password: 'UPDATE users SET password_hash = $2 WHERE user_uid = $1',
   update_info: 'UPDATE users SET first_name = $2, last_name=$3 where user_uid = $1',
-  check_user_status: 'SELECT sum(value) AS total FROM rewards NATURAL JOIN earns NATURAL JOIN customers GROUP BY uid HAVING uid = $1',
-  rate_reservation_restaurant: 'INSERT INTO ratings (resid, rating) VALUES ($1, $2)',
-  display_reservation_rate_value: 'SELECT * FROM ratings WHERE resid = $1',
-  // User
-  display_customer_history:  "" +
-  "WITH current_reservations AS ( " +
-  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, address, C.name AS categories, RA.rating as rating " +
-  "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN  processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid LEFT JOIN ratings RA on RA.resid = R.resid " +
-  ") " +
-  "SELECT * " +
-  "FROM current_reservations " +
-  "WHERE customer_uid = $1 AND date < (select now()) " +
-  "ORDER BY date, time, numpeople ",
 
-  display_manager_history: "" +
-  "WITH current_reservations AS ( " +
-  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, address, C.name AS categories " +
-  "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN  processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid " +
-  ") " +
-  "SELECT * " +
-  "FROM current_reservations " +
-  "WHERE customer_uid = $1 AND date < (select now()) " +
-  "ORDER BY date, time, numpeople ",
 
+  check_user_status: '' +
+  'SELECT sum(value) AS total ' +
+  'FROM rewards NATURAL JOIN earns NATURAL JOIN customers ' +
+  'GROUP BY uid ' +
+  'HAVING uid = $1',
+
+  // User Profile Page
   display_current_reservations: "" +
   "WITH current_reservations AS ( " +
   "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, address, C.name AS categories " +
@@ -50,19 +27,39 @@ sql.query = {
   "WHERE customer_uid = $1 AND date >= (select now()) " +
   "ORDER BY date, time, numpeople ",
 
+  display_customer_history:  "" +
+  "WITH current_reservations AS ( " +
+  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, address, C.name AS categories, RA.rating as rating " +
+  "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid LEFT JOIN ratings RA ON RA.resid = R.resid " +
+  ") " +
+  "SELECT * " +
+  "FROM current_reservations " +
+  "WHERE customer_uid = $1 AND date < (select now()) " +
+  "ORDER BY date, time, numpeople ",
 
+  // User history Page
   display_new_bookings: "" +
   "WITH new_bookings AS (" +
-  "SELECT resid AS reservation_id, RE.restime AS time, RE.resdate AS data, M.uid AS manager_uid, C.uid AS customer_uid, numpeople, name AS restaurant_name, address, open_time, close_time, U.contact_number AS customer_contact " +
-  "FROM reservations RE NATURAL JOIN books B NATURAL JOIN customers C NATURAL JOIN processes P inner join (restaurants R natural join managers M) ON R.rid = P.rid inner join users U ON C.uid = U.user_uid" +
+  "SELECT RE.resid AS reservation_id, RE.restime AS time, RE.resdate AS date, R.uid AS manager_uid, B.uid AS customer_uid, numpeople, name AS restaurant_name, address, open_time, close_time, U.contact_number AS customer_contact, U.username AS username, U.last_name as last_name, U.first_name as first_name " +
+  "FROM reservations RE NATURAL JOIN processes P NATURAL JOIN books B INNER JOIN users U ON U.user_uid = B.uid INNER JOIN registers R ON R.rid = P.rid INNER JOIN restaurants RES ON RES.rid = P.rid " +
   ") " +
   "SELECT * " +
   "FROM new_bookings " +
-  "WHERE manager_uid = $1",
+  "WHERE manager_uid = $1 AND date >= (select now()) " +
+  "ORDER BY date, time, numpeople",
 
-  register_rewards: 'INSERT INTO rewards (value) VALUES ($1) RETURNING rewid',
-  customer_register_rewards: 'INSERT INTO earns (uid, rewid) VALUES ($1, $2)',
+  display_manager_history: "" +
+  "WITH new_bookings AS (" +
+  "SELECT RE.resid AS reservation_id, RE.restime AS time, RE.resdate AS date, R.uid AS manager_uid, B.uid AS customer_uid, numpeople, name AS restaurant_name, address, open_time, close_time, U.contact_number AS customer_contact, U.username AS username, U.last_name as last_name, U.first_name as first_name " +
+  "FROM reservations RE NATURAL JOIN processes P NATURAL JOIN books B INNER JOIN users U ON U.user_uid = B.uid INNER JOIN registers R ON R.rid = P.rid INNER JOIN restaurants RES ON RES.rid = P.rid " +
+  ") " +
+  "SELECT * " +
+  "FROM new_bookings " +
+  "WHERE manager_uid = $1 AND date < (select now()) " +
+  "ORDER BY date, time, numpeople",
 
+  display_reservation_rate_value: 'SELECT * FROM ratings WHERE resid = $1',
+  rate_reservation_restaurant: 'INSERT INTO ratings (resid, rating) VALUES ($1, $2)',
 
   // Update
   // update_info: 'UPDATE users SET first_name=$2, last_name=$3 WHERE username=$1',

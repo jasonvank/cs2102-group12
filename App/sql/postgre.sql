@@ -337,7 +337,7 @@ INSERT INTO registers (uid, rid)
 VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', '7b49a151-dacd-49c5-b49e-116d3889ed38');
 
 INSERT INTO registers (uid, rid)
-VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e', '31aa07d3-a0ab-4fb2-ab52-f58070acf393');
+VALUES ('f58a8552-cfe6-4669-a098-8d6fd533c157', '31aa07d3-a0ab-4fb2-ab52-f58070acf393');
 
 INSERT INTO registers (uid, rid)
 VALUES ('f58a8552-cfe6-4669-a098-8d6fd533c157', '22459a9b-80d6-429d-a65a-af0b883160b0');

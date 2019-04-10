@@ -3,7 +3,7 @@ drop trigger if_menu_name_existed ON menus;
 drop function trig_addMenu();
 drop table belongs cascade;
 drop table books cascade;
-drop table rate cascade;
+--drop table rate cascade;
 -- drop table contains;
 drop table items cascade;
 drop table earns cascade;

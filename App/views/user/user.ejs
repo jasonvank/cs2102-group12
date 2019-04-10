@@ -133,7 +133,7 @@
                 <th>Date</th>
                 <th>Time</th>
                 <th>Customer username</th>
-                <th>Number of people</th>
+                <th>NO. people</th>
                 <th>Contact</th>
                 <th>First Name</th>
                 <th>Last Name</th>
@@ -144,9 +144,9 @@
                 <td><%= i + 1 %></td>
                 <td><%= new Date(new_bookings[i].date).toDateString() %></td>
                 <td><%= new_bookings[i].time %></td>
-                <td><%= new_bookings[i].customer_username %></td>
+                <td><%= new_bookings[i].username %></td>
                 <td><%= new_bookings[i].numpeople %></td>
-                <td><%= new_bookings[i].contact_number %></td>
+                <td><%= new_bookings[i].customer_contact %></td>
                 <td><%= new_bookings[i].last_name %></td>
                 <td><%= new_bookings[i].first_name %></td>
                 <td><a href='/user/<%= user.username %>/<%= new_bookings[i].reservation_id %>/reject'>Reject</a>

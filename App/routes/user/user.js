@@ -251,13 +251,58 @@ router.post('/:userId/edit_restaurant', function (req, res, next) {
   var close_time = req.body.close_time;
   var contacts = req.body.contacts;
   var location = req.body.location;
+  var cuisines = req.body.cuisines;
+
   pool.query(sql_query.query.update_restaurant, [rid, name, address, location, open_time, close_time, contacts], (err, data) => {
     var errorMessage = {
       message: err,
       user_name: req.user.username
     };
     if (err) return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
-    return res.redirect('/user/' + req.user.username);
+    // Edit categories of restaurant
+    client.query('BEGIN', function(err, data) {
+      if (err) rollback(client, err);
+      client.query(sql_query.query.delete_rest_belongs, [rid], function(err, data) {
+        if (err) rollback(client, err);
+        var cid;
+        if (typeof cuisines === 'string' || cuisines instanceof String) {
+          console.log("Only 1 category selected");
+          client.query(sql_query.query.cat_name_to_cid, [cuisines], function (err, data) {
+            if (err) rollback(client, err);
+            cid = data.rows[0].cid;
+            console.log("cid: " + cid);
+            console.log("rid: " + rid);
+            client.query(sql_query.query.add_category, [cid, rid], function (err, data) {
+              if (err) {
+                rollback(client, err);
+              } else {
+                console.log("Added to belongs");
+                client.query('COMMIT');
+                return res.redirect('/user/' + req.user.username);
+              }
+            });
+          });
+        } else {
+          for (var i = 0; i < cuisines.length; i++) {
+            console.log("multiple categories selected");
+            // console.log(cuisines[i]);
+            var cuisine_name = cuisines[i];
+            console.log("cuisine_name: " + cuisine_name);
+            client.query(sql_query.query.cat_name_to_cid, [cuisine_name], function (err, data) {
+              if (err) rollback(client, err);
+              cid = data.rows[0].cid;
+              console.log("cid: " + cid);
+              console.log("rid: " + rid);
+              client.query(sql_query.query.add_category, [cid, rid], function (err, data) {
+                if (err) rollback(client, err);
+              });
+            });
+          }
+          client.query('COMMIT');
+        }
+      });
+      return res.redirect('/user/' + req.user.username);
+    });
   });
 });
 //End of Edit Restaurant------------------------------------------------------------------------------------

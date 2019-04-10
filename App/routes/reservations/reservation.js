@@ -121,9 +121,10 @@ router.post('/:rid', function(req, res, next) {
 								return rollback(client);
 							}
 							else {
-								client.query('COMMIT');
-								return res.redirect('/user/' + req.user.username); }
-						});
+                client.query('COMMIT', client.end.bind(client), (err, res2) => {
+                  return res.redirect('/user/' + req.user.username);
+                });
+							}
 					});
 				});
 			});
@@ -131,10 +132,10 @@ router.post('/:rid', function(req, res, next) {
 	});
 });
 
-var rollback = function (client) {
+  var rollback = function (client) {
   client.query('ROLLBACK', function () {
     client.end();
   });
-};
+}});
 
 module.exports = router;

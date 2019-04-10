@@ -29,8 +29,8 @@
      <tbody>
        <tbody style="cursor:pointer" >
           <% for(var i=0; i<data.rows.length; i++) { %>
-          <tr >
-               <td id = 'td1' onclick="content(this)" ><%= data.rows[i].name%></td>
+          <tr onclick=content(this)>
+               <td id = 'td1' ><%= data.rows[i].name%></td>
                <td id = 'td2' ><%= data.rows[i].price%></td>
                <td id = 'td2' ><%= data.rows[i].description%></td>
           </tr>
@@ -40,8 +40,10 @@
 
 <script>
 function content(elem) {
-  // console.log(elem.getElementById("td1"));
-  document.getElementById("item_name").value = elem.innerHTML;
+  var startingPosition = elem.innerHTML.indexOf("1") + 3;
+  var endPosition = elem.innerHTML.indexOf("</td>");
+  var name = elem.innerHTML.substring(startingPosition, endPosition);
+  document.getElementById("item_name").value = name;
 }
 </script>
 

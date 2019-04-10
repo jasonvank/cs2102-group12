@@ -250,7 +250,8 @@ router.post('/:userId/edit_restaurant', function (req, res, next) {
   var open_time = req.body.open_time;
   var close_time = req.body.close_time;
   var contacts = req.body.contacts;
-  pool.query(sql_query.query.update_restaurant, [rid, name, address, open_time, close_time, contacts], (err, data) => {
+  var location = req.body.location;
+  pool.query(sql_query.query.update_restaurant, [rid, name, address, location, open_time, close_time, contacts], (err, data) => {
     var errorMessage = {
       message: err,
       user_name: req.user.username

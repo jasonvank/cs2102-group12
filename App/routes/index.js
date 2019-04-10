@@ -2,6 +2,8 @@ const sql_query = require('../sql');
 var express = require('express');
 var router = express.Router();
 
+const url = require('url');
+
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const {Pool} = require('pg')
@@ -20,6 +22,7 @@ router.get('/', function (req, res, next) {
   res.render('index', {user: req.user});
 });
 
+/* SEARCH */
 router.post('/', function (req, res, next) {
   var res_name = req.body.rest_name;
   var location = req.body.location;
@@ -37,7 +40,10 @@ router.post('/', function (req, res, next) {
     category : category,
     time : book_time
   }
-
+console.log(url.format({
+  pathname: "/results",
+  query: searchInfo
+}));
   res.redirect(url.format({
     pathname: "/results",
     query: searchInfo

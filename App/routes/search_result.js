@@ -16,10 +16,53 @@ const pool = new Pool({
 router.get('/', function(req, res, next) {
   var searchInfo = req.query;
   var rest_name = searchInfo.name;
-  var location = searchInfo.location;
-  var category = searchInfo.category;
-  var time = searchInfo.time;
+  if (rest_name == 0) {
+    rest_name = "1=1";
+  } else {
+    rest_name = "restaurants.name = " + "'" + rest_name + "'";
+  }
 
-})
+  var location = searchInfo.location;
+  if (location == 'Anywhere') {
+    location = "1=1";
+  } else {
+    location = "restaurants.location = " + "'" + location + "'";
+  }
+
+  var category = searchInfo.category;
+  if (category == 'Anything') {
+    category = "1=1";
+  } else {
+    category = "categories.name = " + "'" + category + "'";
+  }
+
+  var time = searchInfo.time;
+  if (time == 0) {
+    time = "1=1";
+  } else {
+    time = "restaurants.open_time <= " + "'" + time + "'" + "AND restaurants.close_time >=" + "'" + time + "'";
+  }
+
+  var search_query =
+  "SELECT * FROM restaurants LEFT JOIN belongs ON restaurants.rid = belongs.rid LEFT JOIN categories on belongs.cid = categories.cid WHERE " +
+  rest_name + " AND " + location + " AND " + category + " AND " + time;
+
+  pool.query(search_query, (err, data) => {
+    if (err) {
+      //cant find any Restaurants
+        res.render('/restaurants/empty_selections', {user : req.user});
+    }
+    if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
+    var passedData = {
+      user: req.user,
+      passedData: data
+    };
+    res.render('restaurants/restaurant', {
+        data : passedData
+      });
+
+  });
+
+});
 
 module.exports = router;

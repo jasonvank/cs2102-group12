@@ -17,7 +17,7 @@
       </div>
     </section>
 
-    
+
 
     <section class="ftco-section bg-light">
       <div class="container">
@@ -32,10 +32,9 @@
        <thead>
             <tr >
                  <th scope="col"> Restaurant name</th>
-                 <th scope="col"> Restaurant address</th>
-                 <th scope="col"> Restaurant open_time</th>
-                 <th scope="col"> Restaurant close_time</th>
-                 <th scope="col"> Restaurant contacts</th>
+                 <th scope="col"> Address</th>
+                 <th scope="col"> Working hour</th>
+                 <th scope="col"> Contacts</th>
             </tr>
        </thead>
        <tbody>
@@ -44,8 +43,7 @@
             <tr onclick=content(this)>
                  <td id = 'td1'><%= data.passedData.rows[i].name%></td>
                  <td id = 'td1'><%= data.passedData.rows[i].address%></td>
-                 <td id = 'td1'><%= data.passedData.rows[i].open_time%></td>
-                 <td id = 'td1'><%= data.passedData.rows[i].close_time%></td>
+                 <td id = 'td1'><%= data.passedData.rows[i].open_time + " - " + data.passedData.rows[i].close_time%></td>
                  <td id = 'td1'><%= data.passedData.rows[i].contacts%></td>
             </tr>
             <% } %>
@@ -75,7 +73,7 @@
       </div>
     </section>
 
-    
+
 
     <footer class="ftco-footer ftco-bg-dark ftco-section">
       <div class="container">

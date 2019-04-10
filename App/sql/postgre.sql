@@ -15,14 +15,6 @@ CREATE TABLE managers (
 	uid     uuid primary key references users on delete cascade
 );
 
--- CREATE TABLE restaurants (
---     rid     uuid DEFAULT uuid_generate_v4 (),
---     uid     uuid NOT NULL,
---     name    varchar(50) UNIQUE NOT NULL,
---     primary key (rid),
---     foreign key (uid) references restaurant_managers (uid)
--- );
-
 CREATE TABLE restaurants (
     rid          uuid UNIQUE DEFAULT uuid_generate_v4 (),
     name         varchar(50) UNIQUE NOT NULL,
@@ -40,32 +32,6 @@ CREATE TABLE restaurants (
 CREATE TABLE customers (
 	uid         uuid primary key references users on delete cascade
 );
-
--- CREATE TABLE assigns (
---     brid   uuid,
---     rmid   uuid,
---     bid    uuid,
---     primary key (brid, rmid, bid),
---     foreign key (bid) references branches (bid),
---     foreign key (brid) references branch_managers (uid),
---     foreign key (rmid) references restaurant_managers (uid)
--- );
-
--- CREATE TABLE manages (
---     uid     uuid NOT NULL,
---     bid     uuid NOT NULL,
---     primary key (uid, bid),
---     foreign key (uid) references branch_managers (uid),
---     foreign key (bid) references branches (bid)
--- );
-
--- CREATE TABLE opens (
---     rid     uuid NOT NULL,
---     bid     uuid NOT NULL,
---     primary key (rid, bid),
---     foreign key (rid) references restaurants (rid) on delete cascade,
---     foreign key (bid) references branches (bid)
--- );
 
 CREATE TABLE registers (
     uid     uuid NOT NULL,
@@ -97,14 +63,6 @@ CREATE TABLE menus (
     foreign key (rid) references restaurants (rid) on delete cascade
 );
 
--- CREATE TABLE provides (
---     rid     uuid NOT NULL,
---     mid     uuid NOT NULL,
---     primary key (rid, mid),
---     foreign key (rid) references restaurants (rid) on delete cascade,
---     foreign key (mid) references menus (mid)
--- );
-
 CREATE TABLE items (
     iid         uuid UNIQUE NOT NULL DEFAULT uuid_generate_v4 (),
     name        varchar(50) NOT NULL,
@@ -114,14 +72,6 @@ CREATE TABLE items (
     primary key (iid, mid, name),
     foreign key (mid) references menus (mid) on delete cascade
 );
-
--- CREATE TABLE contains (
---     iid         uuid NOT NULL,
---     mid         uuid NOT NULL,
---     primary key (iid, mid),
---     foreign key (iid) references items (iid),
---     foreign key (mid) references menus (mid) on delete cascade
--- );
 
 CREATE TABLE reservations (
   resid       uuid DEFAULT uuid_generate_v4 (),
@@ -171,19 +121,6 @@ CREATE TABLE ratings (
     primary key (resid),
     foreign key (resid) references reservations (resid) on delete cascade
 );
-
---CREATE TABLE rates (
---  ratid     uuid DEFAULT uuid_generate_v4 (),
---  uid       uuid NOT NULL references customers(uid) on delete cascade,
---  primary key (resid)
---);
-
---CREATE TABLE receives (
---  ratid     uuid NOT NULL references rates on delete cascade,
---  rid       uuid NOT NULL references restaurants(rid),
---  primary key (ratid)
---)
-
 
 CREATE OR REPLACE FUNCTION trig_addMenu()
 RETURNS TRIGGER AS
@@ -337,7 +274,7 @@ INSERT INTO registers (uid, rid)
 VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', '7b49a151-dacd-49c5-b49e-116d3889ed38');
 
 INSERT INTO registers (uid, rid)
-VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e', '31aa07d3-a0ab-4fb2-ab52-f58070acf393');
+VALUES ('cc659a63-df54-4922-80e0-950105c98d29', '31aa07d3-a0ab-4fb2-ab52-f58070acf393');
 
 INSERT INTO registers (uid, rid)
 VALUES ('f58a8552-cfe6-4669-a098-8d6fd533c157', '22459a9b-80d6-429d-a65a-af0b883160b0');
@@ -349,36 +286,218 @@ INSERT INTO registers (uid, rid)
 VALUES ('0b6a7521-788a-4430-9614-9cd379ba9fde', 'e2b4cfea-8358-4f8b-bae8-cfaab688376f');
 
 --menus
-INSERT INTO menus (rid, name)
-VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'dinner');
+INSERT INTO menus (mid, rid, name)
+VALUES ('9215008a-bcb3-4f54-a2a0-627bb149a77e', '7b49a151-dacd-49c5-b49e-116d3889ed38', 'dinner');
 
-INSERT INTO menus (rid, name)
-VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'breakfast');
+INSERT INTO menus (mid, rid, name)
+VALUES ('4c79a7f5-b9d9-4f17-a07a-d25967ef6745', '7b49a151-dacd-49c5-b49e-116d3889ed38', 'breakfast');
 
-INSERT INTO menus (rid, name)
-VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'dinner');
+INSERT INTO menus (mid, rid, name)
+VALUES ('2c52eec4-3dae-431d-98e1-258418f1e264', '31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'dinner');
 
-INSERT INTO menus (rid, name)
-VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'breakfast');
+INSERT INTO menus (mid, rid, name)
+VALUES ('0829f390-66f8-42e3-8d38-de30fd26b358', '31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'breakfast');
 
-INSERT INTO menus (rid, name)
-VALUES ('22459a9b-80d6-429d-a65a-af0b883160b0', 'dinner');
+INSERT INTO menus (mid, rid, name)
+VALUES ('854b1727-8e04-4af8-8482-371c54c44c1f', '22459a9b-80d6-429d-a65a-af0b883160b0', 'dinner');
 
-INSERT INTO menus (rid, name)
-VALUES ('22459a9b-80d6-429d-a65a-af0b883160b0', 'breakfast');
+INSERT INTO menus (mid, rid, name)
+VALUES ('229df288-13e2-445e-8462-71327d62e0c7', '22459a9b-80d6-429d-a65a-af0b883160b0', 'breakfast');
 
-INSERT INTO menus (rid, name)
-VALUES ('609cace1-6b36-45b1-868d-f4fa463f358a', 'dinner');
+INSERT INTO menus (mid, rid, name)
+VALUES ('57e36364-2769-469d-8ba0-3d2183fc8a56', '609cace1-6b36-45b1-868d-f4fa463f358a', 'dinner');
 
-INSERT INTO menus (rid, name)
-VALUES ('609cace1-6b36-45b1-868d-f4fa463f358a', 'breakfast');
+INSERT INTO menus (mid, rid, name)
+VALUES ('5f4d0157-c22e-41ae-8106-a07fb00678fb', '609cace1-6b36-45b1-868d-f4fa463f358a', 'breakfast');
 
-INSERT INTO menus (rid, name)
-VALUES ('e2b4cfea-8358-4f8b-bae8-cfaab688376f', 'dinner');
+INSERT INTO menus (mid, rid, name)
+VALUES ('d997f068-ec56-45d9-8e67-eb2257eee703', 'e2b4cfea-8358-4f8b-bae8-cfaab688376f', 'dinner');
 
-INSERT INTO menus (rid, name)
-VALUES ('e2b4cfea-8358-4f8b-bae8-cfaab688376f', 'breakfast');
+INSERT INTO menus (mid, rid, name)
+VALUES ('5a68c459-8023-407b-9312-6573159ce0f0', 'e2b4cfea-8358-4f8b-bae8-cfaab688376f', 'breakfast');
 
+--items
+--dinner--------------------------------------------------------------------------
+INSERT INTO items (name, price, description, mid)
+VALUES ('steak', '80', 'wagyu beef', '9215008a-bcb3-4f54-a2a0-627bb149a77e');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('lamb', '60', 'best lamb', '9215008a-bcb3-4f54-a2a0-627bb149a77e');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('spaghetti', '20', 'italian spaghetti', '9215008a-bcb3-4f54-a2a0-627bb149a77e');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('Hawaiian Pizza', '20', 'italian pizza', '9215008a-bcb3-4f54-a2a0-627bb149a77e');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('mushroom soup', '15', 'cream soup', '9215008a-bcb3-4f54-a2a0-627bb149a77e');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('chicken chop', '20', 'chicken', '9215008a-bcb3-4f54-a2a0-627bb149a77e');
+------------------------------------------------------------------------------
+INSERT INTO items (name, price, description, mid)
+VALUES ('steak', '80', 'wagyu beef', '2c52eec4-3dae-431d-98e1-258418f1e264');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('lamb', '60', 'best lamb', '2c52eec4-3dae-431d-98e1-258418f1e264');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('spaghetti', '20', 'italian spaghetti', '2c52eec4-3dae-431d-98e1-258418f1e264');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('Hawaiian Pizza', '20', 'italian pizza', '2c52eec4-3dae-431d-98e1-258418f1e264');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('mushroom soup', '15', 'cream soup', '2c52eec4-3dae-431d-98e1-258418f1e264');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('chicken chop', '20', 'chicken', '2c52eec4-3dae-431d-98e1-258418f1e264');
+---------------------------------------------------------------------------------------
+INSERT INTO items (name, price, description, mid)
+VALUES ('steak', '80', 'wagyu beef', '854b1727-8e04-4af8-8482-371c54c44c1f');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('lamb', '60', 'best lamb', '854b1727-8e04-4af8-8482-371c54c44c1f');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('spaghetti', '20', 'italian spaghetti', '854b1727-8e04-4af8-8482-371c54c44c1f');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('Hawaiian Pizza', '20', 'italian pizza', '854b1727-8e04-4af8-8482-371c54c44c1f');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('mushroom soup', '15', 'cream soup', '854b1727-8e04-4af8-8482-371c54c44c1f');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('chicken chop', '20', 'chicken', '854b1727-8e04-4af8-8482-371c54c44c1f');
+--------------------------------------------------------------------------------
+INSERT INTO items (name, price, description, mid)
+VALUES ('steak', '80', 'wagyu beef', '57e36364-2769-469d-8ba0-3d2183fc8a56');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('lamb', '60', 'best lamb', '57e36364-2769-469d-8ba0-3d2183fc8a56');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('spaghetti', '20', 'italian spaghetti', '57e36364-2769-469d-8ba0-3d2183fc8a56');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('Hawaiian Pizza', '20', 'italian pizza', '57e36364-2769-469d-8ba0-3d2183fc8a56');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('mushroom soup', '15', 'cream soup', '57e36364-2769-469d-8ba0-3d2183fc8a56');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('chicken chop', '20', 'chicken', '57e36364-2769-469d-8ba0-3d2183fc8a56');
+-----------------------------------------------------------------------
+INSERT INTO items (name, price, description, mid)
+VALUES ('steak', '80', 'wagyu beef', 'd997f068-ec56-45d9-8e67-eb2257eee703');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('lamb', '60', 'best lamb', 'd997f068-ec56-45d9-8e67-eb2257eee703');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('spaghetti', '20', 'italian spaghetti', 'd997f068-ec56-45d9-8e67-eb2257eee703');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('Hawaiian Pizza', '20', 'italian pizza', 'd997f068-ec56-45d9-8e67-eb2257eee703');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('mushroom soup', '15', 'cream soup', 'd997f068-ec56-45d9-8e67-eb2257eee703');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('chicken chop', '20', 'chicken', 'd997f068-ec56-45d9-8e67-eb2257eee703');
+
+--breakfast-----------------------------------------------------------------------------------
+INSERT INTO items (name, price, description, mid)
+VALUES ('hash brown', '5', 'potato hash brown', '4c79a7f5-b9d9-4f17-a07a-d25967ef6745');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('fried egg', '5', 'egg', '4c79a7f5-b9d9-4f17-a07a-d25967ef6745');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('croissant', '5', 'nice croissant', '4c79a7f5-b9d9-4f17-a07a-d25967ef6745');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('pan cake', '6', 'nice pan cake', '4c79a7f5-b9d9-4f17-a07a-d25967ef6745');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('milk', '5', 'fresh milk', '4c79a7f5-b9d9-4f17-a07a-d25967ef6745');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('orange juice', '8', 'fresh squeezed orange juice', '4c79a7f5-b9d9-4f17-a07a-d25967ef6745');
+---------------------------------------------------------------------------------------
+INSERT INTO items (name, price, description, mid)
+VALUES ('hash brown', '5', 'potato hash brown', '0829f390-66f8-42e3-8d38-de30fd26b358');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('fried egg', '5', 'egg', '0829f390-66f8-42e3-8d38-de30fd26b358');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('croissant', '5', 'nice croissant', '0829f390-66f8-42e3-8d38-de30fd26b358');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('pan cake', '6', 'nice pan cake', '0829f390-66f8-42e3-8d38-de30fd26b358');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('milk', '5', 'fresh milk', '0829f390-66f8-42e3-8d38-de30fd26b358');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('orange juice', '8', 'fresh squeezed orange juice', '0829f390-66f8-42e3-8d38-de30fd26b358');
+--------------------------------------------------------------------------------------
+INSERT INTO items (name, price, description, mid)
+VALUES ('hash brown', '5', 'potato hash brown', '229df288-13e2-445e-8462-71327d62e0c7');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('fried egg', '5', 'egg', '229df288-13e2-445e-8462-71327d62e0c7');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('croissant', '5', 'nice croissant', '229df288-13e2-445e-8462-71327d62e0c7');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('pan cake', '6', 'nice pan cake', '229df288-13e2-445e-8462-71327d62e0c7');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('milk', '5', 'fresh milk', '229df288-13e2-445e-8462-71327d62e0c7');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('orange juice', '8', 'fresh squeezed orange juice', '229df288-13e2-445e-8462-71327d62e0c7');
+-----------------------------------------------------------------------------------------
+INSERT INTO items (name, price, description, mid)
+VALUES ('hash brown', '5', 'potato hash brown', '5f4d0157-c22e-41ae-8106-a07fb00678fb');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('fried egg', '5', 'egg', '5f4d0157-c22e-41ae-8106-a07fb00678fb');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('croissant', '5', 'nice croissant', '5f4d0157-c22e-41ae-8106-a07fb00678fb');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('pan cake', '6', 'nice pan cake', '5f4d0157-c22e-41ae-8106-a07fb00678fb');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('milk', '5', 'fresh milk', '5f4d0157-c22e-41ae-8106-a07fb00678fb');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('orange juice', '8', 'fresh squeezed orange juice', '5f4d0157-c22e-41ae-8106-a07fb00678fb');
+----------------------------------------------------------------------------------------
+INSERT INTO items (name, price, description, mid)
+VALUES ('hash brown', '5', 'potato hash brown', '5a68c459-8023-407b-9312-6573159ce0f0');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('fried egg', '5', 'egg', '5a68c459-8023-407b-9312-6573159ce0f0');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('croissant', '5', 'nice croissant', '5a68c459-8023-407b-9312-6573159ce0f0');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('pan cake', '6', 'nice pan cake', '5a68c459-8023-407b-9312-6573159ce0f0');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('milk', '5', 'fresh milk', '5a68c459-8023-407b-9312-6573159ce0f0');
+
+INSERT INTO items (name, price, description, mid)
+VALUES ('orange juice', '8', 'fresh squeezed orange juice', '5a68c459-8023-407b-9312-6573159ce0f0');
 
 --reservations
 INSERT INTO reservations (resid, restime, resdate, numpeople)

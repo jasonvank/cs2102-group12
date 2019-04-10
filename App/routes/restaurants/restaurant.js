@@ -25,7 +25,7 @@ router.post('/', selectRestaurant);
 function selectRestaurant(req, res, next) {
   var restaurant_name = req.body.restaurant_name;
   console.log(restaurant_name);
-  pool.query(sql_query.query.restaurant_rid, [restaurant_name], (err, data) => {
+  pool.query(sql_query.query.restaurant_name_to_rid, [restaurant_name], (err, data) => {
     if(err) return(next);
     restaurantRid = data.rows[0].rid;
     var string = encodeURIComponent(restaurantRid);

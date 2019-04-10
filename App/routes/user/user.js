@@ -108,7 +108,7 @@ router.post('/:userId/update_info', function (req, res, next) {
 // Add Restaurant---------------------------------------------------------------------
 router.get('/:userId/add_restaurant', function (req, res, next) {
   if (!req.user) res.redirect('/login');
-  client.query(sql_query.query.user_restaurant, [req.user.user_uid], function (err, data) {
+  client.query(sql_query.query.userid_to_restaurant, [req.user.user_uid], function (err, data) {
     if (err) return next(err);
     if (data.rows[0]) {
       return res.render('user/restaurants/error_page/add_restaurant_error', {data: req.user.username});
@@ -205,7 +205,7 @@ router.post('/:userId/add_menu', function (req, res, next) {
   if (!req.user.username) {
     res.redirect('/login');
   }
-  pool.query(sql_query.query.user_restaurant, [req.user.user_uid], (err, data) => {
+  pool.query(sql_query.query.userid_to_restaurant, [req.user.user_uid], (err, data) => {
     if (err) return next(err);
     var errorMessage = {
       message: "Please register your restaurant first!",
@@ -230,7 +230,7 @@ router.get('/:userId/edit_restaurant', function (req, res, next) {
   if (!req.user) res.redirect('/login');
   uid = req.user.user_uid;
   // console.log(req.user.user_uid);
-  pool.query(sql_query.query.user_restaurant, [req.user.user_uid], (err, data) => {
+  pool.query(sql_query.query.userid_to_restaurant, [req.user.user_uid], (err, data) => {
     if (err) return next(err);
     var errorMessage = {
       message: "Please register your restaurant first!",
@@ -314,7 +314,7 @@ router.get('/:userId/delete_restaurant', function (req, res, next) {
   if (!req.user) res.redirect('/login');
   uid = req.user.user_uid;
   // console.log(req.user.user_uid);
-  pool.query(sql_query.query.user_restaurant, [req.user.user_uid], (err, data) => {
+  pool.query(sql_query.query.userid_to_restaurant, [req.user.user_uid], (err, data) => {
     if (err) return next(err);
     var errorMessage = {
       message: "You have no restaurant to be deleted!",

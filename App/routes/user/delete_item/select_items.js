@@ -26,7 +26,7 @@ function processPassedVariable(req, res, next) {
   };
     if (err) res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
     mid = data.rows[0].mid;
-    pool.query(sql_query.query.user_item, [mid], (err, data) => {
+    pool.query(sql_query.query.menuid_to_item, [mid], (err, data) => {
       if(err) return(next);
       errorMessage.message="You dont't have any items to delete!"
       if(! data.rows[0]) return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});

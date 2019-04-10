@@ -282,7 +282,7 @@ router.get('/:userId/delete_restaurant', function (req, res, next) {
 
 router.post('/:userId/delete_restaurant', function(req, res, next) {
   var result = typeof req.body.Yes == 'undefined' ? "No" : "Yes";
-  console.log(result);
+  // console.log(result);
   if (result == "No") return res.redirect('/user/' + req.user.username);
   var rollback = function(client, err) {
     client.query('ROLLBACK', function() {
@@ -307,7 +307,7 @@ router.post('/:userId/delete_restaurant', function(req, res, next) {
     });
   });
 });
-//End of Delte restaurant-----------------------------------------------------------------------------------
+//End of Delete restaurant-----------------------------------------------------------------------------------
 
 // Router to user past reservations or bookings page -------------------------------------------------------
 router.get('/:userId/history', function (req, res, next) {

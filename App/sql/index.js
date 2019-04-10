@@ -95,7 +95,7 @@ sql.query = {
   //delete Restaurant
   delete_restaurant: 'DELETE FROM restaurants WHERE rid=$1',
   delete_register: 'DELETE FROM registers WHERE rid=$1',
-  delete_menu: 'DELETE FROM menus WHERE rid=$1',
+  delete_menu: 'DELETE FROM menus WHERE mid=$1',
   delete_item: 'DELETE FROM items WHERE iid=$1',
 
   //reject reservation

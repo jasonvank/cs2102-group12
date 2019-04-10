@@ -357,19 +357,19 @@ router.post('/:userId/history/:reservationId/rate', function (req, res, next) {
 
   var rating_value = Object.keys(req.body)[0];
   var reservation_id = req.params.reservationId;
-  console.log("rating " + rating_value);
-
+  var URL = '/user/' + req.user.username;
+  var hotText = 'Go Back';
   pool.query(sql_query.query.rate_reservation_restaurant, [reservation_id, rating_value], (err, data) => {
-    console.log(sql_query.query.rate_reservation_restaurant, [reservation_id, rating_value]);
-    console.log(JSON.stringify(data));
     if (err) {
       console.log(err);
-      // var goback_url = '/user/' + req.user.username + '/history';
-      res.status(404).send("You have rate for this reservation already. <a href= '/user/ + req.user.username + /history'>Go back</a>")
+      res.status(404).send("You have rate already! "  + hotText.link(URL));
     }
-    console.log(JSON.stringify(req.body));
+    // var history
+
+    res.status(200).send("Rate Successfully! "  + hotText.link(URL));
   });
 });
+
 
 
 router.post('/:userId/:resId/cancel', function (req, res, next) {

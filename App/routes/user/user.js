@@ -347,8 +347,11 @@ router.post('/:userId/delete_restaurant', function(req, res, next) {
       if (err) return rollback(client, err);
       client.query(sql_query.query.delete_restaurant, [rid], function(err, data) {
         if (err) rollback(client, err);
-        client.query('COMMIT');
-        return res.redirect('/user/' + req.user.username);
+        client.query(sql_query.query.delete_rest_belongs, [rid], function(err, data) {
+          if (err) rollback(client, err);
+          client.query('COMMIT');
+          return res.redirect('/user/' + req.user.username);
+        });
       });
     });
   });

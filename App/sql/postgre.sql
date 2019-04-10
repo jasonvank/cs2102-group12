@@ -128,6 +128,7 @@ CREATE TABLE reservations (
   restime     time NOT NULL,
   resdate     date NOT NULL,
   numpeople   integer NOT NULL,
+  discount    integer DEFAULT 0,
   --rid     char(36) NOT NULL,
   primary key (resid)
   --, foreign key (rid) references restaurants.rid
@@ -137,16 +138,16 @@ CREATE TABLE processes (
     resid     uuid NOT NULL,
     rid       uuid NOT NULL,
     primary key (resid, rid),
-    foreign key (resid) references reservations (resid),
-    foreign key (rid) references restaurants (rid)
+    foreign key (resid) references reservations (resid) on delete cascade,
+    foreign key (rid) references restaurants (rid) on delete cascade
 );
 
 CREATE TABLE books (
     resid     uuid NOT NULL,
     uid       uuid NOT NULL,
     primary key (resid, uid),
-    foreign key (resid) references reservations (resid),
-    foreign key (uid) references customers (uid)
+    foreign key (resid) references reservations (resid) on delete cascade,
+    foreign key (uid) references customers (uid) on delete cascade
 );
 
 CREATE TABLE rewards (
@@ -159,8 +160,8 @@ CREATE TABLE earns (
     rewid     uuid NOT NULL,
     uid       uuid NOT NULL,
     primary key (rewid, uid),
-    foreign key (rewid) references rewards (rewid),
-    foreign key (uid) references customers (uid)
+    foreign key (rewid) references rewards (rewid) on delete cascade,
+    foreign key (uid) references customers (uid) on delete cascade
 );
 
 CREATE TABLE ratings (
@@ -283,10 +284,16 @@ VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e');
 
 --customer reward
 INSERT INTO rewards (rewid, value)
-VALUES ('fe6400b3-1e84-405e-a340-dbc539b5f41a', 100);
+VALUES ('fe6400b3-1e84-405e-a340-dbc539b5f41a', 50);
 
 INSERT INTO earns (rewid, uid)
 VALUES ('fe6400b3-1e84-405e-a340-dbc539b5f41a', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e');
+
+INSERT INTO rewards (rewid, value)
+VALUES ('abcd00b3-1e84-405e-a340-dbc539b5f41a', 30);
+
+INSERT INTO earns (rewid, uid)
+VALUES ('abcd00b3-1e84-405e-a340-dbc539b5f41a', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e');
 
 --managers
 INSERT INTO managers (uid)

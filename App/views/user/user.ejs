@@ -75,20 +75,19 @@
                 <a href="/user/<%= user.username %>/add_restaurant"
                    class="btn btn-default btn-sm btn-length">Add</a>
                 <a href="/user/<%= user.username %>/edit_restaurant" class="btn btn-default btn-sm btn-length">Edit</a>
-                <a href="/user/<%= user.username %>/edit_restaurant"
-                   class="btn btn-default btn-sm btn-length">Delete</a>
+                <a href="/user/<%= user.username %>/delete_restaurant" class="btn btn-default btn-sm btn-length">Delete</a>
             </div>
             <div class="row">
                 <span style="width: 200px; color: white">Menu Operation</span>
                 <a href="/user/<%= user.username %>/add_menu" class="btn btn-default btn-sm btn-length">Add</a>
                 <a href="/user/edit_menu/select_menus" class="btn btn-default btn-sm btn-length">Edit</a>
-                <a href="/user/edit_menu/delete_menus" class="btn btn-default btn-sm btn-length">Delete</a>
+                <a href="/user/delete_menu/select_menus" class="btn btn-default btn-sm btn-length">Delete</a>
             </div>
             <div class="row">
                 <span style="width: 200px; color: white">Item Operation</span>
                 <a href="/user/add_item/select_menus" class="btn btn-default btn-sm btn-length">Add</a>
                 <a href="/user/edit_item/select_menus" class="btn btn-default btn-sm btn-length">Edit</a>
-                <a href="/user/edit_item/delete_menus" class="btn btn-default btn-sm btn-length">Delete</a>
+                <a href="/user/delete_item/select_menus" class="btn btn-default btn-sm btn-length">Delete</a>
             </div>
         </div>
         <% } %>
@@ -158,4 +157,3 @@
 </div>
 </body>
 </html>
-

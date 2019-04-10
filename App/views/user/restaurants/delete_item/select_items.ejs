@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>select which menu to edit</title>
+    <title>select which item to delete</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <style>
@@ -15,20 +15,24 @@
 <div>
 
     <div class="page-header text-center">
-        <h1><span class="fa fa-anchor"></span> select which menu</h1>
+        <h1><span class="fa fa-anchor"></span> select which item to delete</h1>
     </div>
     <div class="container">
       <table class='table table-bordered table-condensed table-striped table-hover'>
      <thead>
           <tr >
-               <th scope="col"> Menu name</th>
+               <th scope="col"> Item name</th>
+               <th scope="col"> Item price</th>
+               <th scope="col"> Item description</th>
           </tr>
      </thead>
      <tbody>
        <tbody style="cursor:pointer" >
           <% for(var i=0; i<data.rows.length; i++) { %>
-          <tr>
-               <td id = 'td1' onclick="content(this)"><%= data.rows[i].name%></td>
+          <tr >
+               <td id = 'td1' onclick="content(this)" ><%= data.rows[i].name%></td>
+               <td id = 'td2' ><%= data.rows[i].price%></td>
+               <td id = 'td2' ><%= data.rows[i].description%></td>
           </tr>
           <% } %>
      </tbody>
@@ -36,14 +40,15 @@
 
 <script>
 function content(elem) {
-  document.getElementById("menu_name").value = elem.innerHTML;
+  // console.log(elem.getElementById("td1"));
+  document.getElementById("item_name").value = elem.innerHTML;
 }
 </script>
 
 		<form class="form-detail" action="" method="post">
 <div class="form-row">
-  <label for="Enter the restaurant name">Selected menu</label>
-  <input type="name" id="menu_name" name="menu_name" placeholder="menu name from above"  style="width: 300px" required="required">
+  <label for="Enter the item name">Selected item</label>
+  <input type="name" id="item_name" name="item_name" placeholder="item name from above"  style="width: 300px" required="required">
 </div>
 
 <div class="form-row-last">

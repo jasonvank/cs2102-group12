@@ -327,6 +327,22 @@ VALUES ('609cace1-6b36-45b1-868d-f4fa463f358a', 'Burger King', 'aca97eca-337d-4b
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
 VALUES ('e2b4cfea-8358-4f8b-bae8-cfaab688376f', 'Jumbo', 'cc659a63-df54-4922-80e0-950105c98d29', 'East Coast', 'East', '07:30', '23:00', 88505532);
 
+--registers
+INSERT INTO registers (uid, rid)
+VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', '7b49a151-dacd-49c5-b49e-116d3889ed38');
+
+INSERT INTO registers (uid, rid)
+VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e', '31aa07d3-a0ab-4fb2-ab52-f58070acf393');
+
+INSERT INTO registers (uid, rid)
+VALUES ('f58a8552-cfe6-4669-a098-8d6fd533c157', '22459a9b-80d6-429d-a65a-af0b883160b0');
+
+INSERT INTO registers (uid, rid)
+VALUES ('aca97eca-337d-4b0e-b1bc-789f5acdff87', '609cace1-6b36-45b1-868d-f4fa463f358a');
+
+INSERT INTO registers (uid, rid)
+VALUES ('0b6a7521-788a-4430-9614-9cd379ba9fde', 'e2b4cfea-8358-4f8b-bae8-cfaab688376f');
+
 --menus
 INSERT INTO menus (rid, name)
 VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'dinner');

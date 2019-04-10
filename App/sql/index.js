@@ -92,6 +92,12 @@ sql.query = {
   update_menu: 'UPDATE menus SET name=$2 WHERE mid=$1',
   update_item: 'UPDATE items SET name=$2, price=$3, description=$4 WHERE iid=$1',
 
+  //delete Restaurant
+  delete_restaurant: 'DELETE FROM restaurants WHERE rid=$1',
+  delete_register: 'DELETE FROM registers WHERE rid=$1',
+  delete_menu: 'DELETE FROM menus WHERE rid=$1',
+  delete_item: 'DELETE FROM items WHERE iid=$1',
+
   //reject reservation
   remove_processes: 'DELETE FROM processes WHERE resid=$1',
   remove_books: 'DELETE FROM books WHERE resid=$1',

@@ -2,6 +2,8 @@ const sql_query = require('../sql');
 var express = require('express');
 var router = express.Router();
 
+const url = require('url');
+
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const {Pool} = require('pg')
@@ -18,6 +20,34 @@ router.use('/user', userRouter);
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', {user: req.user});
+});
+
+/* SEARCH */
+router.post('/', function (req, res, next) {
+  var res_name = req.body.rest_name;
+  var location = req.body.location;
+  var category = req.body.cuisines;
+  var book_time = req.body.book_time;
+
+  console.log(res_name == 0);
+  console.log(location);
+  console.log(category);
+  console.log(book_time == 0);
+
+  var searchInfo = {
+    name : res_name,
+    location : location,
+    category : category,
+    time : book_time
+  }
+console.log(url.format({
+  pathname: "/results",
+  query: searchInfo
+}));
+  res.redirect(url.format({
+    pathname: "/results",
+    query: searchInfo
+  }));
 });
 
 

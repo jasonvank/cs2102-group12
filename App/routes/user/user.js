@@ -250,13 +250,59 @@ router.post('/:userId/edit_restaurant', function (req, res, next) {
   var open_time = req.body.open_time;
   var close_time = req.body.close_time;
   var contacts = req.body.contacts;
-  pool.query(sql_query.query.update_restaurant, [rid, name, address, open_time, close_time, contacts], (err, data) => {
+  var location = req.body.location;
+  var cuisines = req.body.cuisines;
+
+  pool.query(sql_query.query.update_restaurant, [rid, name, address, location, open_time, close_time, contacts], (err, data) => {
     var errorMessage = {
       message: err,
       user_name: req.user.username
     };
     if (err) return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
-    return res.redirect('/user/' + req.user.username);
+    // Edit categories of restaurant
+    client.query('BEGIN', function(err, data) {
+      if (err) rollback(client, err);
+      client.query(sql_query.query.delete_rest_belongs, [rid], function(err, data) {
+        if (err) rollback(client, err);
+        var cid;
+        if (typeof cuisines === 'string' || cuisines instanceof String) {
+          console.log("Only 1 category selected");
+          client.query(sql_query.query.cat_name_to_cid, [cuisines], function (err, data) {
+            if (err) rollback(client, err);
+            cid = data.rows[0].cid;
+            console.log("cid: " + cid);
+            console.log("rid: " + rid);
+            client.query(sql_query.query.add_category, [cid, rid], function (err, data) {
+              if (err) {
+                rollback(client, err);
+              } else {
+                console.log("Added to belongs");
+                client.query('COMMIT');
+                return res.redirect('/user/' + req.user.username);
+              }
+            });
+          });
+        } else {
+          for (var i = 0; i < cuisines.length; i++) {
+            console.log("multiple categories selected");
+            // console.log(cuisines[i]);
+            var cuisine_name = cuisines[i];
+            console.log("cuisine_name: " + cuisine_name);
+            client.query(sql_query.query.cat_name_to_cid, [cuisine_name], function (err, data) {
+              if (err) rollback(client, err);
+              cid = data.rows[0].cid;
+              console.log("cid: " + cid);
+              console.log("rid: " + rid);
+              client.query(sql_query.query.add_category, [cid, rid], function (err, data) {
+                if (err) rollback(client, err);
+              });
+            });
+          }
+          client.query('COMMIT');
+        }
+      });
+      return res.redirect('/user/' + req.user.username);
+    });
   });
 });
 //End of Edit Restaurant------------------------------------------------------------------------------------
@@ -301,8 +347,11 @@ router.post('/:userId/delete_restaurant', function(req, res, next) {
       if (err) return rollback(client, err);
       client.query(sql_query.query.delete_restaurant, [rid], function(err, data) {
         if (err) rollback(client, err);
-        client.query('COMMIT');
-        return res.redirect('/user/' + req.user.username);
+        client.query(sql_query.query.delete_rest_belongs, [rid], function(err, data) {
+          if (err) rollback(client, err);
+          client.query('COMMIT');
+          return res.redirect('/user/' + req.user.username);
+        });
       });
     });
   });
@@ -456,17 +505,35 @@ router.post('/:userId/history/:reservationId/rate', function (req, res, next) {
 
   var rating_value = Object.keys(req.body)[0];
   var reservation_id = req.params.reservationId;
-  console.log("rating " + rating_value);
-
+  var URL = '/user/' + req.user.username;
+  var hotText = 'Go Back';
   pool.query(sql_query.query.rate_reservation_restaurant, [reservation_id, rating_value], (err, data) => {
-    console.log(sql_query.query.rate_reservation_restaurant, [reservation_id, rating_value]);
-    console.log(JSON.stringify(data));
     if (err) {
       console.log(err);
-      // var goback_url = '/user/' + req.user.username + '/history';
-      res.status(404).send("You have rate for this reservation already. <a href= '/user/ + req.user.username + /history'>Go back</a>")
+      res.status(404).send("You have rate already! "  + hotText.link(URL));
     }
-    console.log(JSON.stringify(req.body));
+    // var history
+
+    res.status(200).send("Rate Successfully! "  + hotText.link(URL));
+  });
+});
+
+
+router.post('/:userId/:resId/cancel', function (req, res, next) {
+  var resid = req.params.resId;
+  client.query('BEGIN', (err, data) => {
+    if (err) return rollback(client);
+    client.query(sql_query.query.remove_processes, [resid], (err, data) => {
+      if (err) return rollback(client);
+      client.query(sql_query.query.remove_books, [resid], (err, data) => {
+        if (err) return rollback(client);
+        client.query(sql_query.query.remove_reservation, [resid], (err, data) => {
+          if (err) return rollback(client);
+          client.query('COMMIT');
+          return res.redirect('/user/' + req.user.username);
+        });
+      });
+    });
   });
 });
 

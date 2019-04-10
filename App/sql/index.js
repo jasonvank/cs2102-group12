@@ -101,15 +101,17 @@ sql.query = {
   add_processes: 'INSERT INTO processes (resid, rid) VALUES ($1, $2)',
 
   //update Restaurant
-  update_restaurant: 'UPDATE restaurants SET name=$2, address=$3, open_time=$4, close_time=$5, contacts=$6 WHERE rid=$1',
+  update_restaurant: 'UPDATE restaurants SET name=$2, address=$3, location=$4, open_time=$5, close_time=$6, contacts=$7 WHERE rid=$1',
   update_menu: 'UPDATE menus SET name=$2 WHERE mid=$1',
   update_item: 'UPDATE items SET name=$2, price=$3, description=$4 WHERE iid=$1',
 
   //delete Restaurant
   delete_restaurant: 'DELETE FROM restaurants WHERE rid=$1',
+  delete_rest_belongs: 'DELETE FROM belongs WHERE rid=$1',
   delete_register: 'DELETE FROM registers WHERE rid=$1',
   delete_menu: 'DELETE FROM menus WHERE mid=$1',
   delete_item: 'DELETE FROM items WHERE iid=$1',
+
 
   //delete reservation
   remove_processes: 'DELETE FROM processes WHERE resid=$1',

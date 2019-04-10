@@ -53,6 +53,11 @@ var reDeleteRouter = require('./routes/user/delete_item/re_delete_form');
 var reservationRouter = require('./routes/reservations/reservation');
 var servicesRouter = require('./routes/reservations/services');
 
+
+
+/* --- search managment --- */
+var resultsRouter = require('./routes/search_result');
+
 var app = express();
 
 
@@ -126,6 +131,8 @@ app.use('/user', userRouter);
 app.use('/services', servicesRouter);
 app.use('/reservation', reservationRouter);
 
+/* --- search management --- */
+app.use('/results', resultsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -128,6 +128,7 @@ CREATE TABLE reservations (
   restime     time NOT NULL,
   resdate     date NOT NULL,
   numpeople   integer NOT NULL,
+  discount    integer DEFAULT 0,
   --rid     char(36) NOT NULL,
   primary key (resid)
   --, foreign key (rid) references restaurants.rid
@@ -137,16 +138,16 @@ CREATE TABLE processes (
     resid     uuid NOT NULL,
     rid       uuid NOT NULL,
     primary key (resid, rid),
-    foreign key (resid) references reservations (resid),
-    foreign key (rid) references restaurants (rid)
+    foreign key (resid) references reservations (resid) on delete cascade,
+    foreign key (rid) references restaurants (rid) on delete cascade
 );
 
 CREATE TABLE books (
     resid     uuid NOT NULL,
     uid       uuid NOT NULL,
     primary key (resid, uid),
-    foreign key (resid) references reservations (resid),
-    foreign key (uid) references customers (uid)
+    foreign key (resid) references reservations (resid) on delete cascade,
+    foreign key (uid) references customers (uid) on delete cascade
 );
 
 CREATE TABLE rewards (
@@ -159,8 +160,8 @@ CREATE TABLE earns (
     rewid     uuid NOT NULL,
     uid       uuid NOT NULL,
     primary key (rewid, uid),
-    foreign key (rewid) references rewards (rewid),
-    foreign key (uid) references customers (uid)
+    foreign key (rewid) references rewards (rewid) on delete cascade,
+    foreign key (uid) references customers (uid) on delete cascade
 );
 
 CREATE TABLE ratings (
@@ -288,10 +289,16 @@ VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e');
 
 --customer reward
 INSERT INTO rewards (rewid, value)
-VALUES ('fe6400b3-1e84-405e-a340-dbc539b5f41a', 100);
+VALUES ('fe6400b3-1e84-405e-a340-dbc539b5f41a', 50);
 
 INSERT INTO earns (rewid, uid)
 VALUES ('fe6400b3-1e84-405e-a340-dbc539b5f41a', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e');
+
+INSERT INTO rewards (rewid, value)
+VALUES ('abcd00b3-1e84-405e-a340-dbc539b5f41a', 30);
+
+INSERT INTO earns (rewid, uid)
+VALUES ('abcd00b3-1e84-405e-a340-dbc539b5f41a', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e');
 
 --managers
 INSERT INTO managers (uid)
@@ -311,7 +318,7 @@ VALUES ('0b6a7521-788a-4430-9614-9cd379ba9fde');
 
 --restaurants
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'Parks Chicken Rice', 'd0a7f883-36fc-4094-9330-7c932381662a', 'Prince Georges Park', 'West', '01:30', '04:00', 98765432);
+VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', 'Parks Chicken Rice', 'd0a7f883-36fc-4094-9330-7c932381662a', 'Prince Georges Park', 'West', '13:30', '04:00', 98765432);
 
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
 VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', 'KFC', 'f58a8552-cfe6-4669-a098-8d6fd533c157', 'Toa Payoh', 'Central', '07:30', '01:00', 88505532);
@@ -324,6 +331,22 @@ VALUES ('609cace1-6b36-45b1-868d-f4fa463f358a', 'Burger King', 'aca97eca-337d-4b
 
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
 VALUES ('e2b4cfea-8358-4f8b-bae8-cfaab688376f', 'Jumbo', 'cc659a63-df54-4922-80e0-950105c98d29', 'East Coast', 'East', '07:30', '23:00', 88505532);
+
+--registers
+INSERT INTO registers (uid, rid)
+VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', '7b49a151-dacd-49c5-b49e-116d3889ed38');
+
+INSERT INTO registers (uid, rid)
+VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e', '31aa07d3-a0ab-4fb2-ab52-f58070acf393');
+
+INSERT INTO registers (uid, rid)
+VALUES ('f58a8552-cfe6-4669-a098-8d6fd533c157', '22459a9b-80d6-429d-a65a-af0b883160b0');
+
+INSERT INTO registers (uid, rid)
+VALUES ('aca97eca-337d-4b0e-b1bc-789f5acdff87', '609cace1-6b36-45b1-868d-f4fa463f358a');
+
+INSERT INTO registers (uid, rid)
+VALUES ('0b6a7521-788a-4430-9614-9cd379ba9fde', 'e2b4cfea-8358-4f8b-bae8-cfaab688376f');
 
 --menus
 INSERT INTO menus (rid, name)

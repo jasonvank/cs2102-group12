@@ -23,6 +23,7 @@
           <tr >
                <th scope="col"> Item name</th>
                <th scope="col"> Item price</th>
+               <th scope="col"> Item description</th>
           </tr>
      </thead>
      <tbody>
@@ -31,6 +32,7 @@
           <tr >
                <td id = 'td1' onclick="content(this)" ><%= data.rows[i].name%></td>
                <td id = 'td2' ><%= data.rows[i].price%></td>
+               <td id = 'td2' ><%= data.rows[i].description%></td>
           </tr>
           <% } %>
      </tbody>

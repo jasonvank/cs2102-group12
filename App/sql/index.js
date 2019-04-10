@@ -87,15 +87,36 @@ sql.query = {
 	cat_name_to_cid: 'SELECT cid FROM categories WHERE name = $1',
 	add_category: 'INSERT INTO belongs (cid, rid) VALUES ($1, $2)',
 
+
+  //Reservations
+  get_rewards: 'SELECT value FROM earns LEFT JOIN rewards ON earns.rewid = rewards.rewid WHERE uid = $1',
+  select_reward: 'SELECT rewards.rewid FROM earns LEFT JOIN rewards ON earns.rewid = rewards.rewid WHERE uid = $1 AND value = $2',
+  delete_reward: 'DELETE FROM rewards WHERE rewid = $1',
+  add_reservation: 'insert into reservations (restime, resdate, numpeople, discount) values ($1, $2, $3, $4)',
+  add_reward: 'INSERT INTO rewards (value) VALUES ($1) RETURNING rewid',
+  add_earns: 'INSERT INTO earns (rewid, uid) VALUES ($1, $2)',
+  add_books: 'INSERT INTO books (resid, uid) VALUES ($1, $2)',
+  add_processes: 'INSERT INTO processes (resid, rid) VALUES ($1, $2)',
+
   //update Restaurant
   update_restaurant: 'UPDATE restaurants SET name=$2, address=$3, open_time=$4, close_time=$5, contacts=$6 WHERE rid=$1',
   update_menu: 'UPDATE menus SET name=$2 WHERE mid=$1',
   update_item: 'UPDATE items SET name=$2, price=$3, description=$4 WHERE iid=$1',
 
-  //reject reservation
+  //delete Restaurant
+  delete_restaurant: 'DELETE FROM restaurants WHERE rid=$1',
+  delete_register: 'DELETE FROM registers WHERE rid=$1',
+  delete_menu: 'DELETE FROM menus WHERE mid=$1',
+  delete_item: 'DELETE FROM items WHERE iid=$1',
+
+  //delete reservation
   remove_processes: 'DELETE FROM processes WHERE resid=$1',
   remove_books: 'DELETE FROM books WHERE resid=$1',
   remove_reservation: 'DELETE FROM reservations WHERE resid=$1',
+
+  //edit reservation
+  get_reservation: 'SELECT * FROM reservations WHERE resid=$1',
+  update_reservation: 'UPDATE reservations SET resdate=$1, restime=$2, numpeople=$3 WHERE resid=$4',
 }
 
 

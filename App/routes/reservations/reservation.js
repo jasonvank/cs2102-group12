@@ -39,7 +39,13 @@ router.get('/:rid', function(req, res, next) {
     	return next();
 	}
 }, function(req, res, next) {
-    res.render('reservations/reservation', {user: req.user, /*points: req.user.points*/}); //the user is for navbar, points for displaying use points button
+	var get_rewards = 'select value from earns left join rewards on earns.rewid = rewards.rewid where uid = ' + "'" + uid + "'";
+	var rewardvalues;
+	pool.query(get_rewards, (err, data) => {
+		rewardvalues = data.rows;
+		console.log(rewardvalues);
+    	res.render('reservations/reservation', {user: req.user, rewardsList: rewardvalues}); //the user is for navbar, rewards list for displaying rewards
+	});
 });	    
 
 // POST reservation
@@ -49,30 +55,47 @@ router.post('/:rid', function(req, res, next) {
 	var numpeople = req.body.numpeople;
 	var usereward = req.body.usereward;
 
+	console.log("use reward: " + usereward);
+	var find_reward = 'select rewards.rewid from earns left join rewards on earns.rewid = rewards.rewid where uid = ' + "'" + uid + "'" + " and value = " + parseInt(usereward);
 	console.log("form: " + resdate + ", " + restime + "," + numpeople);
 	var resid;
-	var reserve_query = 'insert into reservations (restime, resdate, numpeople) values (' + "'" + restime + "'" + ',' + "'" + resdate + "'" + ',' + numpeople + ') returning resid';
-	var get_rewid = 'select rewid from earns where uid = ' + "'" + uid + "'";
-	var rewid;
+	var reserve_query = 'insert into reservations (restime, resdate, numpeople, discount) values (' + "'" + restime + "'" + ',' + "'" + resdate + "'" + ',' + numpeople + ',' + usereward + ') returning resid';
 	client.query('BEGIN', (err, data) => {
 		if (err) return rollback(client);
-		client.query(get_rewid, (err, data) => {
+		if (usereward != 0) {
+			console.log(find_reward);
+			client.query(find_reward, (err, data) => {
 			if (err) {
-				console.log("each customer should be mapped to a reward in the rewards and earns tables");
+				console.log("find reward ERROR");
 				return rollback(client);
 			} else {
 				rewid = data.rows[0].rewid;
+				var remove_reward = "delete from rewards where rewid = " + "'" + rewid + "'";
 				console.log("rewid:" + rewid);
-				var usereward_query = 'insert into uses (rewid, resid) values (' + "'" + rewid + "'" + ',' + "'" + resid + "'" + ')';
-				var update_reward_pt = 'update rewards set value = value - 100 where uid = ' + "'" + uid + "'";
-				
-				if (usereward == 'on') {
-					client.query(usereward_query, (err, data) => {
-						if (err) {return rollback(client);}
-						client.query(update_reward_pt, (err,data) => {
-							if (err) {return rollback(client);}
-						});
-					});
+				client.query(remove_reward, (err, data) => {
+					if (err) {
+						console.log("delete reward ERROR");
+						return rollback(client);
+					}
+				});
+			}	
+			});
+		}
+		var earnedpoints = Math.min(numpeople * 10, 50);
+		console.log("earned points: " + earnedpoints)
+		var add_reward = "insert into rewards (value) values (" + earnedpoints + ") returning rewid";
+		client.query(add_reward, (err, data) => {
+			if (err) {
+				console.log("add reward ERROR");
+				return rollback(client);
+			}
+			var newrewid = data.rows[0].rewid;
+			var add_earns = "insert into earns (rewid, uid) values (" + "'" + newrewid + "'" + ',' + "'" + uid + "'" + ")";
+			console.log(add_earns);
+			client.query(add_earns, (err, data) => {
+				if (err) {
+					console.log("add earns ERROR");
+					return rollback(client);
 				}
 				//insert into Reservations table
 				client.query(reserve_query, function(err, data) {
@@ -103,7 +126,7 @@ router.post('/:rid', function(req, res, next) {
 						});
 					});
 				});
-			}
+			});
 		});
 	});
 });

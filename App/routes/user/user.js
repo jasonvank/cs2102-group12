@@ -46,9 +46,6 @@ router.get('/:userId', function (req, res, next) {
 });
 // End user profile page -----------------------------------------------------------------------------------
 
-// router.post('/:userId/history', function(req, res, next) {
-//
-// })
 
 // User information and password updates -------------------------------------------------------------------
 router.get('/:userId/reset_password', function (req, res, next) {
@@ -93,8 +90,9 @@ router.post('/:userId/update_info', function (req, res, next) {
   }
   var first_name = req.body.first_name;
   var last_name = req.body.last_name;
+  var contact_number = req.body.contact_number;
 
-  pool.query(sql_query.query.update_info, [req.user.user_uid, first_name, last_name], (err, data) => {
+  pool.query(sql_query.query.update_info, [req.user.user_uid, first_name, last_name, contact_number], (err, data) => {
     if (err) {
       res.redirect('/login');
     } else {

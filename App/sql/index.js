@@ -1,13 +1,5 @@
 const sql = {}
 
-// CREATE VIEW CustomerHistory AS SELECT * from (customers C NATURAL JOIN reservations R1 NATURAL JOIN Processes P NATURAL JOIN books B) LEFT JOIN rate R2 ON R1.resid = R2.resid and C.uid = R2.uid and R2.rid = P.rid
-
-// const current_reservations = "" +
-// 	"CREATE VIEW current_reservations AS" +
-// 	"SELECT resdate AS date, restime AS time, numpeople, name AS restaurant_name, address, C.name AS categories, R.ave_rating AS rating " +
-//     "FROM reservations NATURAL JOIN processes NATURAL JOIN restaurants NATURAL JOIN belongs B INNER JOIN categories C ON C.cid = B.cid inner join Ratings R ON R.rid = B.rid" +
-//     "WHERE uid = $1"
-
 sql.query = {
   // Register
   user_info: 'SELECT * FROM users WHERE username = $1',
@@ -15,7 +7,7 @@ sql.query = {
   manager_register: 'INSERT INTO managers (uid) VALUES ($1)',
   customer_register: 'INSERT INTO customers (uid) VALUES ($1)',
   reset_password: 'UPDATE users SET password_hash = $2 WHERE user_uid = $1',
-  update_info: 'UPDATE users SET first_name = $2, last_name=$3 where user_uid = $1',
+  update_info: 'UPDATE users SET first_name = $2, last_name=$3, contact_number=$4 where user_uid = $1',
 
 
   check_user_status: '' +

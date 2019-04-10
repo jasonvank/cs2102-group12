@@ -39,15 +39,4 @@ function enterName(req, res, next) {
   });
 }
 
-// router.get('/', function(req, res, next) {
-//   if (!req.user) res.redirect('/login');
-//   pool.query(sql_query.query.user_menu, [req.user.user_uid], (err, data) => {
-//     if(err) return(next);
-//     if(! data.rows[0]) return res.render('restaurants/error_page/add_menu_error', {data: "You dont't have any menus to edit!"});
-//     res.render('restaurants/edit_menu/select_menus', {
-//         data : data
-//       });
-//   });
-// });
-
 module.exports = router;

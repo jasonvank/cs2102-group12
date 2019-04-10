@@ -11,7 +11,7 @@ router.get('/', processPassedVariable);
 
 function processPassedVariable(req, res, next) {
   var passedVariable = req.query.valid;
-  pool.query(sql_query.query.menu_item, [passedVariable], (err, data) => {
+  pool.query(sql_query.query.menuid_to_item, [passedVariable], (err, data) => {
     if(err) return(next);
     if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
     var passedData = {

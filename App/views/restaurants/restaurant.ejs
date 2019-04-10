@@ -2,7 +2,7 @@
 <html lang="en">
   <%- include ../templates/header.ejs %>
   <body>
-    <%- include ../templates/navbar_for_restaurants.ejs %>
+    <%- include ../templates/navbar.ejs %>
     <section class="home-slider owl-carousel">
       <div class="slider-item" style="background-image: url('images/bg_1.jpg');" data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
@@ -35,16 +35,18 @@
                  <th scope="col"> Address</th>
                  <th scope="col"> Working hour</th>
                  <th scope="col"> Contacts</th>
+                 <th scope="col"> Rating</th>
             </tr>
        </thead>
        <tbody>
          <tbody style="cursor:pointer" >
-            <% for(var i=0; i<data.passedData.rows.length; i++) { %>
+            <% for(var i=0; i<attributes.length; i++) { %>
             <tr onclick=content(this)>
-                 <td id = 'td1'><%= data.passedData.rows[i].name%></td>
-                 <td id = 'td1'><%= data.passedData.rows[i].address%></td>
-                 <td id = 'td1'><%= data.passedData.rows[i].open_time + " - " + data.passedData.rows[i].close_time%></td>
-                 <td id = 'td1'><%= data.passedData.rows[i].contacts%></td>
+                 <td id = 'td1'><%= attributes[i].name%></td>
+                 <td id = 'td1'><%= attributes[i].address%></td>
+                 <td id = 'td1'><%= attributes[i].open_time + " - " + attributes[i].close_time%></td>
+                 <td id = 'td1'><%= attributes[i].contacts%></td>
+                 <td id = 'td1'><%= attributes[i].rating%></td>
             </tr>
             <% } %>
        </tbody>

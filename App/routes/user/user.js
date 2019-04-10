@@ -108,7 +108,7 @@ router.post('/:userId/update_info', function (req, res, next) {
 // Add Restaurant---------------------------------------------------------------------
 router.get('/:userId/add_restaurant', function (req, res, next) {
   if (!req.user) res.redirect('/login');
-  client.query(sql_query.query.user_restaurant, [req.user.user_uid], function (err, data) {
+  client.query(sql_query.query.userid_to_restaurant, [req.user.user_uid], function (err, data) {
     if (err) return next(err);
     if (data.rows[0]) {
       return res.render('user/restaurants/error_page/add_restaurant_error', {data: req.user.username});
@@ -205,7 +205,7 @@ router.post('/:userId/add_menu', function (req, res, next) {
   if (!req.user.username) {
     res.redirect('/login');
   }
-  pool.query(sql_query.query.user_restaurant, [req.user.user_uid], (err, data) => {
+  pool.query(sql_query.query.userid_to_restaurant, [req.user.user_uid], (err, data) => {
     if (err) return next(err);
     var errorMessage = {
       message: "Please register your restaurant first!",
@@ -230,7 +230,7 @@ router.get('/:userId/edit_restaurant', function (req, res, next) {
   if (!req.user) res.redirect('/login');
   uid = req.user.user_uid;
   // console.log(req.user.user_uid);
-  pool.query(sql_query.query.user_restaurant, [req.user.user_uid], (err, data) => {
+  pool.query(sql_query.query.userid_to_restaurant, [req.user.user_uid], (err, data) => {
     if (err) return next(err);
     var errorMessage = {
       message: "Please register your restaurant first!",
@@ -250,13 +250,59 @@ router.post('/:userId/edit_restaurant', function (req, res, next) {
   var open_time = req.body.open_time;
   var close_time = req.body.close_time;
   var contacts = req.body.contacts;
-  pool.query(sql_query.query.update_restaurant, [rid, name, address, open_time, close_time, contacts], (err, data) => {
+  var location = req.body.location;
+  var cuisines = req.body.cuisines;
+
+  pool.query(sql_query.query.update_restaurant, [rid, name, address, location, open_time, close_time, contacts], (err, data) => {
     var errorMessage = {
       message: err,
       user_name: req.user.username
     };
     if (err) return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
-    return res.redirect('/user/' + req.user.username);
+    // Edit categories of restaurant
+    client.query('BEGIN', function(err, data) {
+      if (err) rollback(client, err);
+      client.query(sql_query.query.delete_rest_belongs, [rid], function(err, data) {
+        if (err) rollback(client, err);
+        var cid;
+        if (typeof cuisines === 'string' || cuisines instanceof String) {
+          console.log("Only 1 category selected");
+          client.query(sql_query.query.cat_name_to_cid, [cuisines], function (err, data) {
+            if (err) rollback(client, err);
+            cid = data.rows[0].cid;
+            console.log("cid: " + cid);
+            console.log("rid: " + rid);
+            client.query(sql_query.query.add_category, [cid, rid], function (err, data) {
+              if (err) {
+                rollback(client, err);
+              } else {
+                console.log("Added to belongs");
+                client.query('COMMIT');
+                return res.redirect('/user/' + req.user.username);
+              }
+            });
+          });
+        } else {
+          for (var i = 0; i < cuisines.length; i++) {
+            console.log("multiple categories selected");
+            // console.log(cuisines[i]);
+            var cuisine_name = cuisines[i];
+            console.log("cuisine_name: " + cuisine_name);
+            client.query(sql_query.query.cat_name_to_cid, [cuisine_name], function (err, data) {
+              if (err) rollback(client, err);
+              cid = data.rows[0].cid;
+              console.log("cid: " + cid);
+              console.log("rid: " + rid);
+              client.query(sql_query.query.add_category, [cid, rid], function (err, data) {
+                if (err) rollback(client, err);
+              });
+            });
+          }
+          client.query('COMMIT');
+        }
+      });
+      return res.redirect('/user/' + req.user.username);
+    });
   });
 });
 //End of Edit Restaurant------------------------------------------------------------------------------------
@@ -268,7 +314,7 @@ router.get('/:userId/delete_restaurant', function (req, res, next) {
   if (!req.user) res.redirect('/login');
   uid = req.user.user_uid;
   // console.log(req.user.user_uid);
-  pool.query(sql_query.query.user_restaurant, [req.user.user_uid], (err, data) => {
+  pool.query(sql_query.query.userid_to_restaurant, [req.user.user_uid], (err, data) => {
     if (err) return next(err);
     var errorMessage = {
       message: "You have no restaurant to be deleted!",
@@ -301,8 +347,11 @@ router.post('/:userId/delete_restaurant', function(req, res, next) {
       if (err) return rollback(client, err);
       client.query(sql_query.query.delete_restaurant, [rid], function(err, data) {
         if (err) rollback(client, err);
-        client.query('COMMIT');
-        return res.redirect('/user/' + req.user.username);
+        client.query(sql_query.query.delete_rest_belongs, [rid], function(err, data) {
+          if (err) rollback(client, err);
+          client.query('COMMIT');
+          return res.redirect('/user/' + req.user.username);
+        });
       });
     });
   });

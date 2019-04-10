@@ -12,12 +12,7 @@ router.post('/', selectMenu);
 
 function processPassedVariable(req, res, next) {
   restaurantRid = req.query.valid;
-  // pool.query(sql_query.query.restaurant_rid, [passedVariable], (err, data) => {
-    // if(err) return(next);
-    // restaurantRid = data.rows[0].rid;
-    // console.log(restaurantRid);
-    // console.log(data.rows[0].name);
-    pool.query(sql_query.query.restaurant_menu, [restaurantRid], (err, data) => {
+    pool.query(sql_query.query.restaurantid_to_menu, [restaurantRid], (err, data) => {
       if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
       // console.log(data.rows[0].name);
       var passedData = {
@@ -37,7 +32,7 @@ function processPassedVariable(req, res, next) {
 function selectMenu(req, res, next) {
   var menu_name = req.body.menu_name;
 
-  pool.query(sql_query.query.menu_mid, [restaurantRid, menu_name], (err, data) => {
+  pool.query(sql_query.query.name_rid_to_mid, [restaurantRid, menu_name], (err, data) => {
     if (err) return next(err);
     // console.log(restaurantRid);
     // console.log(data.rows[0].mid);

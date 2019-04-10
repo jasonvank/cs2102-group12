@@ -8,7 +8,7 @@ const pool = new Pool({connectionString: process.env.DATABASE_URL});
 /* GET menu page. */
 router.get('/', function(req, res, next) {
   if (!req.user) res.redirect('/login');
-  pool.query(sql_query.query.user_menu, [req.user.user_uid], (err, data) => {
+  pool.query(sql_query.query.userid_to_menu, [req.user.user_uid], (err, data) => {
     if(err) return(next);
 
     var errorMessage = {

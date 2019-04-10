@@ -57,7 +57,7 @@ router.get('/', function(req, res, next) {
       user: req.user,
       passedData: data
     };
-    res.render('restaurants/search_results', {
+    res.render('restaurants/search', {
         data : passedData
       });
 

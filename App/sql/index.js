@@ -16,12 +16,14 @@ sql.query = {
   customer_register: 'INSERT INTO customers (uid) VALUES ($1)',
   reset_password: 'UPDATE users SET password_hash = $2 WHERE user_uid = $1',
   update_info: 'UPDATE users SET first_name = $2, last_name=$3 where user_uid = $1',
-  check_user_status: 'SELECT sum(value) AS total from rewards NATURAL JOIN earns NATURAL JOIN customers GROUP BY uid HAVING uid = $1',
+  check_user_status: 'SELECT sum(value) AS total FROM rewards NATURAL JOIN earns NATURAL JOIN customers GROUP BY uid HAVING uid = $1',
+  rate_reservation_restaurant: 'INSERT INTO ratings (resid, rating) VALUES ($1, $2)',
+  display_reservation_rate_value: 'SELECT * FROM ratings WHERE resid = $1',
   // User
   display_customer_history:  "" +
   "WITH current_reservations AS ( " +
-  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, address, C.name AS categories " +
-  "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN  processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid " +
+  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, address, C.name AS categories, RA.rating as rating " +
+  "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN  processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid LEFT JOIN ratings RA on RA.resid = R.resid " +
   ") " +
   "SELECT * " +
   "FROM current_reservations " +
@@ -89,6 +91,12 @@ sql.query = {
   update_restaurant: 'UPDATE restaurants SET name=$2, address=$3, open_time=$4, close_time=$5, contacts=$6 WHERE rid=$1',
   update_menu: 'UPDATE menus SET name=$2 WHERE mid=$1',
   update_item: 'UPDATE items SET name=$2, price=$3, description=$4 WHERE iid=$1',
+
+  //delete Restaurant
+  delete_restaurant: 'DELETE FROM restaurants WHERE rid=$1',
+  delete_register: 'DELETE FROM registers WHERE rid=$1',
+  delete_menu: 'DELETE FROM menus WHERE mid=$1',
+  delete_item: 'DELETE FROM items WHERE iid=$1',
 
   //reject reservation
   remove_processes: 'DELETE FROM processes WHERE resid=$1',

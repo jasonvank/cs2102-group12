@@ -44,6 +44,10 @@ var updateItem_UpdateFieldsRouter = require('./routes/user/edit_item/edit_fields
 var reEditRouter = require('./routes/user/edit_item/re_edit_form');
 // var addRestaurantErrorRouter = require('./routes/restaurants/add_restaurant');
 // var addMenuErrorRouter = require('./routes/restaurants/add_menu');
+var deleteMenuRouter = require('./routes/user/delete_menu/select_menus');
+var deleteItem_SelectMenusRouter = require('./routes/user/delete_item/select_menus');
+var deleteItem_DeleteItemRouter = require('./routes/user/delete_item/select_items');
+var reDeleteRouter = require('./routes/user/delete_item/re_delete_form');
 
 /* --- reservations management --- */
 var reservationRouter = require('./routes/reservations/reservation');
@@ -111,6 +115,11 @@ app.use('/user/edit_item/select_menus', updateItem_SelectMenusRouter);
 app.use('/user/edit_item/select_items', updateItem_SelectItemsRouter);
 app.use('/user/edit_item/edit_fields', updateItem_UpdateFieldsRouter);
 app.use('/user/edit_item/re_edit_form', reEditRouter);
+
+app.use('/user/delete_menu/select_menus', deleteMenuRouter);
+app.use('/user/delete_item/select_menus', deleteItem_SelectMenusRouter);
+app.use('/user/delete_item/select_items', deleteItem_DeleteItemRouter);
+app.use('/user/delete_item/re_delete_form', reDeleteRouter);
 // app.use('/add_restaurant_error',addRestaurantErrorRouter);
 // app.use('/add_menu_error',addMenuErrorRouter);
 

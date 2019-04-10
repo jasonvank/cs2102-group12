@@ -3,17 +3,17 @@ var express = require('express');
 var router = express.Router();
 var isLoggedIn = require('../index.js');// import isLoggedIn from index.js
 const bcrypt = require('bcrypt');
-const { Pool } = require('pg')
+const {Pool} = require('pg')
 const pool = new Pool({connectionString: process.env.DATABASE_URL});
-
-var historyRouter = require('./history.js');
-router.use('/history', historyRouter);
 
 
 var Client = require('pg').Client;
 var client = new Client({connectionString: process.env.DATABASE_URL});
 client.connect();
 
+
+// var historyRouter = require('./history.js');
+// router.use('/:userId/history', historyRouter);
 
 // User Profile Page -----------------------------------------------------------------------------------
 router.get('/', function (req, res, next) {
@@ -46,6 +46,9 @@ router.get('/:userId', function (req, res, next) {
 });
 // End user profile page -----------------------------------------------------------------------------------
 
+// router.post('/:userId/history', function(req, res, next) {
+//
+// })
 
 // User information and password updates -------------------------------------------------------------------
 router.get('/:userId/reset_password', function (req, res, next) {
@@ -103,19 +106,19 @@ router.post('/:userId/update_info', function (req, res, next) {
 
 
 // Add Restaurant---------------------------------------------------------------------
-router.get('/:userId/add_restaurant', function(req, res, next) {
+router.get('/:userId/add_restaurant', function (req, res, next) {
   if (!req.user) res.redirect('/login');
-    client.query(sql_query.query.user_restaurant, [req.user.user_uid], function(err, data) {
-      if (err) return next(err);
-      if (data.rows[0]) {
-        return res.render('user/restaurants/error_page/add_restaurant_error', {data: req.user.username});
-      } else {
-        res.render('user/restaurants/add_restaurant', {user: req.user});
-      }
-    });
+  client.query(sql_query.query.user_restaurant, [req.user.user_uid], function (err, data) {
+    if (err) return next(err);
+    if (data.rows[0]) {
+      return res.render('user/restaurants/error_page/add_restaurant_error', {data: req.user.username});
+    } else {
+      res.render('user/restaurants/add_restaurant', {user: req.user});
+    }
   });
+});
 
-router.post('/:userId/add_restaurant', function(req, res, next) {
+router.post('/:userId/add_restaurant', function (req, res, next) {
   var name = req.body.name;
   var address = req.body.address;
   var location = req.body.location;
@@ -126,8 +129,8 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
   var menu_name = req.body.menu_name;
   var cuisines = req.body.cuisines;
 
-  var rollback = function(client, err) {
-    client.query('ROLLBACK', function() {
+  var rollback = function (client, err) {
+    client.query('ROLLBACK', function () {
       var errorMessage = {
         message: err,
         user_name: req.user.username
@@ -137,26 +140,26 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
     });
   };
   var rid;
-  client.query('BEGIN', function(err, data) {
-    if(err) return rollback(client, err);
-    client.query(sql_query.query.add_restaurant, [uid, name, address, location, open_time, close_time, contacts], function(err, data) {
+  client.query('BEGIN', function (err, data) {
+    if (err) return rollback(client, err);
+    client.query(sql_query.query.add_restaurant, [uid, name, address, location, open_time, close_time, contacts], function (err, data) {
       if (err) return rollback(client, err);
       rid = data.rows[0].rid;
       console.log("rid0: " + rid);
-      client.query(sql_query.query.register_restaurant, [uid, rid], function(err, data) {
+      client.query(sql_query.query.register_restaurant, [uid, rid], function (err, data) {
         if (err) rollback(client, err);
-        client.query(sql_query.query.add_menu, [rid, menu_name], function(err, data) {
+        client.query(sql_query.query.add_menu, [rid, menu_name], function (err, data) {
           if (err) rollback(client, err);
           // To add Categories
           var cid;
           if (typeof cuisines === 'string' || cuisines instanceof String) {
             console.log("Only 1 category selected");
-            client.query(sql_query.query.cat_name_to_cid, [cuisines], function(err, data) {
+            client.query(sql_query.query.cat_name_to_cid, [cuisines], function (err, data) {
               if (err) rollback(client, err);
               cid = data.rows[0].cid;
               console.log("cid: " + cid);
               console.log("rid: " + rid);
-              client.query(sql_query.query.add_category, [cid, rid], function(err, data) {
+              client.query(sql_query.query.add_category, [cid, rid], function (err, data) {
                 if (err) {
                   rollback(client, err);
                 } else {
@@ -172,12 +175,12 @@ router.post('/:userId/add_restaurant', function(req, res, next) {
               // console.log(cuisines[i]);
               var cuisine_name = cuisines[i];
               console.log("cuisine_name: " + cuisine_name);
-              client.query(sql_query.query.cat_name_to_cid, [cuisine_name], function(err, data) {
+              client.query(sql_query.query.cat_name_to_cid, [cuisine_name], function (err, data) {
                 if (err) rollback(client, err);
                 cid = data.rows[0].cid;
                 console.log("cid: " + cid);
                 console.log("rid: " + rid);
-                client.query(sql_query.query.add_category, [cid, rid], function(err, data) {
+                client.query(sql_query.query.add_category, [cid, rid], function (err, data) {
                   if (err) rollback(client, err);
                 });
               });
@@ -259,6 +262,53 @@ router.post('/:userId/edit_restaurant', function (req, res, next) {
 //End of Edit Restaurant------------------------------------------------------------------------------------
 
 
+//Delete Restaurant------------------------------------------------------------------------------------------
+var rid;
+router.get('/:userId/delete_restaurant', function (req, res, next) {
+  if (!req.user) res.redirect('/login');
+  uid = req.user.user_uid;
+  // console.log(req.user.user_uid);
+  pool.query(sql_query.query.user_restaurant, [req.user.user_uid], (err, data) => {
+    if (err) return next(err);
+    var errorMessage = {
+      message: "You have no restaurant to be deleted!",
+      user_name: req.user.username
+    };
+    if (!data.rows[0]) return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
+    rid = data.rows[0].rid;
+    res.render('user/restaurants/delete_restaurant', {data: data.rows[0]});
+  });
+});
+
+router.post('/:userId/delete_restaurant', function(req, res, next) {
+  var result = typeof req.body.Yes == 'undefined' ? "No" : "Yes";
+  // console.log(result);
+  if (result == "No") return res.redirect('/user/' + req.user.username);
+  var rollback = function(client, err) {
+    client.query('ROLLBACK', function() {
+      var errorMessage = {
+        message: err,
+        user_name: req.user.username
+      };
+      return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
+      client.end();
+    });
+  };
+  console.log(rid);
+  client.query('BEGIN', function(err, data) {
+    if(err) return rollback(client, err);
+    client.query(sql_query.query.delete_register, [rid], function(err, data) {
+      if (err) return rollback(client, err);
+      client.query(sql_query.query.delete_restaurant, [rid], function(err, data) {
+        if (err) rollback(client, err);
+        client.query('COMMIT');
+        return res.redirect('/user/' + req.user.username);
+      });
+    });
+  });
+});
+//End of Delete restaurant-----------------------------------------------------------------------------------
+
 // Router to user past reservations or bookings page -------------------------------------------------------
 router.get('/:userId/history', function (req, res, next) {
   console.log("hey");
@@ -279,25 +329,25 @@ router.get('/:userId/history', function (req, res, next) {
 });
 
 
-router.get('/:userId/reset_password', function(req, res, next) {
+router.get('/:userId/reset_password', function (req, res, next) {
   if (!req.user.username) {
     res.redirect('/login');
   }
   if (req.user.username != req.params.userId) {
     res.redirect('/user/' + req.user.username);
   }
-  res.render('user/reset_password', { title: 'Express' });
+  res.render('user/reset_password', {title: 'Express'});
 });
 
-router.post('/:userId/reset_password', function(req, res, next) {
+router.post('/:userId/reset_password', function (req, res, next) {
   if (req.user.username != req.params.userId) {
     res.redirect('/login');
   }
 
-  var password_hash   = bcrypt.hashSync(req.body.password, 10);
+  var password_hash = bcrypt.hashSync(req.body.password, 10);
 
   pool.query(sql_query.query.reset_password, [req.user.user_uid, password_hash], (err, data) => {
-    if(err) {
+    if (err) {
       res.redirect('/login');
     } else {
       res.redirect('/user/' + req.user.username);
@@ -305,17 +355,18 @@ router.post('/:userId/reset_password', function(req, res, next) {
   });
 });
 
-router.get('/:userId/:resId/reject', function(req, res, next) {
+router.get('/:userId/:resId/reject', function (req, res, next) {
   if (!req.user.isManager) {
     res.redirect('/login');
-  } if (req.user.username != req.params.userId) {
+  }
+  if (req.user.username != req.params.userId) {
     res.redirect('/login');
   }
   res.render('user/reject');
 });
 
 
-router.post('/:userId/:resId/reject', function(req, res, next) {
+router.post('/:userId/:resId/reject', function (req, res, next) {
   var resid = req.params.resId;
   client.query('BEGIN', (err, data) => {
     if (err) return rollback(client);
@@ -333,16 +384,42 @@ router.post('/:userId/:resId/reject', function(req, res, next) {
   });
 });
 
-router.get('/:userId/:resId/cancel', function(req, res, next) {
+router.get('/:userId/:resId/cancel', function (req, res, next) {
   if (req.user.isManager) {
     res.redirect('/login');
-  } if (req.user.username != req.params.userId) {
+  }
+  if (req.user.username != req.params.userId) {
     res.redirect('/login');
   }
   res.render('user/cancel');
 });
 
-router.post('/:userId/:resId/cancel', function(req, res, next) {
+
+router.post('/:userId/history/:reservationId/rate', function (req, res, next) {
+  console.log('reservation history');
+
+  if (!req.user.username) {
+    res.redirect('/login');
+  }
+
+  var rating_value = Object.keys(req.body)[0];
+  var reservation_id = req.params.reservationId;
+  console.log("rating " + rating_value);
+
+  pool.query(sql_query.query.rate_reservation_restaurant, [reservation_id, rating_value], (err, data) => {
+    console.log(sql_query.query.rate_reservation_restaurant, [reservation_id, rating_value]);
+    console.log(JSON.stringify(data));
+    if (err) {
+      console.log(err);
+      // var goback_url = '/user/' + req.user.username + '/history';
+      res.status(404).send("You have rate for this reservation already. <a href= '/user/ + req.user.username + /history'>Go back</a>")
+    }
+    console.log(JSON.stringify(req.body));
+  });
+});
+
+
+router.post('/:userId/:resId/cancel', function (req, res, next) {
   var resid = req.params.resId;
   client.query('BEGIN', (err, data) => {
     if (err) return rollback(client);
@@ -368,7 +445,6 @@ function customer_history(user_uid, req, res) {
       console.log(err);
       return res.redirect('/user/' + req.user.username);
     } else {
-
       return res.render('user/history', {
         history_reservations: data.rows,
         user: req.user,

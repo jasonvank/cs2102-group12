@@ -101,6 +101,12 @@ router.post('/:rid', function (req, res, next) {
           return rollback(client, err);
         }
         //insert into Reservations table
+
+        console.log(restime);
+        console.log(resdate);
+        console.log(numpeople);
+        console.log(usereward);
+
         client.query(sql_query.query.add_reservation, [restime, resdate, numpeople, usereward], function (err, data) {
           if (err) {
             console.log("reserve ERROR");

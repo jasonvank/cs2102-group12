@@ -99,7 +99,7 @@ CREATE TABLE books (
 
 CREATE TABLE rewards (
     rewid   uuid DEFAULT uuid_generate_v4 (),
-    value   NUMERIC(5,2) NOT NULL,
+    value   integer NOT NULL,
     primary key (rewid)
 );
 

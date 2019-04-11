@@ -17,7 +17,7 @@ CREATE TABLE managers (
 
 CREATE TABLE restaurants (
     rid          uuid UNIQUE DEFAULT uuid_generate_v4 (),
-    name         varchar(50) UNIQUE NOT NULL,
+    name         varchar(50) NOT NULL,
     uid          uuid UNIQUE NOT NULL,
     address      varchar(50) NOT NULL,
     location     varchar(50) NOT NULL,
@@ -692,7 +692,9 @@ $$
 DECLARE current_date DATE;
 BEGIN
  SELECT CURRENT_DATE INTO current_date;
- IF NEW.resdate < CURRENT_DATE THEN RAISE NOTICE 'Date is not expired !'; RETURN NULL;
+ IF NEW.resdate < CURRENT_DATE THEN RAISE NOTICE 'Date is before today!';
+ RAISE EXCEPTION 'Please enter a date that is today or later';
+ RETURN NULL;
  ELSE RETURN NEW;
  END IF;
 END;
@@ -703,3 +705,31 @@ CREATE TRIGGER validate_reservation_date
 BEFORE INSERT ON reservations
 FOR EACH ROW
 EXECUTE PROCEDURE validate_reservation_date();
+
+CREATE OR REPLACE FUNCTION validate_reservation_time()
+RETURNS TRIGGER AS
+$$
+DECLARE opentime TIME;
+DECLARE closetime TIME;
+DECLARE reservid uuid;
+DECLARE restaurant uuid;
+DECLARE reservtime TIME;
+BEGIN
+ SELECT NEW.resid INTO reservid;
+ SELECT NEW.rid INTO restaurant;
+ SELECT restime from reservations where resid = reservid INTO reservtime;
+ SELECT open_time from restaurants where rid = restaurant INTO opentime;
+ SELECT close_time from restaurants where rid = restaurant INTO closetime;
+ IF reservtime < opentime OR reservtime > closetime THEN RAISE NOTICE 'Restaurant not open!';
+ RAISE EXCEPTION 'Please choose a time when the restaurant is open';
+ RETURN NULL;
+ ELSE RETURN NEW;
+ END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER validate_reservation_time
+BEFORE INSERT ON processes
+FOR EACH ROW
+EXECUTE PROCEDURE validate_reservation_time();

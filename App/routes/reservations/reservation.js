@@ -60,20 +60,27 @@ router.post('/:rid', function (req, res, next) {
   console.log("use reward: " + usereward);
   console.log("form: " + resdate + ", " + restime + "," + numpeople);
   var resid;
+
+  var rollback = function (client, err) {
+    client.query('ROLLBACK', client.end.bind(client), function () {
+      return res.render('reservations/errorpage', {message: err});
+    });
+  };
+
   client.query('BEGIN', (err, data) => {
-    if (err) return rollback(client);
+    if (err) return rollback(client, err);
     if (usereward != 0) {
       client.query(sql_query.query.select_reward, [uid, usereward], (err, data) => {
         if (err) {
           console.log("find reward ERROR");
-          return rollback(client);
+          return rollback(client, err);
         } else {
           rewid = data.rows[0].rewid;
           console.log("rewid:" + rewid);
           client.query(sql_query.query.delete_reward, [rewid], (err, data) => {
             if (err) {
               console.log("delete reward ERROR");
-              return rollback(client);
+              return rollback(client, err);
             }
           });
         }
@@ -84,20 +91,20 @@ router.post('/:rid', function (req, res, next) {
     client.query(sql_query.query.add_reward, [earnedpoints], (err, data) => {
       if (err) {
         console.log("add reward ERROR");
-        return rollback(client);
+        return rollback(client, err);
       }
       var newrewid = data.rows[0].rewid;
 
       client.query(sql_query.query.add_earns, [newrewid, uid], (err, data) => {
         if (err) {
           console.log("add earns ERROR");
-          return rollback(client);
+          return rollback(client, err);
         }
         //insert into Reservations table
         client.query(sql_query.query.add_reservation, [restime, resdate, numpeople, usereward], function (err, data) {
           if (err) {
             console.log("reserve ERROR");
-            return rollback(client);
+            return rollback(client, err);
           }
           resid = data.rows[0].resid;
           console.log("resid: " + resid);
@@ -105,13 +112,13 @@ router.post('/:rid', function (req, res, next) {
           client.query(sql_query.query.add_books, [resid, uid], function (err, data) {
             if (err) {
               console.log("book ERROR");
-              return rollback(client);
+              return rollback(client, err);
             }
             // insert into processes table
             client.query(sql_query.query.add_processes, [resid, rid], function (err, data) {
               if (err) {
                 console.log("process ERROR");
-                return rollback(client);
+                return rollback(client, err);
               }
               else {
                 client.query('COMMIT', client.end.bind(client), (err, res2) => {
@@ -125,11 +132,7 @@ router.post('/:rid', function (req, res, next) {
     });
   });
 
-  var rollback = function (client) {
-    client.query('ROLLBACK', function () {
-      client.end();
-    });
-  }
 });
+
 
 module.exports = router;

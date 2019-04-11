@@ -128,13 +128,12 @@ router.post('/:userId/add_restaurant', function (req, res, next) {
   var cuisines = req.body.cuisines;
 
   var rollback = function (client, err) {
-    client.query('ROLLBACK', function () {
+    client.query('ROLLBACK', client.end.bind(client), function () {
       var errorMessage = {
         message: err,
         user_name: req.user.username
       };
       return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
-      client.end();
     });
   };
   var rid;
@@ -162,36 +161,17 @@ router.post('/:userId/add_restaurant', function (req, res, next) {
                   rollback(client, err);
                 } else {
                   console.log("Added to belongs");
-                  client.query('COMMIT');
-                  return res.redirect('/user/' + req.user.username);
+                  client.query('COMMIT', client.end.bind(client), (err, res2) => {
+                      return res.redirect('/user/' + req.user.username);
+                  });
                 }
               });
             });
-          // }
-          // else {
-          //   for (var i = 0; i < cuisines.length; i++) {
-          //     console.log("multiple categories selected");
-          //     // console.log(cuisines[i]);
-          //     var cuisine_name = cuisines[i];
-          //     console.log("cuisine_name: " + cuisine_name);
-          //     client.query(sql_query.query.cat_name_to_cid, [cuisine_name], function (err, data) {
-          //       if (err) rollback(client, err);
-          //       cid = data.rows[0].cid;
-          //       console.log("cid: " + cid);
-          //       console.log("rid: " + rid);
-          //       client.query(sql_query.query.add_category, [cid, rid], function (err, data) {
-          //         if (err) rollback(client, err);
-          //       });
-          //     });
-          //   }
-          //   client.query('COMMIT');
-          //   return res.redirect('/user/' + req.user.username);
-          // }
+          });
         });
       });
     });
   });
-});
 // End of Add Restaurant--------------------------------------------------------------------------
 
 //Add Menu-------------------------------------------------------------------------------------------
@@ -264,7 +244,7 @@ router.post('/:userId/edit_restaurant', function (req, res, next) {
       client.query(sql_query.query.delete_rest_belongs, [rid], function(err, data) {
         if (err) rollback(client, err);
         var cid;
-        if (typeof cuisines === 'string' || cuisines instanceof String) {
+        // if (typeof cuisines === 'string' || cuisines instanceof String) {
           console.log("Only 1 category selected");
           client.query(sql_query.query.cat_name_to_cid, [cuisines], function (err, data) {
             if (err) rollback(client, err);
@@ -281,26 +261,9 @@ router.post('/:userId/edit_restaurant', function (req, res, next) {
               }
             });
           });
-        } else {
-          for (var i = 0; i < cuisines.length; i++) {
-            console.log("multiple categories selected");
-            // console.log(cuisines[i]);
-            var cuisine_name = cuisines[i];
-            console.log("cuisine_name: " + cuisine_name);
-            client.query(sql_query.query.cat_name_to_cid, [cuisine_name], function (err, data) {
-              if (err) rollback(client, err);
-              cid = data.rows[0].cid;
-              console.log("cid: " + cid);
-              console.log("rid: " + rid);
-              client.query(sql_query.query.add_category, [cid, rid], function (err, data) {
-                if (err) rollback(client, err);
-              });
-            });
-          }
-          client.query('COMMIT');
-        }
+        // }
       });
-      return res.redirect('/user/' + req.user.username);
+      // return res.redirect('/user/' + req.user.username);
     });
   });
 });

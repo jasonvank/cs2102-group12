@@ -5,6 +5,8 @@ drop function trig_addMenu();
 drop trigger validate_reservation_date ON reservations;
 drop function validate_reservation_date();
 
+drop trigger validate_reservation_time ON processes;
+drop function validate_reservation_time();
 
 drop table belongs cascade;
 drop table books cascade;

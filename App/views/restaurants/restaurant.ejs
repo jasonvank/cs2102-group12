@@ -32,6 +32,8 @@
             <tr >
                  <th scope="col"> Restaurant name</th>
                  <th scope="col"> Address</th>
+                 <th scope="col"> Location</th>
+                 <th scope="col"> Category</th>
                  <th scope="col"> Working hour</th>
                  <th scope="col"> Contacts</th>
                  <th scope="col"> Rating</th>
@@ -41,8 +43,10 @@
          <tbody style="cursor:pointer" >
             <% for(var i=0; i<attributes.length; i++) { %>
             <tr onclick=content(this)>
-                 <td id = 'td1'><%= attributes[i].name%></td>
+                 <td id = 'td1'><%= attributes[i].rname%></td>
                  <td id = 'td1'><%= attributes[i].address%></td>
+                 <td id = 'td1'><%= attributes[i].location%></td>
+                 <td id = 'td1'><%= attributes[i].cname%></td>
                  <td id = 'td1'><%= attributes[i].open_time + " - " + attributes[i].close_time%></td>
                  <td id = 'td1'><%= attributes[i].contacts%></td>
                  <td id = 'td1'><%= attributes[i].rating%></td>

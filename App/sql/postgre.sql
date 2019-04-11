@@ -49,7 +49,7 @@ CREATE TABLE categories (
 
 CREATE TABLE belongs (
     cid     uuid NOT NULL,
-    rid     uuid NOT NULL,
+    rid     uuid NOT NULL UNIQUE,
     primary key (cid, rid),
     foreign key (cid) references categories (cid),
     foreign key (rid) references restaurants (rid) on delete cascade

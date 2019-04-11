@@ -26,7 +26,6 @@ CREATE TABLE restaurants (
     contacts     NUMERIC(10,0) NOT NULL,
     primary key (rid),
     foreign key (uid) references managers (uid)
-    -- foreign key (name) references restaurants (name) on delete cascade on update cascade
 );
 
 CREATE TABLE customers (
@@ -79,9 +78,7 @@ CREATE TABLE reservations (
   resdate     date NOT NULL,
   numpeople   integer NOT NULL,
   discount    integer DEFAULT 0,
-  --rid     char(36) NOT NULL,
   primary key (resid)
-  --, foreign key (rid) references restaurants.rid
 );
 
 CREATE TABLE processes (

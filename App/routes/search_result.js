@@ -67,6 +67,11 @@ router.get('/', function (req, res, next) {
         res.render('restaurants/search', {
           data: passedData
         });
+        pool.query(sql_query.query.delete_restaurant_ratings, (err, data) => {
+          if (err) {
+            console.log(err);
+          }
+        });
       });
     });
   } else {
@@ -91,6 +96,11 @@ router.get('/', function (req, res, next) {
         };
         res.render('restaurants/search', {
           data: passedData
+        });
+        pool.query(sql_query.query.delete_restaurant_ratings, (err, data) => {
+          if (err) {
+            console.log(err);
+          }
         });
       });
     });

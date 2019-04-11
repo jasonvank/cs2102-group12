@@ -28,6 +28,7 @@ router.post('/', function (req, res, next) {
   var location = req.body.location;
   var category = req.body.cuisines;
   var book_time = req.body.book_time;
+  var rating = req.body.rating;
 
   console.log(res_name == 0);
   console.log(location);
@@ -38,7 +39,8 @@ router.post('/', function (req, res, next) {
     name : res_name,
     location : location,
     category : category,
-    time : book_time
+    time : book_time,
+    rating : rating
   }
 console.log(url.format({
   pathname: "/results",

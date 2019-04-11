@@ -36,7 +36,7 @@ CREATE TABLE customers (
 CREATE TABLE registers (
     uid     uuid NOT NULL,
     rid     uuid NOT NULL,
-    primary key (uid, rid),
+    primary key (rid),
     foreign key (uid) references managers (uid),
     foreign key (rid) references restaurants (rid)
 );
@@ -50,7 +50,7 @@ CREATE TABLE categories (
 CREATE TABLE belongs (
     cid     uuid NOT NULL,
     rid     uuid NOT NULL UNIQUE,
-    primary key (cid, rid),
+    primary key (rid),
     foreign key (cid) references categories (cid),
     foreign key (rid) references restaurants (rid) on delete cascade
 );
@@ -59,7 +59,7 @@ CREATE TABLE menus (
     mid     uuid UNIQUE DEFAULT uuid_generate_v4 (),
     rid     uuid NOT NULL,
     name    varchar(50),
-    primary key (mid, rid, name),
+    primary key (mid),
     foreign key (rid) references restaurants (rid) on delete cascade
 );
 
@@ -69,7 +69,7 @@ CREATE TABLE items (
     price       decimal(8,2) NOT NULL,
     description text,
     mid         uuid NOT NULL,
-    primary key (iid, mid, name),
+    primary key (iid),
     foreign key (mid) references menus (mid) on delete cascade
 );
 
@@ -87,7 +87,7 @@ CREATE TABLE reservations (
 CREATE TABLE processes (
     resid     uuid NOT NULL,
     rid       uuid NOT NULL,
-    primary key (resid, rid),
+    primary key (resid),
     foreign key (resid) references reservations (resid) on delete cascade,
     foreign key (rid) references restaurants (rid) on delete cascade
 );
@@ -95,7 +95,7 @@ CREATE TABLE processes (
 CREATE TABLE books (
     resid     uuid NOT NULL,
     uid       uuid NOT NULL,
-    primary key (resid, uid),
+    primary key (resid),
     foreign key (resid) references reservations (resid) on delete cascade,
     foreign key (uid) references customers (uid) on delete cascade
 );
@@ -109,7 +109,7 @@ CREATE TABLE rewards (
 CREATE TABLE earns (
     rewid     uuid NOT NULL,
     uid       uuid NOT NULL,
-    primary key (rewid, uid),
+    primary key (rewid),
     foreign key (rewid) references rewards (rewid) on delete cascade,
     foreign key (uid) references customers (uid) on delete cascade
 );

@@ -1,19 +1,18 @@
 const sql_query = require('../sql');
 
 
-
 var express = require('express');
 var router = express.Router();
 
 
 const passport = require('passport');
 const bcrypt = require('bcrypt');
-const { Pool } = require('pg');
+const {Pool} = require('pg');
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL
 });
 
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   var searchInfo = req.query;
   var rest_name = searchInfo.name;
   if (rest_name == 0) {
@@ -54,39 +53,48 @@ router.get('/', function(req, res, next) {
     pool.query(sql_query.query.restaurant_ratings, (err, data) => {
       if (err) console.log("cannot create restaurant_ratings view");
       pool.query(sql_query.query.search_no_time, [rest_name, location, category, rating], (err, data) => {
-        if (err)
-          res.render('/restaurants/empty_selections', {user : req.user});
-          if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
-          var passedData = {
-            user: req.user,
-            passedData: data
-          };
-          res.render('restaurants/search', {
-          data : passedData
-          });
+        if (err) {
+          return res.status(500).send("Query has problem");
+        }
+        // // res.render('/restaurants/empty_selections', {user : req.user});
+        // if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
+        var passedData = {
+          user: req.user,
+          passedData: data
+        };
+        res.render('restaurants/search', {
+          data: passedData
+        });
       });
     });
   } else {
     pool.query(sql_query.query.restaurant_ratings, (err, data) => {
       if (err) console.log("cannot create restaurant_ratings view");
+      console.log(rest_name);
+      console.log(location);
+      console.log(category);
+      console.log(rating);
+      console.log(time);
       pool.query(sql_query.query.search, [rest_name, location, category, rating, time], (err, data) => {
-        if (err)
-          res.render('/restaurants/empty_selections', {user : req.user});
-          if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
-          var passedData = {
-            user: req.user,
-            passedData: data
-          };
-          res.render('restaurants/search', {
-          data : passedData
-          });
+        if (err) {
+          return res.status(500).send("Query has problem");
+        }
+        // res.render('/restaurants/empty_selections', {user : req.user});
+        // if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
+        var passedData = {
+          user: req.user,
+          passedData: data
+        };
+        res.render('restaurants/search', {
+          data: passedData
+        });
       });
     });
   }
 
   var search_query =
-  "SELECT * FROM restaurants LEFT JOIN belongs ON restaurants.rid = belongs.rid LEFT JOIN categories on belongs.cid = categories.cid WHERE " +
-  rest_name + " AND " + location + " AND " + category + " AND " + time;
+    "SELECT * FROM restaurants LEFT JOIN belongs ON restaurants.rid = belongs.rid LEFT JOIN categories on belongs.cid = categories.cid WHERE " +
+    rest_name + " AND " + location + " AND " + category + " AND " + time;
 
   // pool.query(sql_query.query.search, [rest_name, location, category, time], (err, data) => {
   //   if (err)

@@ -18,7 +18,7 @@ router.get('/', function (req, res, next) {
   if (rest_name == 0) {
     rest_name = '%%';
   } else {
-    rest_name = '%' + rest_name + '%';
+    rest_name = '%' + rest_name.toLowerCase() + '%';
   }
 
   console.log(rest_name);

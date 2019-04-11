@@ -45,19 +45,7 @@ sql.query = {
   "SELECT * " +
   "FROM restaurant_rating RR Left join user_reservations CR on RR.restaurant_id = CR.restaurant_id " +
   "WHERE customer_uid = $1 AND date < (select now()) " +
-  "ORDER BY date, time, numpeople ",
-
-
-
-  // "" +
-  // "WITH user_reservations AS ( " +
-  // "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, address, C.name AS categories, RA.rating as rating " +
-  // "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid LEFT JOIN ratings RA ON RA.resid = R.resid " +
-  // "),  " +
-  // "SELECT * " +
-  // "FROM user_reservations " +
-  // "WHERE customer_uid = $1 AND date < (select now()) " +
-  // "ORDER BY date, time, numpeople ",
+  "ORDER BY date DESC, time, numpeople, rating, discount ",
 
   // User history Page
   display_new_bookings: "" +
@@ -78,7 +66,7 @@ sql.query = {
   "SELECT * " +
   "FROM accepted_bookings " +
   "WHERE manager_uid = $1 AND date < (select now()) " +
-  "ORDER BY date, time, numpeople",
+  "ORDER BY date DESC, time, numpeople",
 
   display_restaurant_attributes: "" +
   "SELECT r1.name AS rname, c1.name AS cname, address, location, open_time, close_time, contacts, COALESCE(rating, 5.0 ) AS rating " +
@@ -126,7 +114,7 @@ sql.query = {
   "FROM restaurants LEFT JOIN restaurant_ratings ON restaurants.name = restaurant_ratings.rname " +
   "LEFT JOIN belongs on restaurants.rid = belongs.rid " +
   "LEFT JOIN categories on belongs.cid = categories.cid " +
-  "WHERE restaurants.name LIKE $1 " +
+  "WHERE lower(restaurants.name) LIKE $1 " +
   "AND location LIKE $2 " +
   "AND categories.name LIKE $3 " +
   "AND rating >= $4 " +
@@ -139,7 +127,7 @@ sql.query = {
   "FROM restaurants LEFT JOIN restaurant_ratings ON restaurants.name = restaurant_ratings.rname " +
   "LEFT JOIN belongs on restaurants.rid = belongs.rid " +
   "LEFT JOIN categories on belongs.cid = categories.cid " +
-  "WHERE restaurants.name LIKE $1 " +
+  "WHERE lower(restaurants.name) LIKE $1 " +
   "AND location LIKE $2 " +
   "AND categories.name LIKE $3 " +
   "AND rating >= $4",

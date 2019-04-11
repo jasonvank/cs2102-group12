@@ -600,7 +600,7 @@ VALUES ('orange juice', '8', 'fresh squeezed orange juice', '5a68c459-8023-407b-
 
 --reservations
 INSERT INTO reservations (resid, restime, resdate, numpeople, discount)
-VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', '01:00', '2019-03-02', 3, 50);
+VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', '03:00', '2019-04-05', 3, 50);
 
 INSERT INTO reservations (resid, restime, resdate, numpeople, discount)
 VALUES ('b2a5078d-df7a-46f2-a4c1-d60b9a168394', '07:00', '2019-04-05', 2, 30);

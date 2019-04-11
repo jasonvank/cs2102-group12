@@ -42,32 +42,51 @@ router.get('/', function(req, res, next) {
 
   console.log(category);
 
+  var rating = searchInfo.rating;
+  if (rating == "Any Rating") {
+    rating = 0;
+  }
+
+  console.log("rating: " + rating);
+
   var time = searchInfo.time;
   if (time == 0) {
-    pool.query(sql_query.query.search_no_time, [rest_name, location, category], (err, data) => {
-      if (err)
-        res.render('/restaurants/empty_selections', {user : req.user});
-        if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
-        var passedData = {
-          user: req.user,
-          passedData: data
-        };
-        res.render('restaurants/search', {
-        data : passedData
-        });
+    pool.query(sql_query.query.restaurant_ratings, (err, data) => {
+      if (err) console.log("cannot create restaurant_ratings view");
+      pool.query(sql_query.query.search_no_time, [rest_name, location, category, rating], (err, data) => {
+        if (err)
+          res.render('/restaurants/empty_selections', {user : req.user});
+          if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
+          var passedData = {
+            user: req.user,
+            passedData: data
+          };
+          res.render('restaurants/search', {
+          data : passedData
+          });
+          pool.query(sql_query.query.delete_restaurant_ratings, (err, data) => {
+            if (err) console.log("cannot delete view");
+          });
+      });
     });
   } else {
-    pool.query(sql_query.query.search, [rest_name, location, category, time], (err, data) => {
-      if (err)
-        res.render('/restaurants/empty_selections', {user : req.user});
-        if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
-        var passedData = {
-          user: req.user,
-          passedData: data
-        };
-        res.render('restaurants/search', {
-        data : passedData
-        });
+    pool.query(sql_query.query.restaurant_ratings, (err, data) => {
+      if (err) console.log("cannot create restaurant_ratings view");
+      pool.query(sql_query.query.search, [rest_name, location, category, rating, time], (err, data) => {
+        if (err)
+          res.render('/restaurants/empty_selections', {user : req.user});
+          if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
+          var passedData = {
+            user: req.user,
+            passedData: data
+          };
+          res.render('restaurants/search', {
+          data : passedData
+          });
+          pool.query(sql_query.query.delete_restaurant_ratings, (err, data) => {
+            if (err) console.log("cannot delete view");
+          });
+      });
     });
   }
 

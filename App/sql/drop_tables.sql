@@ -1,6 +1,11 @@
 -- drop table assigns;
 drop trigger if_menu_name_existed ON menus;
 drop function trig_addMenu();
+
+drop trigger validate_reservation_date ON reservations;
+drop function validate_reservation_date();
+
+
 drop table belongs cascade;
 drop table books cascade;
 --drop table rate cascade;

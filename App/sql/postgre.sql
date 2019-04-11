@@ -201,6 +201,10 @@ BEFORE INSERT OR UPDATE ON items
 FOR EACH ROW
 EXECUTE PROCEDURE trig_addItem();
 
+
+
+
+
 --Users
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
 VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', 'customer', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'customer', 'customer', '84508450');
@@ -581,3 +585,23 @@ VALUES ('235a555f-6c36-4b57-b34c-eb92db1276d2', 4.0);
 
 INSERT INTO ratings (resid, rating)
 VALUES ('d2d3fa97-bb8f-450a-9f2a-fe58df40133c', 4.0);
+
+
+
+CREATE OR REPLACE FUNCTION validate_reservation_date()
+RETURNS TRIGGER AS
+$$
+DECLARE current_date DATE;
+BEGIN
+ SELECT CURRENT_DATE INTO current_date;
+ IF NEW.resdate < CURRENT_DATE THEN RAISE NOTICE 'Date is not expired !'; RETURN NULL;
+ ELSE RETURN NEW;
+ END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER validate_reservation_date
+BEFORE INSERT ON reservations
+FOR EACH ROW
+EXECUTE PROCEDURE validate_reservation_date();

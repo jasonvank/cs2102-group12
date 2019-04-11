@@ -13,34 +13,31 @@ const pool = new Pool({connectionString: process.env.DATABASE_URL});
 
 function findUser(username, callback) {
   pool.query(sql_query.query.user_info, [username], async function (err, data) {
-    if (err) {
-      console.error("Cannot find user");
-      return callback(null);
-    }
+      if (err) {
+        console.error("Cannot find user");
+        return callback(null);
+      }
 
-    if (data.rows.length == 0) {
-      console.error("User does not exists?");
-      return callback(null)
-    } else if (data.rows.length == 1) {
-      var reward_points = 0;
-      var user_uid = data.rows[0].user_uid
-      var isManager = true;
-      pool.query(sql_query.query.check_user_status, [user_uid], async function (err2, data2) {
-        if (err2) return callback(null);
-        // console.log("data2 : " + JSON.stringify(data2)
-
-        return callback(null, {
-          username: data.rows[0].username,
-          password_hash: data.rows[0].password_hash,
-          user_uid: data.rows[0].user_uid,
-          last_name: data.rows[0].last_name,
-          first_name: data.rows[0].first_name,
-          contact_number: data.rows[0].contact_number,
-          reward_points: data2.rowCount == 0 ? reward_points : reward_points = data2.rows[0].total,
-          isManager: data2.rowCount == 0 ? true : false,
+      if (data.rows.length == 0) {
+        console.error("User does not exists?");
+        return callback(null)
+      } else if (data.rows.length == 1) {
+        var reward_points = 0;
+        var user_uid = data.rows[0].user_uid
+        pool.query(sql_query.query.check_user_status, [user_uid], async function (err2, data2) {
+          if (err2) return callback(null);
+          return callback(null, {
+            username: data.rows[0].username,
+            password_hash: data.rows[0].password_hash,
+            user_uid: data.rows[0].user_uid,
+            last_name: data.rows[0].last_name,
+            first_name: data.rows[0].first_name,
+            contact_number: data.rows[0].contact_number,
+            reward_points: data2.rowCount == 0 ? reward_points : reward_points = data2.rows[0].total,
+            isManager: data2.rowCount == 0 ? true : false,
+          })
         })
-      })
-    } else {
+      } else {
         console.error("More than one user?");
         return callback(null);
       }
@@ -93,7 +90,6 @@ function get_user_status(user_uid) {
   var isMnager = true;
   pool.query(sql_query.query.check_user_status, [user_uid], (err2, data2) => {
     if (err2) return callback(null);
-    console.log("data2 : " + JSON.stringify(data2));
     if (data2.rowCount != 0) {
       reward_points = data2.rows[0].total;
       isManager = false;

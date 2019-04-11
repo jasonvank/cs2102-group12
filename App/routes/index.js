@@ -65,27 +65,45 @@ router.post('/register', function (req, res, next) {
   var contact_number = req.body.contact_number;
   var user_type = req.body.usertype;
 
-  console.log("start to register");
+
+  function user_login() {
+    console.log("going to login")
+    client.query('COMMIT', client.end.bind(client), (err, res2) => {
+      req.login({
+        username: username,
+        passwordHash: bcrypt.hashSync(req.body.password, 10),
+      }, function (err) {
+        if (err) {
+          return res.redirect('/login');
+        } else {
+          return res.redirect('/user/' + username);
+        }
+      });
+    });
+  }
+
   client.query('BEGIN', function (err, data) {
+    console.log("start to register")
     if (err) return rollback(client);
     client.query(sql_query.query.user_register, [username, password_hash, last_name, first_name, contact_number], (err2, data2) => {
       var user_uid;
-      if (err2 || !data2.rows || data2.rows.length == 0) {
+      console.log("-1");
+      if (err2) {
         // show message duplicate user name
         res.status(400).send("This user name has been registered, please change!");
         return rollback(client);
       }
+      console.log("-2");
       console.log("complete registration");
       user_uid = data2.rows[0].user_uid;
-      console.log("get user uid "  + user_uid);
-      console.log("user is " + user_type);
+      var inial_point = 100;
       if (user_type == "customer") {
         console.log("customer");
         client.query(sql_query.query.customer_register, [user_uid], (err3, data3) => {
           if (err3) {
             return rollback(client);
           }
-          client.query(sql_query.query.register_rewards, [100], (err4, data4) => {
+          client.query(sql_query.query.register_rewards, [inial_point], (err4, data4) => {
             if (err4 || !data4.rows || data4.rows.length == 0) {
               return rollback(client);
             }
@@ -94,32 +112,24 @@ router.post('/register', function (req, res, next) {
               if (err5) {
                 return rollback(client);
               }
+              user_login();
+
+
+
             })
           })
         });
       } else {
         console.log("manager");
+        console.log("-3");
         client.query(sql_query.query.manager_register, [user_uid], (err6, data6) => {
-          if (err6 || !data6.rows || data6.rows.length == 0) {
+          if (err6) {
+            console.log("has problem");
             return rollback(client);
           }
-
+          user_login();
         });
       }
-
-      client.query('COMMIT', client.end.bind(client), (err, res2) => {
-        console.log("going to login");
-        req.login({
-          username: username,
-          passwordHash: bcrypt.hashSync(req.body.password, 10),
-        }, function (err) {
-          if (err) {
-            return res.redirect('/login');
-          } else {
-            return res.redirect('/user/' + username);
-          }
-        });
-      });
     });
   });
 });

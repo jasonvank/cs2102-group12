@@ -2,26 +2,35 @@
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
         <a class="navbar-brand" href="/">EatLah</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="oi oi-menu"></span> Menu
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+                aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Menu
         </button>
 
         <div class="collapse navbar-collapse" id="ftco-nav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item active"><a href="/" class="nav-link">Home</a></li>
-            <li class="nav-item"><a href="restaurant" class="nav-link">Restaurants</a></li>
-            <li class="nav-item"><a href="categories" class="nav-link">Categories</a></li>
-            <li class="nav-item"><a href="search" class="nav-link">Search</a></li>
-        </ul>
-        <ul class="nav navbar-nav">
-            <%if (data.user) { %>
-                <li class="nav-item" ><a href="/user/<%= data.user.username %>" class="nav-link" style="color: gold">Welcome : <%= data.user.username %><br></a></li>
-                <li class="nav-item"><a href="logout" class="nav-link" >Logout</a></li>
-            <% } else { %>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active"><a href="/" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="restaurant" class="nav-link">Restaurants</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <% if (data.user) { %>
+                <li class="nav-item">
+                    <a href="/user/<%= data.user.username %>" class="nav-link" style="color: gold">
+                        Welcome : <%= data.user.username %>
+                        <% if (data.user.isManager) { %>
+                        (manager)
+                        <% } else { %>
+                        (customer)
+                        <% } %>
+                        <br>
+                    </a>
+                </li>
+                <li class="nav-item"><a href="logout" class="nav-link">Logout</a></li>
+                <% } else { %>
                 <li class="nav-item"><a href="login" class="nav-link">Login</a></li>
                 <li class="nav-item"><a href="register" class="nav-link">Register</a></li>
-            <% } %>
-        </ul>
+                <% } %>
+            </ul>
         </div>
     </div>
 </nav>

@@ -118,7 +118,7 @@ sql.query = {
   get_rewards: 'SELECT value FROM earns LEFT JOIN rewards ON earns.rewid = rewards.rewid WHERE uid = $1',
   select_reward: 'SELECT rewards.rewid FROM earns LEFT JOIN rewards ON earns.rewid = rewards.rewid WHERE uid = $1 AND value = $2',
   delete_reward: 'DELETE FROM rewards WHERE rewid = $1',
-  add_reservation: 'insert into reservations (restime, resdate, numpeople, discount) values ($1, $2, $3, $4)',
+  add_reservation: 'INSERT INTO reservations (restime, resdate, numpeople, discount) VALUES ($1, $2, $3, $4) RETURNING resid',
   add_reward: 'INSERT INTO rewards (value) VALUES ($1) RETURNING rewid',
   add_earns: 'INSERT INTO earns (rewid, uid) VALUES ($1, $2)',
   add_books: 'INSERT INTO books (resid, uid) VALUES ($1, $2)',

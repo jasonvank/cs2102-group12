@@ -31,20 +31,26 @@
       <table class='table table-bordered table-condensed table-striped table-hover'>
        <thead>
             <tr >
-                 <th scope="col"> Restaurant name</th>
-                 <th scope="col"> Address</th>
-                 <th scope="col"> Working hour</th>
-                 <th scope="col"> Contacts</th>
+              <th scope="col"> Restaurant name</th>
+              <th scope="col"> Address</th>
+              <th scope="col"> Location</th>
+              <th scope="col"> Category</th>
+              <th scope="col"> Working hour</th>
+              <th scope="col"> Contacts</th>
+              <th scope="col"> Rating</th>
             </tr>
        </thead>
        <tbody>
          <tbody style="cursor:pointer" >
             <% for(var i=0; i<data.passedData.rows.length; i++) { %>
             <tr onclick=content(this)>
-                 <td id = 'td1'><%= data.passedData.rows[i].rname%></td>
-                 <td id = 'td1'><%= data.passedData.rows[i].address%></td>
-                 <td id = 'td1'><%= data.passedData.rows[i].open_time + " - " + data.passedData.rows[i].close_time%></td>
-                 <td id = 'td1'><%= data.passedData.rows[i].contacts%></td>
+              <td id = 'td1'><%= data.passedData.rows[i].rname%></td>
+              <td id = 'td1'><%= data.passedData.rows[i].address%></td>
+              <td id = 'td1'><%= data.passedData.rows[i].location%></td>
+              <td id = 'td1'><%= data.passedData.rows[i].cname%></td>
+              <td id = 'td1'><%= data.passedData.rows[i].open_time + " - " + data.passedData.rows[i].close_time%></td>
+              <td id = 'td1'><%= data.passedData.rows[i].contacts%></td>
+              <td id = 'td1'><%= data.passedData.rows[i].rating%></td>
             </tr>
             <% } %>
        </tbody>

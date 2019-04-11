@@ -90,8 +90,15 @@ sql.query = {
 	add_category: 'INSERT INTO belongs (cid, rid) VALUES ($1, $2)',
 
   //search Restaurants
-  search: 'SELECT restaurants.name as name, restaurants.rid, location, categories.name as cname, belongs.cid, open_time, close_time FROM restaurants LEFT JOIN belongs ON restaurants.rid = belongs.rid LEFT JOIN categories on belongs.cid = categories.cid WHERE restaurants.name LIKE $1 AND location=$2 AND cname=$3 AND open_time <= $4 AND close_time >= $5',
-
+  search: ''  +
+  'SELECT restaurants.name as rname, restaurants.rid, location, categories.name as cname, belongs.cid, open_time, close_time' +
+  'FROM restaurants LEFT JOIN belongs ON restaurants.rid = belongs.rid LEFT JOIN categories on belongs.cid = categories.cid' +
+  'WHERE restaurants.name LIKE $1' +
+  'AND location LIKE $2' +
+  'AND categories.name LIKE $3' +
+  'AND open_time <= $4' +
+  'AND close_time >= $5',
+  search_no_time: 'SELECT restaurants.name as rname, restaurants.rid, location, categories.name as cname, belongs.cid, open_time, close_time FROM restaurants LEFT JOIN belongs ON restaurants.rid = belongs.rid LEFT JOIN categories on belongs.cid = categories.cid WHERE restaurants.name LIKE $1 AND location LIKE $2 AND categories.name LIKE $3',
   //Reservations
   get_rewards: 'SELECT value FROM earns LEFT JOIN rewards ON earns.rewid = rewards.rewid WHERE uid = $1',
   select_reward: 'SELECT rewards.rewid FROM earns LEFT JOIN rewards ON earns.rewid = rewards.rewid WHERE uid = $1 AND value = $2',

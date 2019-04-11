@@ -17,51 +17,91 @@ router.get('/', function(req, res, next) {
   var searchInfo = req.query;
   var rest_name = searchInfo.name;
   if (rest_name == 0) {
-    rest_name = "1=1";
+    rest_name = '%%';
   } else {
-    rest_name = "restaurants.name = " + "'" + rest_name + "'";
+    rest_name = '%' + rest_name + '%';
   }
+
+  console.log(rest_name);
 
   var location = searchInfo.location;
   if (location == 'Anywhere') {
-    location = "1=1";
+    location = '%%';
   } else {
-    location = "restaurants.location = " + "'" + location + "'";
+    location = '%' + location + '%';
   }
+
+  console.log(location);
 
   var category = searchInfo.category;
   if (category == 'Anything') {
-    category = "1=1";
+    category = '%%';
   } else {
-    category = "categories.name = " + "'" + category + "'";
+    category = '%' + category + '%';
   }
+
+  console.log(category);
 
   var time = searchInfo.time;
   if (time == 0) {
-    time = "1=1";
+    pool.query(sql_query.query.search_no_time, [rest_name, location, category], (err, data) => {
+      if (err)
+        res.render('/restaurants/empty_selections', {user : req.user});
+        if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
+        var passedData = {
+          user: req.user,
+          passedData: data
+        };
+        res.render('restaurants/search', {
+        data : passedData
+        });
+    });
   } else {
-    time = "restaurants.open_time <= " + "'" + time + "'" + "AND restaurants.close_time >=" + "'" + time + "'";
+    pool.query(sql_query.query.search, [rest_name, location, category, time], (err, data) => {
+      if (err)
+        res.render('/restaurants/empty_selections', {user : req.user});
+        if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
+        var passedData = {
+          user: req.user,
+          passedData: data
+        };
+        res.render('restaurants/search', {
+        data : passedData
+        });
+    });
   }
 
   var search_query =
   "SELECT * FROM restaurants LEFT JOIN belongs ON restaurants.rid = belongs.rid LEFT JOIN categories on belongs.cid = categories.cid WHERE " +
   rest_name + " AND " + location + " AND " + category + " AND " + time;
 
-  pool.query(search_query, (err, data) => {
-    if (err) {
-      //cant find any Restaurants
-        res.render('/restaurants/empty_selections', {user : req.user});
-    }
-    if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
-    var passedData = {
-      user: req.user,
-      passedData: data
-    };
-    res.render('restaurants/search', {
-        data : passedData
-      });
-
-  });
+  // pool.query(sql_query.query.search, [rest_name, location, category, time], (err, data) => {
+  //   if (err)
+  //     res.render('/restaurants/empty_selections', {user : req.user});
+  //     if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
+  //     var passedData = {
+  //       user: req.user,
+  //       passedData: data
+  //     };
+  //     res.render('restaurants/search', {
+  //     data : passedData
+  //     });
+  // });
+  // pool.query(search_query, (err, data) => {
+  //   if (err) {
+  //     //cant find any Restaurants
+  //       res.render('/restaurants/empty_selections', {user : req.user});
+  //   }
+  //   if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
+  //   var passedData = {
+  //     user: req.user,
+  //     passedData: data
+  //   };
+  //   res.render('restaurants/search', {
+  //       data : passedData
+  //     });
+  //
+  // });
 
 });
 

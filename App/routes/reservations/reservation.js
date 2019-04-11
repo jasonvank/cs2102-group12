@@ -62,9 +62,8 @@ router.post('/:rid', function (req, res, next) {
   var resid;
 
   var rollback = function (client, err) {
-    client.query('ROLLBACK', function () {
-      res.render('reservations/errorpage', {message: err});
-      client.end();
+    client.query('ROLLBACK', client.end.bind(client), function () {
+      return res.render('reservations/errorpage', {message: err});
     });
   };
 

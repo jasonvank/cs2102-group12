@@ -17,7 +17,7 @@ CREATE TABLE managers (
 
 CREATE TABLE restaurants (
     rid          uuid UNIQUE DEFAULT uuid_generate_v4 (),
-    name         varchar(50) UNIQUE NOT NULL,
+    name         varchar(50) NOT NULL,
     uid          uuid UNIQUE NOT NULL,
     address      varchar(50) NOT NULL,
     location     varchar(50) NOT NULL,
@@ -692,7 +692,7 @@ $$
 DECLARE current_date DATE;
 BEGIN
  SELECT CURRENT_DATE INTO current_date;
- IF NEW.resdate < CURRENT_DATE THEN RAISE NOTICE 'Date is before today!'; 
+ IF NEW.resdate < CURRENT_DATE THEN RAISE NOTICE 'Date is before today!';
  RAISE EXCEPTION 'Please enter a date that is today or later';
  RETURN NULL;
  ELSE RETURN NEW;
@@ -720,7 +720,7 @@ BEGIN
  SELECT restime from reservations where resid = reservid INTO reservtime;
  SELECT open_time from restaurants where rid = restaurant INTO opentime;
  SELECT close_time from restaurants where rid = restaurant INTO closetime;
- IF reservtime < opentime OR reservtime > closetime THEN RAISE NOTICE 'Restaurant not open!'; 
+ IF reservtime < opentime OR reservtime > closetime THEN RAISE NOTICE 'Restaurant not open!';
  RAISE EXCEPTION 'Please choose a time when the restaurant is open';
  RETURN NULL;
  ELSE RETURN NEW;

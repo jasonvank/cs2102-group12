@@ -40,7 +40,7 @@
             <% for(var i=0; i<data.passedData.rows.length; i++) { %>
             <tr>
               <td id = 'td1' ><%= data.passedData.rows[i].name%></td>
-              <td id = 'td2' ><%= data.passedData.rows[i].price%></td>
+              <td id = 'td2' ><%= "$ " + data.passedData.rows[i].price%></td>
               <td id = 'td2' ><%= data.passedData.rows[i].description%></td>
             </tr>
             <% } %>

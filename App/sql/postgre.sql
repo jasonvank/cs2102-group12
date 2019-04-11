@@ -49,7 +49,7 @@ CREATE TABLE categories (
 
 CREATE TABLE belongs (
     cid     uuid NOT NULL,
-    rid     uuid NOT NULL,
+    rid     uuid NOT NULL UNIQUE,
     primary key (cid, rid),
     foreign key (cid) references categories (cid),
     foreign key (rid) references restaurants (rid) on delete cascade
@@ -116,7 +116,7 @@ CREATE TABLE earns (
 
 CREATE TABLE ratings (
     resid     uuid NOT NULL,
-    rating   NUMERIC(2,1) NOT NULL DEFAULT 5.0,
+    rating    NUMERIC(2,1) NOT NULL,
     CHECK (rating >= 0.0 and rating <= 5.0),
     primary key (resid),
     foreign key (resid) references reservations (resid) on delete cascade
@@ -201,6 +201,10 @@ BEFORE INSERT OR UPDATE ON items
 FOR EACH ROW
 EXECUTE PROCEDURE trig_addItem();
 
+
+
+
+
 --Users
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
 VALUES ('d0a7f883-36fc-4094-9330-7c932381662a', 'customer', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'customer', 'customer', '84508450');
@@ -219,6 +223,55 @@ VALUES ('aca97eca-337d-4b0e-b1bc-789f5acdff87', 'manager1', '$2b$10$QU1IB9xEAKzC
 
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
 VALUES ('0b6a7521-788a-4430-9614-9cd379ba9fde', 'manager2', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'manager', 'Chen', '84508450');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('b5eacf40-8170-40b3-826b-5d9d00280e31', 'xinze', '$2b$10$UZjC3PNlK1IBwZQfeipMkeavQCwG9N53tLpA.OyzV0c591cCNpIKm', 'xinze', 'li', '87563745');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('a4ac8567-f9e8-4baf-957c-d508e674c8ea', 'lizhi', '$2b$10$ee8SHIdq6xo3e2F2uQe6Y.ysor1A63DtfMxv9Y502QM56.nw6UyKO', 'lizhi', 'zhang', '98789878');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('be00ba64-2752-4f1f-8d97-7ad6046ec361', 'jasonvank', '$2b$10$AZH.L8s3VcHFdlkhxmmk7OFShRPB/IiFAKm5su6d9IUFvenqF5K0q', 'jason', 'van', '12345678');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('428f1791-1217-47c1-aabe-b6d6acef9476', 'changrui', '$2b$10$qRNCRD3ILFYju1L8E2oX/e1/f1BwNcWKmuwDjLA089qo/xmYMkxjG', 'changrui', 'li', '87899878');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('986cf913-b9c7-4d4f-b0c4-66bd231e7f09', 'delong', '$2b$10$fAU5IRE.0PJr.ExA1H3vSO0rorCMe8nneLTYJvhtsoNTspCzk4/76', 'delong', 'xiao', '87895676');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('4b050675-9f76-4f04-95ca-5e34cc0399d7', 'zegang', '$2b$10$/DClXmkWt0RFk5/zfOYR..TOC./rTJcVW2aBjt4LmvVqdRgIuuOZ2', 'zegang', 'zhou', '98009878');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('e86b9b12-1e4a-4df7-9a42-3920b64c23f1', 'wangfei', '$2b$10$cRJcVUa6a0IXgOY5evd8w.yoRJ0tdnRowDdXSV31oUzdlVUIY6bPS', 'fei', 'wang', '98900097');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('21a05c46-96cd-40b2-b00a-f7e8960376b3', 'tingfeng', '$2b$10$F.QyKMrISjU.gpuktLXwouO6Ef9Ysdh0b4US77zpCL3oadadi7KG2', 'tingfeng', 'xie', '98767867');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('5c835253-03f5-476f-9121-17ff0d207119', 'chenglong', '$2b$10$wPV5q0eKswbTH5JUJaCim.ii4bN1iGoiBwuxgrNcIbjnJDT8Arrfi', 'long', 'cheng', '98098766');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('2b11c253-a5c3-4021-aec0-c5772cc8eb1a', 'zhangjie', '$2b$10$AwOE2Kjy9hOMQYnjSOaPpeu7XnsMpXb3NkY9lrGI3DR1fKC/i7eVC', 'jie', 'zhang', '88987898');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('c3705556-91c1-404f-a056-12de7c482e35', 'minyu', '$2b$10$6/uZwQ4bZsvblKztC8ODDurJioLkFVjPxLY/wDrD5jJir2dhXOiJC', 'minyu', 'gao', '98987656');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('49e5527b-5476-40ff-9d06-54de25ac9c7b', 'chengyu', '$2b$10$X75mSmA6qsNZ671eIxdP9uPMTPzweVdFNsphniDsJVWvtXvoaUVC2', 'chengyu', 'hua', '98876787');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('91e15db8-37d8-4771-b7aa-3bb1acb32784', 'shiyuan', '$2b$10$zRHxUDxdYotYmYJmCchHeOOyqBQRtJKVZRuRIpK26UEg1OpKoX8ve', 'shiyuan', 'shui', '98780090');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('9e4b5fbf-6029-479b-b743-0f7f428da2c2', 'linxu', '$2b$10$WOcUySMKc8Zr6bQDSLptRO.JAtqiUIYKTFYKHw7nUgOH4zE4BScpG', 'xu', 'lin', '98765445');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('66cbae09-1692-4ec2-bada-b919b3a54fc0', 'shuiyao', '$2b$10$Gnebd3uzFN7XuWSQcgtwKek.XELEeA.0avvPxLLN/uaJTH4EVxrim', 'yao', 'shui', '98979898');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('ca94b41e-8fdb-4b52-bcdd-3f82d8464d45', 'jinyao', '$2b$10$Q8cHgJQic53PTkQCGBOjNu.lP6KlZVMbVZWQM1tO/RAme7SZkXSgq', 'jinyao', 'lu', '89896754');
+
 
 --customers
 INSERT INTO customers (uid)
@@ -252,6 +305,55 @@ VALUES ('cc659a63-df54-4922-80e0-950105c98d29');
 
 INSERT INTO managers (uid)
 VALUES ('0b6a7521-788a-4430-9614-9cd379ba9fde');
+
+INSERT INTO managers (uid)
+VALUES ('b5eacf40-8170-40b3-826b-5d9d00280e31');
+
+INSERT INTO managers (uid)
+VALUES ('a4ac8567-f9e8-4baf-957c-d508e674c8ea');
+
+INSERT INTO managers (uid)
+VALUES ('be00ba64-2752-4f1f-8d97-7ad6046ec361');
+
+INSERT INTO managers (uid)
+VALUES ('428f1791-1217-47c1-aabe-b6d6acef9476');
+
+INSERT INTO managers (uid)
+VALUES ('986cf913-b9c7-4d4f-b0c4-66bd231e7f09');
+
+INSERT INTO managers (uid)
+VALUES ('4b050675-9f76-4f04-95ca-5e34cc0399d7');
+
+INSERT INTO managers (uid)
+VALUES ('e86b9b12-1e4a-4df7-9a42-3920b64c23f1');
+
+INSERT INTO managers (uid)
+VALUES ('21a05c46-96cd-40b2-b00a-f7e8960376b3');
+
+INSERT INTO managers (uid)
+VALUES ('5c835253-03f5-476f-9121-17ff0d207119');
+
+INSERT INTO managers (uid)
+VALUES ('2b11c253-a5c3-4021-aec0-c5772cc8eb1a');
+
+INSERT INTO managers (uid)
+VALUES ('c3705556-91c1-404f-a056-12de7c482e35');
+
+INSERT INTO managers (uid)
+VALUES ('49e5527b-5476-40ff-9d06-54de25ac9c7b');
+
+INSERT INTO managers (uid)
+VALUES ('91e15db8-37d8-4771-b7aa-3bb1acb32784');
+
+INSERT INTO managers (uid)
+VALUES ('9e4b5fbf-6029-479b-b743-0f7f428da2c2');
+
+INSERT INTO managers (uid)
+VALUES ('66cbae09-1692-4ec2-bada-b919b3a54fc0');
+
+INSERT INTO managers (uid)
+VALUES ('ca94b41e-8fdb-4b52-bcdd-3f82d8464d45');
+
 
 --restaurants
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
@@ -581,3 +683,23 @@ VALUES ('235a555f-6c36-4b57-b34c-eb92db1276d2', 4.0);
 
 INSERT INTO ratings (resid, rating)
 VALUES ('d2d3fa97-bb8f-450a-9f2a-fe58df40133c', 4.0);
+
+
+
+CREATE OR REPLACE FUNCTION validate_reservation_date()
+RETURNS TRIGGER AS
+$$
+DECLARE current_date DATE;
+BEGIN
+ SELECT CURRENT_DATE INTO current_date;
+ IF NEW.resdate < CURRENT_DATE THEN RAISE NOTICE 'Date is not expired !'; RETURN NULL;
+ ELSE RETURN NEW;
+ END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER validate_reservation_date
+BEFORE INSERT ON reservations
+FOR EACH ROW
+EXECUTE PROCEDURE validate_reservation_date();

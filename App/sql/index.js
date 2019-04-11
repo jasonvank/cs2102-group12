@@ -19,7 +19,7 @@ sql.query = {
   // User Profile Page
   display_current_reservations: "" +
   "WITH user_reservations AS ( " +
-  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, RE.location AS location, address, C.name AS categories, RA.rating as rating, RE.rid as restaurant_id " +
+  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, RE.location AS location, address, C.name AS categories, RA.rating as rating, R.discount as discount, RE.rid as restaurant_id " +
   "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid LEFT JOIN ratings RA ON RA.resid = R.resid " +
   "), " +
   "restaurant_rating AS ( " +
@@ -34,7 +34,7 @@ sql.query = {
 
   display_customer_history: "" +
   "WITH user_reservations AS ( " +
-  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, RE.location AS location, address, C.name AS categories, RA.rating as rating, RE.rid as restaurant_id " +
+  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, RE.location AS location, address, C.name AS categories, RA.rating as rating, R.discount as discount, RE.rid as restaurant_id " +
   "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid LEFT JOIN ratings RA ON RA.resid = R.resid " +
   "), " +
   "restaurant_rating AS ( " +

@@ -50,7 +50,7 @@
         label.star {
             float: right;
             padding: 2px;
-            font-size: 20px;
+            font-size: 10px;
             color: cornsilk;
             transition: all .2s;
 
@@ -95,10 +95,11 @@
                 <th>No.</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>People</th>
+                <th>Guests</th>
                 <th>name</th>
                 <th>Rating</th>
-                <th>address</th>
+                <th>Discount(pt.)</th>
+                <th>Address</th>
                 <th>Location</th>
                 <th>Categories</th>
                 <th>Rate</th>
@@ -112,6 +113,11 @@
                 <td><%= history_reservations[i].numpeople %></td>
                 <td><%= history_reservations[i].restaurant_name %></td>
                 <td><%= history_reservations[i].restaurant_rating%></td>
+                <% if (history_reservations[i].discount == 0) { %>
+                <td><%= history_reservations[i].discount%></td>
+                <% } else { %>
+                <td style="color: gold">-<%= history_reservations[i].discount%></td>
+                <% } %>
                 <td><%= history_reservations[i].address %></td>
                 <td><%= history_reservations[i].location%></td>
                 <td><%= history_reservations[i].categories %></td>
@@ -134,7 +140,7 @@
                         <label class="star star-1" for=<%= i + 'star-1'%>></label>
                         </div>
                         <div>
-                            <input type="submit" value="submit"></input>
+                            <input type="submit" value="submit" style=""></input>
                         </div>
 
                     </form>
@@ -148,8 +154,8 @@
                 <th>Booking No.</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>Customer username</th>
-                <th>NO. people</th>
+                <th>Username</th>
+                <th>Guests</th>
                 <th>Contact</th>
                 <th>First Name</th>
                 <th>Last Name</th>

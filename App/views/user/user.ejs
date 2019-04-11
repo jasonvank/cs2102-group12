@@ -103,9 +103,10 @@
                 <th>No.</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>People</th>
+                <th>Guests</th>
                 <th>Name</th>
                 <th>Rating</th>
+                <th>Discount(pt.)</th>
                 <th>Address</th>
                 <th>Location</th>
                 <th>Categories</th>
@@ -120,6 +121,11 @@
                 <td><%= current_reservations[i].numpeople %></td>
                 <td><%= current_reservations[i].restaurant_name %></td>
                 <td><%= current_reservations[i].restaurant_rating%></td>
+                <% if (current_reservations[i].discount == 0) { %>
+                <td><%= current_reservations[i].discount%></td>
+                <% } else { %>
+                <td style="color: gold">-<%= current_reservations[i].discount%></td>
+                <% } %>
                 <td><%= current_reservations[i].address %></td>
                 <td><%= current_reservations[i].location %></td>
                 <td><%= current_reservations[i].categories %></td>
@@ -138,8 +144,8 @@
                 <th>Booking No.</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>Customer username</th>
-                <th>NO. people</th>
+                <th>Username</th>
+                <th>Guests</th>
                 <th>Contact</th>
                 <th>First Name</th>
                 <th>Last Name</th>

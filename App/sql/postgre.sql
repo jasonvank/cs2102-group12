@@ -602,14 +602,14 @@ INSERT INTO items (name, price, description, mid)
 VALUES ('orange juice', '8', 'fresh squeezed orange juice', '5a68c459-8023-407b-9312-6573159ce0f0');
 
 --reservations
-INSERT INTO reservations (resid, restime, resdate, numpeople)
-VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', '01:00', '2019-03-02', 3);
+INSERT INTO reservations (resid, restime, resdate, numpeople, discount)
+VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', '01:00', '2019-03-02', 3, 50);
 
-INSERT INTO reservations (resid, restime, resdate, numpeople)
-VALUES ('b2a5078d-df7a-46f2-a4c1-d60b9a168394', '07:00', '2019-04-05', 2);
+INSERT INTO reservations (resid, restime, resdate, numpeople, discount)
+VALUES ('b2a5078d-df7a-46f2-a4c1-d60b9a168394', '07:00', '2019-04-05', 2, 30);
 
-INSERT INTO reservations (resid, restime, resdate, numpeople)
-VALUES ('d2d3fa97-bb8f-450a-9f2a-fe58df40133c', '02:00', '2019-04-15', 5);
+INSERT INTO reservations (resid, restime, resdate, numpeople, discount)
+VALUES ('d2d3fa97-bb8f-450a-9f2a-fe58df40133c', '02:00', '2019-04-15', 5, 100);
 
 INSERT INTO reservations (resid, restime, resdate, numpeople)
 VALUES ('235a555f-6c36-4b57-b34c-eb92db1276d2', '08:00', '2019-03-15', 15);

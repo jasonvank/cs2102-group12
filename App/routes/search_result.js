@@ -18,7 +18,7 @@ router.get('/', function (req, res, next) {
   if (rest_name == 0) {
     rest_name = '%%';
   } else {
-    rest_name = '%' + rest_name + '%';
+    rest_name = '%' + rest_name.toLowerCase() + '%';
   }
 
   console.log(rest_name);
@@ -51,10 +51,12 @@ router.get('/', function (req, res, next) {
   var time = searchInfo.time;
   if (time == 0) {
     pool.query(sql_query.query.restaurant_ratings, (err, data) => {
-      if (err) console.log("cannot create restaurant_ratings view");
+      if (err) {
+        console.log(err);
+      }
       pool.query(sql_query.query.search_no_time, [rest_name, location, category, rating], (err, data) => {
         if (err) {
-          return res.status(500).send("Query has problem");
+          console.log(err);
         }
         // // res.render('/restaurants/empty_selections', {user : req.user});
         // if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
@@ -65,11 +67,18 @@ router.get('/', function (req, res, next) {
         res.render('restaurants/search', {
           data: passedData
         });
+        pool.query(sql_query.query.delete_restaurant_ratings, (err, data) => {
+          if (err) {
+            console.log(err);
+          }
+        });
       });
     });
   } else {
     pool.query(sql_query.query.restaurant_ratings, (err, data) => {
-      if (err) console.log("cannot create restaurant_ratings view");
+      if (err) {
+        console.log(err);
+      }
       console.log(rest_name);
       console.log(location);
       console.log(category);
@@ -77,7 +86,7 @@ router.get('/', function (req, res, next) {
       console.log(time);
       pool.query(sql_query.query.search, [rest_name, location, category, rating, time], (err, data) => {
         if (err) {
-          return res.status(500).send("Query has problem");
+          console.log(err);
         }
         // res.render('/restaurants/empty_selections', {user : req.user});
         // if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
@@ -87,6 +96,11 @@ router.get('/', function (req, res, next) {
         };
         res.render('restaurants/search', {
           data: passedData
+        });
+        pool.query(sql_query.query.delete_restaurant_ratings, (err, data) => {
+          if (err) {
+            console.log(err);
+          }
         });
       });
     });

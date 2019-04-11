@@ -104,7 +104,7 @@ sql.query = {
   "CREATE VIEW restaurant_ratings AS " +
   "SELECT r1.name AS rname, COALESCE(ROUND(AVG(rating)::numeric, 1), 5.0) AS rating " +
   "FROM restaurants r1 LEFT JOIN processes p1 on r1.rid = p1.rid " +
-  "LEFT JOIN ratings on p1.resid = ratings.resid" +
+  "LEFT JOIN ratings on p1.resid = ratings.resid " +
   "GROUP BY rname",
 
   delete_restaurant_ratings: "DROP VIEW restaurant_ratings",
@@ -114,7 +114,7 @@ sql.query = {
   "FROM restaurants LEFT JOIN restaurant_ratings ON restaurants.name = restaurant_ratings.rname " +
   "LEFT JOIN belongs on restaurants.rid = belongs.rid " +
   "LEFT JOIN categories on belongs.cid = categories.cid " +
-  "WHERE restaurants.name LIKE $1 " +
+  "WHERE lower(restaurants.name) LIKE $1 " +
   "AND location LIKE $2 " +
   "AND categories.name LIKE $3 " +
   "AND rating >= $4 " +
@@ -127,7 +127,7 @@ sql.query = {
   "FROM restaurants LEFT JOIN restaurant_ratings ON restaurants.name = restaurant_ratings.rname " +
   "LEFT JOIN belongs on restaurants.rid = belongs.rid " +
   "LEFT JOIN categories on belongs.cid = categories.cid " +
-  "WHERE restaurants.name LIKE $1 " +
+  "WHERE lower(restaurants.name) LIKE $1 " +
   "AND location LIKE $2 " +
   "AND categories.name LIKE $3 " +
   "AND rating >= $4",

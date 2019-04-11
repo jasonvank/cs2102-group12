@@ -14,15 +14,15 @@
 \usetikzlibrary{positioning}
 \usetikzlibrary{shadows}
 
-\tikzstyle{every entity} = [top color=white, bottom color=blue!30, 
+\tikzstyle{every entity} = [top color=white, bottom color=blue!30,
                             draw=blue!50!black!100, drop shadow]
-\tikzstyle{every weak entity} = [drop shadow={shadow xshift=.7ex, 
+\tikzstyle{every weak entity} = [drop shadow={shadow xshift=.7ex,
                                  shadow yshift=-.7ex}]
-\tikzstyle{every attribute} = [top color=white, bottom color=yellow!20, 
+\tikzstyle{every attribute} = [top color=white, bottom color=yellow!20,
                                draw=yellow, node distance=1cm, drop shadow]
-\tikzstyle{every relationship} = [top color=white, bottom color=red!20, 
+\tikzstyle{every relationship} = [top color=white, bottom color=red!20,
                                   draw=red!50!black!100, drop shadow]
-\tikzstyle{every isa} = [top color=white, bottom color=green!20, 
+\tikzstyle{every isa} = [top color=white, bottom color=green!20,
                          draw=green!50!black!100, drop shadow]
 
 \centering
@@ -30,109 +30,106 @@
 \begin{tikzpicture}[node distance=1.5cm, every edge/.style={link}]
 
   \node[entity] (usr) {Users};
-  \node[attribute] (uid) [above=of usr] {\key{uid}} edge (usr);
-  \node[attribute] (pwd) [above right=of usr] {password hash} edge (usr);
-  \node[attribute] (firstname) [right=of usr] {first name} edge (usr);
-  \node[attribute] (lastname) [below right=of usr] {last name} edge (usr);
+  \node[attribute] (uid) [above=of usr] {\key{user\textunderscore uid}} edge (usr);
+  \node[attribute] (pwd) [above right=of usr] {password\textunderscore hash} edge (usr);
+  \node[attribute] (firstname) [right=of usr] {first\textunderscore name} edge (usr);
+  \node[attribute] (lastname) [below right=of usr] {last\textunderscore name} edge (usr);
   \node[attribute] (username) [left=of usr] {username} edge (usr);
-  
+  \node[attribute] (contact) [below left=of usr] {contact\textunderscore number} edge (usr);
+
   \node[isa] (isa) [below=1cm of usr] {ISA} edge (usr);
 
   \node[entity] (resman) [below left=2cm of isa] {Restaurant Managers} edge (isa);
+  \node[attribute] (resman_uid) [below=2cm of resman] {\key{uid}} edge (resman);
+
   \node[entity] (custom) [below right=2.5cm of isa] {Customers} edge (isa);
-  
-  
+  \node[attribute] (custom_uid) [below left=2.5cm of custom] {\key{uid}} edge (custom);
+
+
   \node[relationship] (registers) [left=5cm of resman] {Registers} edge (resman);
   \node[attribute] (rid) [left=1cm of registers] {\key{rid}} edge (registers);
-  \node[attribute] (uid) [above=1cm of registers] {\key{uid}} edge (registers);
+  \node[attribute] (uid) [above=1cm of registers] {uid} edge (registers);
 
 
-  
+
   \node[entity] (restaur) [below left=8cm of resman] {Restaurants};
   \node[attribute] (rid) [below right=0.5cm of restaur] {\key{rid}} edge (restaur);
-  \node[attribute] (rating) [above right=0.5cm of restaur] {averating} edge (restaur);
+    \node[attribute] (closetime) [below right=2cm of restaur] {close\textunderscore time} edge (restaur.320);
+  \node[attribute] (address) [above right=2cm of restaur] {address} edge (restaur.90);
   \node[attribute] (location) [above left=0.5cm of restaur] {location} edge (restaur.140);
-  \node[attribute] (openinghours) [below left=0.5cm of restaur] {openinghours} edge (restaur);
+  \node[attribute] (opentime) [below left=0.5cm of restaur] {open\textunderscore time} edge (restaur);
+
   \node[attribute] (contacts) [left = 1.5cm of restaur] {contacts} edge (restaur.180);
+  \node[attribute] (restaurnamae) [above right=0.5cm of restaur] {name} edge (restaur);
 
   \node[relationship] (books) [below right=2.5cm of custom] {Books} edge (custom);
   \node[attribute] (resid) [left=0.5cm of books] {\key{resid}} edge (books);
-  \node[attribute] (uid) [right=0.5cm of books] {\key{uid}} edge (books);
-  
+  \node[attribute] (uid) [right=0.5cm of books] {uid} edge (books);
+
   \node[entity] (reserv) [below =8.5cm of books] {Reservations} edge [double distance=0.1cm, ->] (books);
   \node[attribute] (resid) [right=1cm of reserv] {\key{resid}} edge (reserv);
-  \node[attribute] (time) [below right=1cm of reserv] {time} edge (reserv);
-  \node[attribute] (bid) [below=1cm of reserv] {bid} edge (reserv);
+  \node[attribute] (restime) [below right=1cm of reserv] {restime} edge (reserv);
+  \node[attribute] (resdate) [below=1cm of reserv] {resdate} edge (reserv);
   \node[attribute] (numpeople) [below left=1cm of reserv] {numpeople} edge (reserv);
-  
-  \node[relationship] (proc) [below right=4cm of restaur] {Processes} edge (restaur);
+  \node[attribute] (discount) [above right=1cm of reserv] {discount} edge (reserv);
+
+  \node[relationship] (proc) [below right=4cm of restaur] {Processes} edge (restaur.270);
   \draw[link] (reserv) edge [double distance=0.1cm, ->] (proc);
   \node[attribute] (resid) [below=1cm of proc] {\key{resid}} edge (proc);
-  \node[attribute] (bid) [below right=1cm of proc] {\key{bid}} edge (proc);
-  
+  \node[attribute] (bid) [below right=1cm of proc] {rid} edge (proc);
+
   \node[relationship] (provides) [below=3cm of restaur] {Provides} edge [double distance=0.1cm] (restaur);
-  \node[attribute] (mid) [below=1cm of provides] {\key{mid}} edge (provides);
-  \node[attribute] (bid) [below right=1cm of provides] {\key{bid}} edge (provides);
-  
+
   \node[weak entity] (menus) [left=2cm of provides] {Menus} edge [double distance=0.1cm, ->] (provides);
   \node[attribute] (mid) [below=1cm of menus] {\key{mid}} edge (menus);
   \node[attribute] (mname) [above=1cm of menus] {name} edge (menus);
-  
+  \node[attribute] (restaurantid) [below left=1cm of menus] {rid} edge (menus);
+
   \node[relationship] (contains) [left=3cm of menus] {Contains} edge [double distance=0.1cm] (menus);
-  \node[attribute] (mid) [left=1cm of contains] {\key{mid}} edge (contains);
-  \node[attribute] (iid) [above=1cm of contains] {\key{iid}} edge (contains);
-  
+
   \node[weak entity] (items) [below=2cm of contains] {Items} edge [double distance=0.1cm, ->] (contains);
   \node[attribute] (iid) [below=1cm of items] {\key{iid}} edge (items);
   \node[attribute] (name) [above left=1cm of items] {name} edge (items);
   \node[attribute] (price) [below left=1cm of items] {price} edge (items);
   \node[attribute] (desc) [below right=1cm of items] {description} edge (items);
-  
+  \node[attribute] (menuid) [right=1cm of items] {mid} edge (items);
+
   \node[relationship] (earns) [right=5cm of custom] {Earns} edge (custom);
   \node[attribute] (rewid) [above left=1cm of earns] {\key{rewid}} edge (earns);
-  \node[attribute] (uid) [above=1cm of earns] {\key{uid}} edge (earns);
-  
+  \node[attribute] (uid) [above=1cm of earns] {uid} edge (earns);
+
   \node[entity] (rewards) [below = 3.5cm of earns] {Rewards} edge [double distance=0.1cm, ->] (earns);
   \node[attribute] (rewid) [right = 0.5cm of rewards] {\key{rewid}} edge (rewards);
   \node[attribute] (value) [above right = 0.5cm of rewards] {value} edge (rewards);
   \node[relationship] (uses) [below = 2cm of rewards] {Uses} edge [double distance=0.1cm, <-] (rewards);
-  
-  \draw[link] (uses) edge [double distance=0.1cm, <-] (reserv);
-  \node[attribute] (rewid) [left = 0.5cm of uses] {\key{rewid}} edge (uses);
-  \node[attribute] (resid) [right = 0.5cm of uses] {\key{resid}} edge (uses);
-  
 
-  
-  \node[relationship] (receives) [right=4cm of restaur]
-  {Receives} edge (restaur);
-  \node[attribute] (ratid) [above=0.5cm of receives]
-  {\key{ratid}} edge (receives);
-  \node[attribute] (rid) [below=0.5cm of receives] {\key{rid}} edge (receives);
-  
+  \draw[link] (uses) edge [double distance=0.1cm, <-] (reserv);
+
+
+
+
+  \node[relationship] (receives) [right=4cm of restaur] {Receives} edge (restaur);
+
+
     \node[entity] (rating) [right=2.5cm of receives] {Ratings} edge (receives);
-    \node[attribute] (ratid) [above=0.5cm of rating]
-    {\key{ratid}} edge (rating);
-    \node[attribute] (ratval) [below=0.5cm of rating]
-    {rating value} edge (rating);
-    
+    \node[attribute] (reservid) [above=0.5cm of rating] {\key{resid}} edge (rating);
+    \node[attribute] (ratval) [below=0.5cm of rating] {value} edge (rating);
+
     \node[relationship] (rates) [right=2cm of rating]
     {Rates} edge (rating);
-    \node[attribute] (ratid) [right=0.5cm of rates]
-  {\key{ratid}} edge (rates);
-  \node[attribute] (uid) [below=0.5cm of rates] {\key{uid}} edge (rates);
-    
+
     \draw[link] (rates) edge (custom);
-    
+
     \draw[link] (registers) edge (restaur);
-    
-    \node[relationship] (belongs) [above left=3cm of restaur] {Belongs} edge (restaur);
-    \node[attribute] (cid) [right=0.5cm of belongs] {\key{cid}} edge (belongs);
+
+    \node[relationship] (belongs) [above left=3cm of restaur] {Belongs} edge (restaur.90);
+    \node[attribute] (cid) [right=0.5cm of belongs] {cid} edge (belongs);
     \node[attribute] (rid) [above=0.5cm of belongs] {\key{rid}} edge (belongs);
-    
+
     \node[entity] (cat) [left= 2cm of belongs] {Categories} edge (belongs);
     \node[attribute] (cid) [above=0.5cm of cat] {\key{cid}} edge (cat);
     \node[attribute] (name) [left=0.5cm of cat] {name} edge (cat);
-  
+
 \end{tikzpicture}
 }
 

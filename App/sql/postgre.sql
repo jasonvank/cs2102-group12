@@ -116,7 +116,7 @@ CREATE TABLE earns (
 
 CREATE TABLE ratings (
     resid     uuid NOT NULL,
-    rating   NUMERIC(2,1) NOT NULL DEFAULT 5.0,
+    rating    NUMERIC(2,1) NOT NULL,
     CHECK (rating >= 0.0 and rating <= 5.0),
     primary key (resid),
     foreign key (resid) references reservations (resid) on delete cascade

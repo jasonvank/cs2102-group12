@@ -100,14 +100,17 @@
             <% if (!user.isManager) { %>
             <caption style="font-size: 30px; color: white;">Current Reservations</caption>
             <tr>
-                <th>Res. No.</th>
+                <th>No.</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>Number of people</th>
-                <th>Restaurant name</th>
-                <th>Restaurant address</th>
+                <th>People</th>
+                <th>Name</th>
+                <th>Rating</th>
+                <th>Address</th>
+                <th>Location</th>
                 <th>Categories</th>
-                <th>Action</th>
+                <th>Edit</th>
+                <th>Cancel</th>
             </tr>
             <% for(var i = 0; current_reservations !== undefined && i < current_reservations.length; i++) { %>
             <tr>
@@ -116,8 +119,11 @@
                 <td><%= current_reservations[i].time %></td>
                 <td><%= current_reservations[i].numpeople %></td>
                 <td><%= current_reservations[i].restaurant_name %></td>
+                <td><%= current_reservations[i].restaurant_rating%></td>
                 <td><%= current_reservations[i].address %></td>
+                <td><%= current_reservations[i].location %></td>
                 <td><%= current_reservations[i].categories %></td>
+
                 <td>
                     <a href='/user/<%= user.username %>/<%= current_reservations[i].reservation_id %>/edit'>Edit</a>
                 </td>

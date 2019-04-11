@@ -18,48 +18,70 @@ sql.query = {
 
   // User Profile Page
   display_current_reservations: "" +
-  "WITH current_reservations AS ( " +
-  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, address, C.name AS categories " +
-  "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN  processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid " +
+  "WITH user_reservations AS ( " +
+  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, RE.location AS location, address, C.name AS categories, RA.rating as rating, RE.rid as restaurant_id " +
+  "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid LEFT JOIN ratings RA ON RA.resid = R.resid " +
+  "), " +
+  "restaurant_rating AS ( " +
+  "SELECT P.rid as restaurant_id, COALESCE(ROUND(AVG(rating)::numeric,1), 5.0) as restaurant_rating " +
+  "FROM reservations RE NATURAL JOIN processes P LEFT JOIN ratings RA ON RA.resid = RE.resid " +
+  "GROUP BY P.rid " +
   ") " +
   "SELECT * " +
-  "FROM current_reservations " +
+  "FROM restaurant_rating RR Left join user_reservations CR on RR.restaurant_id = CR.restaurant_id " +
   "WHERE customer_uid = $1 AND date >= (select now()) " +
   "ORDER BY date, time, numpeople ",
 
-  display_customer_history:  "" +
-  "WITH current_reservations AS ( " +
-  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, address, C.name AS categories, RA.rating as rating " +
+  display_customer_history: "" +
+  "WITH user_reservations AS ( " +
+  "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, RE.location AS location, address, C.name AS categories, RA.rating as rating, RE.rid as restaurant_id " +
   "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid LEFT JOIN ratings RA ON RA.resid = R.resid " +
+  "), " +
+  "restaurant_rating AS ( " +
+  "SELECT P.rid as restaurant_id, COALESCE(ROUND(AVG(rating)::numeric,1), 5.0) as restaurant_rating " +
+  "FROM reservations RE NATURAL JOIN processes P LEFT JOIN ratings RA ON RA.resid = RE.resid " +
+  "GROUP BY P.rid " +
   ") " +
   "SELECT * " +
-  "FROM current_reservations " +
+  "FROM restaurant_rating RR Left join user_reservations CR on RR.restaurant_id = CR.restaurant_id " +
   "WHERE customer_uid = $1 AND date < (select now()) " +
   "ORDER BY date, time, numpeople ",
 
+
+
+  // "" +
+  // "WITH user_reservations AS ( " +
+  // "SELECT B.uid AS customer_uid, B.resid AS reservation_id, resdate AS date, restime AS time, numpeople, RE.name AS restaurant_name, address, C.name AS categories, RA.rating as rating " +
+  // "FROM books B LEFT JOIN reservations R ON B.resid = R.resid LEFT JOIN processes P ON P.resid = R.resid LEFT JOIN restaurants RE ON RE.rid = P.rid LEFT JOIN belongs BE ON BE.rid = P.rid LEFT JOIN categories C ON C.cid = BE.cid LEFT JOIN ratings RA ON RA.resid = R.resid " +
+  // "),  " +
+  // "SELECT * " +
+  // "FROM user_reservations " +
+  // "WHERE customer_uid = $1 AND date < (select now()) " +
+  // "ORDER BY date, time, numpeople ",
+
   // User history Page
   display_new_bookings: "" +
-  "WITH new_bookings AS (" +
+  "WITH accepted_bookings AS (" +
   "SELECT RE.resid AS reservation_id, RE.restime AS time, RE.resdate AS date, R.uid AS manager_uid, B.uid AS customer_uid, numpeople, name AS restaurant_name, address, open_time, close_time, U.contact_number AS customer_contact, U.username AS username, U.last_name as last_name, U.first_name as first_name " +
   "FROM reservations RE NATURAL JOIN processes P NATURAL JOIN books B INNER JOIN users U ON U.user_uid = B.uid INNER JOIN registers R ON R.rid = P.rid INNER JOIN restaurants RES ON RES.rid = P.rid " +
   ") " +
   "SELECT * " +
-  "FROM new_bookings " +
+  "FROM accepted_bookings " +
   "WHERE manager_uid = $1 AND date >= (select now()) " +
   "ORDER BY date, time, numpeople",
 
   display_manager_history: "" +
-  "WITH new_bookings AS (" +
+  "WITH accepted_bookings AS (" +
   "SELECT RE.resid AS reservation_id, RE.restime AS time, RE.resdate AS date, R.uid AS manager_uid, B.uid AS customer_uid, numpeople, name AS restaurant_name, address, open_time, close_time, U.contact_number AS customer_contact, U.username AS username, U.last_name as last_name, U.first_name as first_name " +
   "FROM reservations RE NATURAL JOIN processes P NATURAL JOIN books B INNER JOIN users U ON U.user_uid = B.uid INNER JOIN registers R ON R.rid = P.rid INNER JOIN restaurants RES ON RES.rid = P.rid " +
   ") " +
   "SELECT * " +
-  "FROM new_bookings " +
+  "FROM accepted_bookings " +
   "WHERE manager_uid = $1 AND date < (select now()) " +
   "ORDER BY date, time, numpeople",
 
   display_restaurant_attributes: "" +
-  "SELECT name, address, open_time, close_time, contacts, COALESCE(rating, 0.0 ) AS rating " +
+  "SELECT name, address, open_time, close_time, contacts, COALESCE(rating, 5.0 ) AS rating " +
   "FROM restaurants r1 LEFT JOIN (SELECT P.rid, ROUND(AVG(rating)::numeric,1) AS rating FROM processes P NATURAL JOIN ratings R GROUP BY rid) AS rating ON r1.rid = rating.rid",
 
   register_rewards: 'INSERT INTO rewards (value) VALUES ($1) RETURNING rewid',

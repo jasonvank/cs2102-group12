@@ -539,6 +539,7 @@ router.post('/:userId/:resId/cancel', function (req, res, next) {
 // Supplementary functions for user queries ------------------------------------------------------------
 function customer_history(user_uid, req, res) {
   console.log("user uid", user_uid);
+  console.log("goign to display ")
   pool.query(sql_query.query.display_customer_history, [user_uid], (err, data) => {
     if (err) {
       console.log(err);

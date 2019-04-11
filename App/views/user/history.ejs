@@ -88,18 +88,20 @@
     <%- include ../templates/navbar.ejs %>
 
     <div>
-        <table class="table" style="margin-top: 50px; color: white">
+        <table class="table" style="margin-top: 50px; color: white; width:110%">
             <% if (!user.isManager) { %>
             <caption style="font-size: 30px; color: white;">Your Reservation History</caption>
             <tr>
-                <th>Res. No.</th>
+                <th>No.</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>NO. people</th>
-                <th>Restaurant name</th>
-                <th>Restaurant address</th>
-                <th>Categories</th>
+                <th>People</th>
+                <th>name</th>
                 <th>Rating</th>
+                <th>address</th>
+                <th>Location</th>
+                <th>Categories</th>
+                <th>Rate</th>
                 <!--<th>Confirm</th>-->
             </tr>
             <% for(var i = 0;  history_reservations !== undefined && i < history_reservations.length; i++) { %>
@@ -109,16 +111,17 @@
                 <td><%= history_reservations[i].time %></td>
                 <td><%= history_reservations[i].numpeople %></td>
                 <td><%= history_reservations[i].restaurant_name %></td>
+                <td><%= history_reservations[i].restaurant_rating%></td>
                 <td><%= history_reservations[i].address %></td>
+                <td><%= history_reservations[i].location%></td>
                 <td><%= history_reservations[i].categories %></td>
-                <!--<td><%= history_reservations[i].rating %></td>-->
 
                 <% if (history_reservations[i].rating) { %>
-                <td><%= history_reservations[i].rating %></td>
+                <td style="color: gold; font-weight: 900;"><%= history_reservations[i].rating %></td>
                 <% } else { %>
                 <td class="star">
                     <form action="/user/<%= user.username %>/history/<%= history_reservations[i].reservation_id %>/rate" method="post" id=<%= i%> >
-                        <input type="submit" value="submit"></input>
+                        <div>
                         <input class="star star-5" id=<%= i + 'star-5'%> type="radio" name="5"/>
                         <label class="star star-5" for=<%= i + 'star-5'%> ></label>
                         <input class="star star-4" id=<%= i + 'star-4'%> type="radio" name="4"/>
@@ -129,6 +132,11 @@
                         <label class="star star-2" for=<%= i + 'star-2'%> ></label>
                         <input class="star star-1" id=<%= i + 'star-1'%> type="radio" name="1"/>
                         <label class="star star-1" for=<%= i + 'star-1'%>></label>
+                        </div>
+                        <div>
+                            <input type="submit" value="submit"></input>
+                        </div>
+
                     </form>
                 </td>
                 <% } %>

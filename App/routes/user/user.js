@@ -293,13 +293,12 @@ router.post('/:userId/delete_restaurant', function(req, res, next) {
   // console.log(result);
   if (result == "No") return res.redirect('/user/' + req.user.username);
   var rollback = function(client, err) {
-    client.query('ROLLBACK', function() {
+    client.query('ROLLBACK', client.end.bind(client), function() {
       var errorMessage = {
         message: err,
         user_name: req.user.username
       };
       return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
-      client.end();
     });
   };
   console.log(rid);
@@ -311,8 +310,9 @@ router.post('/:userId/delete_restaurant', function(req, res, next) {
         if (err) rollback(client, err);
         client.query(sql_query.query.delete_rest_belongs, [rid], function(err, data) {
           if (err) rollback(client, err);
-          client.query('COMMIT');
-          return res.redirect('/user/' + req.user.username);
+          client.query('COMMIT', client.end.bind(client), (err, res2) => {
+              return res.redirect('/user/' + req.user.username);
+          });
         });
       });
     });

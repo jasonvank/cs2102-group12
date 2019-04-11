@@ -112,7 +112,38 @@ sql.query = {
 	add_category: 'INSERT INTO belongs (cid, rid) VALUES ($1, $2)',
 
   //search Restaurants
-  search: 'SELECT restaurants.name as name, restaurants.rid, location, categories.name as cname, belongs.cid, open_time, close_time FROM restaurants LEFT JOIN belongs ON restaurants.rid = belongs.rid LEFT JOIN categories on belongs.cid = categories.cid WHERE restaurants.name LIKE $1 AND location=$2 AND cname=$3 AND open_time <= $4 AND close_time >= $5',
+  restaurant_ratings: ""  +
+  "CREATE VIEW restaurant_ratings AS " +
+  "SELECT r1.name AS rname, COALESCE(ROUND(AVG(rating)::numeric, 1), 5.0) AS rating " +
+  "FROM restaurants r1 LEFT JOIN processes p1 on r1.rid = p1.rid " +
+  "LEFT JOIN ratings on p1.resid = ratings.resid" +
+  "GROUP BY rname",
+
+  delete_restaurant_ratings: "DROP VIEW restaurant_ratings",
+
+  search: "" +
+  "SELECT restaurants.name as rname, categories.name as cname, address, location, open_time, close_time, contacts, rating " +
+  "FROM restaurants LEFT JOIN restaurant_ratings ON restaurants.name = restaurant_ratings.rname " +
+  "LEFT JOIN belongs on restaurants.rid = belongs.rid " +
+  "LEFT JOIN categories on belongs.cid = categories.cid " +
+  "WHERE restaurants.name LIKE $1 " +
+  "AND location LIKE $2 " +
+  "AND categories.name LIKE $3 " +
+  "AND rating >= $4 " +
+  "AND open_time <= $5 " +
+  "AND close_time >= $5",
+
+
+  search_no_time: ""  +
+  "SELECT restaurants.name AS rname, categories.name AS cname, address, location, open_time, close_time, contacts, rating " +
+  "FROM restaurants LEFT JOIN restaurant_ratings ON restaurants.name = restaurant_ratings.rname " +
+  "LEFT JOIN belongs on restaurants.rid = belongs.rid " +
+  "LEFT JOIN categories on belongs.cid = categories.cid " +
+  "WHERE restaurants.name LIKE $1 " +
+  "AND location LIKE $2 " +
+  "AND categories.name LIKE $3 " +
+  "AND rating >= $4",
+
 
   //Reservations
   get_rewards: 'SELECT value FROM earns LEFT JOIN rewards ON earns.rewid = rewards.rewid WHERE uid = $1',

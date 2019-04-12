@@ -269,10 +269,28 @@ VALUES ('66cbae09-1692-4ec2-bada-b919b3a54fc0', 'shuiyao', '$2b$10$Gnebd3uzFN7Xu
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
 VALUES ('ca94b41e-8fdb-4b52-bcdd-3f82d8464d45', 'jinyao', '$2b$10$Q8cHgJQic53PTkQCGBOjNu.lP6KlZVMbVZWQM1tO/RAme7SZkXSgq', 'jinyao', 'lu', '89896754');
 
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('410fd52f-d2c7-4ffe-820b-47d8e7763857', 'hotaru', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'Xiong', 'Yiliao', '93698827');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('4c56583e-7266-4a5c-96e0-caf682be1865', 'ponkllama', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'Pork', 'Song Jon', '93453455');
+
+INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
+VALUES ('0f352beb-bd3e-4653-b36d-00ef559fac42', 'foodie', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'Love', 'Eating', '91234123');
+
 
 --customers
 INSERT INTO customers (uid)
 VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e');
+
+INSERT INTO customers (uid)
+VALUES ('410fd52f-d2c7-4ffe-820b-47d8e7763857');
+
+INSERT INTO customers (uid)
+VALUES ('4c56583e-7266-4a5c-96e0-caf682be1865');
+
+INSERT INTO customers (uid)
+VALUES ('0f352beb-bd3e-4653-b36d-00ef559fac42');
 
 --customer reward
 INSERT INTO rewards (rewid, value)
@@ -286,6 +304,13 @@ VALUES ('abcd00b3-1e84-405e-a340-dbc539b5f41a', 30);
 
 INSERT INTO earns (rewid, uid)
 VALUES ('abcd00b3-1e84-405e-a340-dbc539b5f41a', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e');
+
+INSERT INTO rewards (rewid, value)
+VALUES ('817b92de-aea6-4730-998e-cce2ec28cd83', 20);
+
+INSERT INTO earns (rewid, uid)
+VALUES ('817b92de-aea6-4730-998e-cce2ec28cd83', '410fd52f-d2c7-4ffe-820b-47d8e7763857');
+
 
 --managers
 INSERT INTO managers (uid)
@@ -611,6 +636,15 @@ VALUES ('d2d3fa97-bb8f-450a-9f2a-fe58df40133c', '14:00', '2019-04-15', 5, 10);
 INSERT INTO reservations (resid, restime, resdate, numpeople)
 VALUES ('235a555f-6c36-4b57-b34c-eb92db1276d2', '08:00', '2019-03-15', 15);
 
+INSERT INTO reservations (resid, restime, resdate, numpeople, discount)
+VALUES ('8fc486b4-8fcf-4f4e-bb41-9f6a09d3c632', '13:00', '2019-04-05', 3, 50);
+
+INSERT INTO reservations (resid, restime, resdate, numpeople, discount)
+VALUES ('114445ff-4662-4e26-aa41-c4b2d11e58f0', '13:30', '2019-04-06', 3, 20);
+
+INSERT INTO reservations (resid, restime, resdate, numpeople, discount)
+VALUES ('4eb96026-d2f4-4eaf-a9a3-1db592e890e7', '14:30', '2019-04-26', 2, 10);
+
 
 --books
 INSERT INTO books (resid, uid)
@@ -626,6 +660,16 @@ INSERT INTO books (resid, uid)
 VALUES ('235a555f-6c36-4b57-b34c-eb92db1276d2', 'fa9d34a8-78e5-4e3e-a800-e5b56554668e');
 
 
+INSERT INTO books (resid, uid)
+VALUES ('8fc486b4-8fcf-4f4e-bb41-9f6a09d3c632', '410fd52f-d2c7-4ffe-820b-47d8e7763857');
+
+INSERT INTO books (resid, uid)
+VALUES ('114445ff-4662-4e26-aa41-c4b2d11e58f0', '410fd52f-d2c7-4ffe-820b-47d8e7763857');
+
+INSERT INTO books (resid, uid)
+VALUES ('4eb96026-d2f4-4eaf-a9a3-1db592e890e7', '410fd52f-d2c7-4ffe-820b-47d8e7763857');
+
+
 --processes
 INSERT INTO processes (resid, rid)
 VALUES ('a6b1a41c-a889-4d2a-bb9e-e07c8de05d6f', '7b49a151-dacd-49c5-b49e-116d3889ed38');
@@ -638,6 +682,15 @@ VALUES ('d2d3fa97-bb8f-450a-9f2a-fe58df40133c', '31aa07d3-a0ab-4fb2-ab52-f58070a
 
 INSERT INTO processes (resid, rid)
 VALUES ('235a555f-6c36-4b57-b34c-eb92db1276d2', '31aa07d3-a0ab-4fb2-ab52-f58070acf393');
+
+INSERT INTO processes (resid, rid)
+VALUES ('8fc486b4-8fcf-4f4e-bb41-9f6a09d3c632', '7b49a151-dacd-49c5-b49e-116d3889ed38');
+
+INSERT INTO processes (resid, rid)
+VALUES ('114445ff-4662-4e26-aa41-c4b2d11e58f0', 'e2b4cfea-8358-4f8b-bae8-cfaab688376f');
+
+INSERT INTO processes (resid, rid)
+VALUES ('4eb96026-d2f4-4eaf-a9a3-1db592e890e7', '22459a9b-80d6-429d-a65a-af0b883160b0');
 
 ---categories
 INSERT INTO categories (cid, name)
@@ -657,7 +710,7 @@ VALUES ('958407cf-8ef0-40ca-a537-801d7f92e684', 'Indian');
 
 --belongs
 INSERT INTO belongs (rid, cid)
-VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', '8f87cee1-d078-429d-807a-e4e4db2e3a36');
+VALUES ('7b49a151-dacd-49c5-b49e-116d3889ed38', '74367fad-d083-4898-aa93-6c214870c460');
 
 INSERT INTO belongs (rid, cid)
 VALUES ('31aa07d3-a0ab-4fb2-ab52-f58070acf393', '3b688933-e5ae-483a-87b1-3c3c99be8749');

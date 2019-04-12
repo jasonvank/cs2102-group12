@@ -19,13 +19,8 @@ function processPassedVariable(req, res, next) {
 
 function enterName(req, res, next) {
   var name = req.body.name;
-  // console.log(name);
-  // var price = req.body.item_price;
-  // var description = req.body.item_description;
-  // price = parseFloat(price.replace('$', ''));
   pool.query(sql_query.query.menu_name_to_mid, [req.user.user_uid, passedName], (err, data) => {
     if(err) return next(err);
-    // console.log(data.rows[0]);
     var mid = data.rows[0].mid;
     pool.query(sql_query.query.update_menu, [mid, name], (err, data) => {
 

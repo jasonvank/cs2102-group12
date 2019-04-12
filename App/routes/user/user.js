@@ -139,7 +139,7 @@ router.post('/:userId/add_restaurant', function (req, res, next) {
   var rid;
   client.query('BEGIN', function (err, data) {
     if (err) return rollback(client, err);
-    client.query(sql_query.query.add_restaurant, [uid, name, address, location, open_time, close_time, contacts], function (err, data) {
+    client.query(sql_query.query.add_restaurant, [name, address, location, open_time, close_time, contacts], function (err, data) {
       if (err) return rollback(client, err);
       rid = data.rows[0].rid;
       console.log("rid0: " + rid);

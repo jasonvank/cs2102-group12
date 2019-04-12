@@ -1,4 +1,4 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS 'uuid-ossp';
 
 CREATE TABLE users (
     user_uid        uuid DEFAULT uuid_generate_v4 (),
@@ -278,6 +278,81 @@ VALUES ('4c56583e-7266-4a5c-96e0-caf682be1865', 'ponkllama', '$2b$10$QU1IB9xEAKz
 INSERT INTO users (user_uid, username, password_hash, first_name, last_name, contact_number)
 VALUES ('0f352beb-bd3e-4653-b36d-00ef559fac42', 'foodie', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'Love', 'Eating', '91234123');
 
+insert into users(user_uid, username, password_hash, first_name, last_name, contact_number)
+values ('517E32D8-10BF-A8B8-C7E5-5791E00E39E8', 'LEE', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','LEE', 'LEE', '84508450');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('A6065EAA-253F-312C-CBAB-481720D955EB','user1, Alex','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','90934647');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('B76366D7-08D8-E102-CA7B-7DECCE8CFB55','user2, Alex','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','98302246');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('3C8C082C-19D7-BCDF-35D3-5279D5F815B1','user3, Alex','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','82988144');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('7301D2B1-B70D-2847-D433-CA1FDBE1491C','user4, Alex','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','96940755');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('C7702DAC-5326-9197-DD17-45514964E470','Gray','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','86094246');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('0AA5DF54-FB38-8DE5-2B3F-BFCA693633EC','Best','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','88192319');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('1B31FA5E-6F85-4D52-CF74-C94D977FC564','Carpenter','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','83759414');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('11D7142F-4E7B-C046-81D2-08300269356F','Flynn','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','98918197');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('CA669A06-B499-0AB8-0785-B26CC6CA1D92','Ewing','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','82374174');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('A23DA39B-9607-4B52-2A88-75503EEB96B1','Kane','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','89313114');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('B47E665E-FFD2-41A2-C8D6-0E6CF96CF7F9','Hendrix','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','80614236');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('0AB16C4A-6B43-B9F0-D8FB-25EB9CB12EA0','Adams','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','82012958');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('BE6B047B-127D-05A9-67CF-6EA4C2B97D6F','Cain','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','90178462');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('2A49480B-15D8-B6F8-EFE8-E2EBF825B9F2','Calhoun','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','88192194');
+----------------------------------------
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('1EE2BCCF-5F02-4D80-F51E-10BFD6F0D36F','Cole','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','83416677');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('222E4E78-98EB-19F0-3A1D-130DFB75922E','Mccoy','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','85871002');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('26D40867-8FAB-F75F-E42E-35A8FB234D79','Le','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','80193572');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('22ED6620-3661-5881-2146-B1A8B81F13F6','Sweet','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','83741374');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('08C5E762-174E-73AD-1CC5-DD222CA5DC99','Salazar','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','85470703');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('2B60DEF5-B57F-C5AE-1DD8-34F4918D351F','Murray','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','96771444');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('BE9457DF-8401-7DF3-6A0D-A5800FC79477','Dotson','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','85057891');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('A7DC90B7-3D37-2D30-DD05-C36428F314B5','Mathis','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','83417346');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('A84A6ED2-8711-7A9C-D8F0-C19FD97F4115','Gordon','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','91121359');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES('7FB4A065-137F-50AC-A3A6-A18CC104CE45','Bass','$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lao','Five','80428611');
 
 --customers
 INSERT INTO customers (uid)
@@ -733,8 +808,6 @@ VALUES ('235a555f-6c36-4b57-b34c-eb92db1276d2', 4.0);
 
 INSERT INTO ratings (resid, rating)
 VALUES ('d2d3fa97-bb8f-450a-9f2a-fe58df40133c', 4.0);
-
-
 
 CREATE OR REPLACE FUNCTION validate_reservation_date()
 RETURNS TRIGGER AS

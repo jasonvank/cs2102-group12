@@ -110,27 +110,17 @@ sql.query = {
   delete_restaurant_ratings: "DROP VIEW restaurant_ratings",
 
   search: "" +
-  "SELECT restaurants.name as rname, categories.name as cname, address, location, open_time, close_time, contacts, rating " +
+  "SELECT restaurants.name as rname, restaurants.address AS address, categories.name as cname, address, location, open_time, close_time, contacts, rating " +
   "FROM restaurants LEFT JOIN restaurant_ratings ON restaurants.name = restaurant_ratings.rname " +
   "LEFT JOIN belongs on restaurants.rid = belongs.rid " +
   "LEFT JOIN categories on belongs.cid = categories.cid " +
   "WHERE lower(restaurants.name) LIKE $1 " +
-  "AND location LIKE $2 " +
-  "AND categories.name LIKE $3 " +
-  "AND rating >= $4 " +
-  "AND open_time <= $5 " +
-  "AND close_time >= $5",
-
-
-  search_no_time: ""  +
-  "SELECT restaurants.name AS rname, categories.name AS cname, address, location, open_time, close_time, contacts, rating " +
-  "FROM restaurants LEFT JOIN restaurant_ratings ON restaurants.name = restaurant_ratings.rname " +
-  "LEFT JOIN belongs on restaurants.rid = belongs.rid " +
-  "LEFT JOIN categories on belongs.cid = categories.cid " +
-  "WHERE lower(restaurants.name) LIKE $1 " +
-  "AND location LIKE $2 " +
-  "AND categories.name LIKE $3 " +
-  "AND rating >= $4",
+  "AND address LIKE $2 " +
+  "AND location LIKE $3 " +
+  "AND categories.name LIKE $4 " +
+  "AND rating >= $5 " +
+  "AND REPLACE($6, ' ', open_time::VARCHAR(50))::TIME  between open_time and close_time " +
+  "ORDER BY rname, rating, location, cname",
 
 
   //Reservations

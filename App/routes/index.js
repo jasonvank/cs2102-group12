@@ -25,6 +25,7 @@ router.get('/', function (req, res, next) {
 /* SEARCH */
 router.post('/', function (req, res, next) {
   var res_name = req.body.rest_name;
+  var res_address = req.body.rest_address;
   var location = req.body.location;
   var category = req.body.cuisines;
   var book_time = req.body.book_time;
@@ -37,6 +38,7 @@ router.post('/', function (req, res, next) {
 
   var searchInfo = {
     name : res_name,
+    address: res_address,
     location : location,
     category : category,
     time : book_time,

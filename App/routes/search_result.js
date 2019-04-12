@@ -21,13 +21,21 @@ router.get('/', function (req, res, next) {
     rest_name = '%' + rest_name.toLowerCase() + '%';
   }
 
+  var address = searchInfo.address;
+  console.log(address);
+  if (address == 0) {
+    address = '%%';
+  } else {
+    address = '%' + address + '%';
+  }
+
   console.log(rest_name);
 
   var location = searchInfo.location;
   if (location == 'Anywhere') {
     location = '%%';
   } else {
-    location = '%' + location + '%';
+    location = location;
   }
 
   console.log(location);
@@ -49,95 +57,37 @@ router.get('/', function (req, res, next) {
   console.log("rating: " + rating);
 
   var time = searchInfo.time;
+  console.log("time :" + time);
+  console.log(time);
+
   if (time == 0) {
-    pool.query(sql_query.query.restaurant_ratings, (err, data) => {
-      if (err) {
-        console.log(err);
-      }
-      pool.query(sql_query.query.search_no_time, [rest_name, location, category, rating], (err, data) => {
-        if (err) {
-          console.log(err);
-        }
-        // // res.render('/restaurants/empty_selections', {user : req.user});
-        // if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
-        var passedData = {
-          user: req.user,
-          passedData: data
-        };
-        res.render('restaurants/search', {
-          data: passedData
-        });
-        pool.query(sql_query.query.delete_restaurant_ratings, (err, data) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-      });
-    });
-  } else {
-    pool.query(sql_query.query.restaurant_ratings, (err, data) => {
-      if (err) {
-        console.log(err);
-      }
-      console.log(rest_name);
-      console.log(location);
-      console.log(category);
-      console.log(rating);
-      console.log(time);
-      pool.query(sql_query.query.search, [rest_name, location, category, rating, time], (err, data) => {
-        if (err) {
-          console.log(err);
-        }
-        // res.render('/restaurants/empty_selections', {user : req.user});
-        // if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
-        var passedData = {
-          user: req.user,
-          passedData: data
-        };
-        res.render('restaurants/search', {
-          data: passedData
-        });
-        pool.query(sql_query.query.delete_restaurant_ratings, (err, data) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-      });
-    });
+    time = ' ';
   }
 
-  var search_query =
-    "SELECT * FROM restaurants LEFT JOIN belongs ON restaurants.rid = belongs.rid LEFT JOIN categories on belongs.cid = categories.cid WHERE " +
-    rest_name + " AND " + location + " AND " + category + " AND " + time;
-
-  // pool.query(sql_query.query.search, [rest_name, location, category, time], (err, data) => {
-  //   if (err)
-  //     res.render('/restaurants/empty_selections', {user : req.user});
-  //     if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
-  //     var passedData = {
-  //       user: req.user,
-  //       passedData: data
-  //     };
-  //     res.render('restaurants/search', {
-  //     data : passedData
-  //     });
-  // });
-  // pool.query(search_query, (err, data) => {
-  //   if (err) {
-  //     //cant find any Restaurants
-  //       res.render('/restaurants/empty_selections', {user : req.user});
-  //   }
-  //   if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
-  //   var passedData = {
-  //     user: req.user,
-  //     passedData: data
-  //   };
-  //   res.render('restaurants/search', {
-  //       data : passedData
-  //     });
-  //
-  // });
-
+  pool.query(sql_query.query.restaurant_ratings, (err, data) => {
+    if (err) {
+      res.status(404).send(err);
+    }
+    pool.query(sql_query.query.search, [rest_name, address, location, category, rating, time], (err, data) => {
+      if (err) {
+        res.status(404).send(err);
+      }
+      // res.render('/restaurants/empty_selections', {user : req.user});
+      // if (!data.rows[0]) return res.render('restaurants/empty_selections', {user : req.user});
+      var passedData = {
+        user: req.user,
+        passedData: data
+      };
+      res.render('restaurants/search', {
+        data: passedData
+      });
+      pool.query(sql_query.query.delete_restaurant_ratings, (err, data) => {
+        if (err) {
+          res.status(404).send(err);
+        }
+      });
+    });
+  });
 });
 
 module.exports = router;

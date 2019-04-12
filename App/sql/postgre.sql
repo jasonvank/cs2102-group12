@@ -681,36 +681,36 @@ VALUES ('cc568518-4cd5-4648-a986-96e2b6735ba5', 'Vegetarian Planet', 'Jurong', '
 INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
 VALUES ('eaefbc91-86ea-4028-9a7d-348df2108d68', 'Canton Paradise', 'Star Vista', 'West', '08:00', '20:00', 91928472);
 
-INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('7944f693-7703-4c98-9451-911a9c0b6da1', 'Burger Queeeeeen', '0f56e1a1-272d-4553-be70-2d6211de99c1', 'Clarke Quay', 'South', '07:00', '18:00', 69874521);
+-------------------------------------------------------
+INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
+VALUES ('7944f693-7703-4c98-9451-911a9c0b6da1', 'Burger Queeeeeen', 'Clarke Quay', 'South', '07:00', '18:00', 69874521);
 
-INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('1559c814-e188-4eae-aa90-298f1615ceeb', 'Sanpoutei Rice', 'c45a9838-7374-4220-b131-8dbc61f7cda0', 'Prince Georges Park', 'West', '13:30', '04:00', 67765432);
+INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
+VALUES ('1559c814-e188-4eae-aa90-298f1615ceeb', 'Sanpoutei Rice', 'Prince Georges Park', 'West', '13:30', '04:00', 67765432);
 
-INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('f55ea70d-4b14-4e6e-84e0-d7b5fa0479a2', 'Yayoi Bento', 'ebc72ddc-fe59-4f19-81f7-04ea9d6773f5', 'Buona Vista', 'West', '13:00', '20:00', 69765432);
+INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
+VALUES ('f55ea70d-4b14-4e6e-84e0-d7b5fa0479a2', 'Yayoi Bento', 'Buona Vista', 'West', '13:00', '20:00', 69765432);
 
-INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('2f2f2e7d-9aa3-4ce0-9f43-c7386e781a81', 'Oppa BBQ @ Orchard', 'd6e88324-a8d0-43e0-bb43-42b35c4ab427', 'Orchard Road', 'Central', '11:00', '20:00', 63251489);
+INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
+VALUES ('2f2f2e7d-9aa3-4ce0-9f43-c7386e781a81', 'Oppa BBQ @ Orchard', 'Orchard Road', 'Central', '11:00', '20:00', 63251489);
 
-INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('a9444554-7dd7-461e-b0e7-5fb54c812509', 'Doodoo Eelean', '40aebef0-1118-4f1b-bdf5-30eb2ec94858', 'Yishun', 'North', '07:00', '18:00', 61258795);
+INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
+VALUES ('a9444554-7dd7-461e-b0e7-5fb54c812509', 'Doodoo Eelean', 'Yishun', 'North', '07:00', '18:00', 61258795);
 
-INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('dac20863-15c4-4ae8-888d-ff1f383a9c33', 'Bobaboba', '0f2c01c6-de2f-4a29-be41-b28bb351a3dd', 'Harbourfront', 'South', '13:30', '20:30', 67132589);
+INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
+VALUES ('dac20863-15c4-4ae8-888d-ff1f383a9c33', 'Bobaboba', 'Harbourfront', 'South', '13:30', '20:30', 67132589);
 
-INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('d903e21c-ab3d-450d-96fc-cb2beebb3e8f', 'Paik Bibimmyun', '132f0616-a811-4e62-99f6-65e3bfcf3b42', 'Sembawang', 'North', '13:30', '20:00', 98765432);
+INSERT INTO restaurants (rid, name,address, location, open_time, close_time, contacts)
+VALUES ('d903e21c-ab3d-450d-96fc-cb2beebb3e8f', 'Paik Bibimmyun', 'Sembawang', 'North', '13:30', '20:00', 98765432);
 
-INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('a1380816-8080-42ee-b233-aed0442ee2a5', 'Curry Planet', 'fff450e2-3a9a-45f2-97f0-5c494e742ddd', 'Holland Road', 'Central', '13:30', '20:00', 98765432);
+INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
+VALUES ('a1380816-8080-42ee-b233-aed0442ee2a5', 'Curry Planet', 'Holland Road', 'Central', '13:30', '20:00', 98765432);
 
-INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('9184e572-57e8-4f96-9d92-533ca178299c', 'Very Good Hotpot', '3c7e806d-e877-4844-b531-04df6c963dde', 'Kent Ridge', 'West', '13:30', '21:00', 98765432);
+INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
+VALUES ('9184e572-57e8-4f96-9d92-533ca178299c', 'Very Good Hotpot', 'Kent Ridge', 'West', '13:30', '21:00', 98765432);
 
-INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
-VALUES ('b945a604-5243-48e5-8781-b6f1e2112f81', 'Bobs Burgers', '843cf3dd-8a28-45d3-94c6-6a686c31e924', 'Yishun', 'North', '13:30', '23:00', 98765432);
-
+INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
+VALUES ('b945a604-5243-48e5-8781-b6f1e2112f81', 'Bobs Burgers', 'Yishun', 'North', '13:30', '23:00', 98765432);
 
 --registers
 INSERT INTO registers (uid, rid)

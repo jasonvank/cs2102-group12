@@ -46,7 +46,7 @@
   \node[attribute] (custom_uid) [below left=2.5cm of custom] {\key{uid}} edge (custom);
 
 
-  \node[relationship] (registers) [left=5cm of resman] {Registers} edge (resman);
+  \node[relationship] (registers) [left=5cm of resman] {Registers} edge [<-] (resman);
   \node[attribute] (rid) [left=1cm of registers] {\key{rid}} edge (registers);
   \node[attribute] (uid) [above=1cm of registers] {uid} edge (registers);
 
@@ -54,13 +54,14 @@
 
   \node[entity] (restaur) [below left=8cm of resman] {Restaurants};
   \node[attribute] (rid) [below right=0.5cm of restaur] {\key{rid}} edge (restaur);
-    \node[attribute] (closetime) [below right=2cm of restaur] {close\textunderscore time} edge (restaur.320);
+    \node[attribute] (closetime) [below right=2cm of restaur] {close\textunderscore time} edge (restaur.270);
   \node[attribute] (address) [above right=2cm of restaur] {address} edge (restaur.90);
   \node[attribute] (location) [above left=0.5cm of restaur] {location} edge (restaur.140);
   \node[attribute] (opentime) [below left=0.5cm of restaur] {open\textunderscore time} edge (restaur);
 
   \node[attribute] (contacts) [left = 1.5cm of restaur] {contacts} edge (restaur.180);
   \node[attribute] (restaurnamae) [above right=0.5cm of restaur] {name} edge (restaur);
+
 
   \node[relationship] (books) [below right=2.5cm of custom] {Books} edge (custom);
   \node[attribute] (resid) [left=0.5cm of books] {\key{resid}} edge (books);
@@ -103,7 +104,7 @@
   \node[attribute] (value) [above right = 0.5cm of rewards] {value} edge (rewards);
   \node[relationship] (uses) [below = 2cm of rewards] {Uses} edge [double distance=0.1cm, <-] (rewards);
 
-  \draw[link] (uses) edge [double distance=0.1cm, <-] (reserv);
+  \draw[link] (uses) edge [<-] (reserv);
 
 
 
@@ -111,18 +112,18 @@
   \node[relationship] (receives) [right=4cm of restaur] {Receives} edge (restaur);
 
 
-    \node[entity] (rating) [right=2.5cm of receives] {Ratings} edge (receives);
+    \node[entity] (rating) [right=2.5cm of receives] {Ratings} edge [double distance=0.1cm, ->] (receives);
     \node[attribute] (reservid) [above=0.5cm of rating] {\key{resid}} edge (rating);
     \node[attribute] (ratval) [below=0.5cm of rating] {value} edge (rating);
 
     \node[relationship] (rates) [right=2cm of rating]
-    {Rates} edge (rating);
+    {Rates} edge [double distance=0.1cm, <-] (rating);
 
     \draw[link] (rates) edge (custom);
 
-    \draw[link] (registers) edge (restaur);
+    \draw[link] (registers) edge [double distance=0.1cm, <-] (restaur);
 
-    \node[relationship] (belongs) [above left=3cm of restaur] {Belongs} edge (restaur.90);
+    \node[relationship] (belongs) [above left=3cm of restaur] {Belongs} edge [double distance=0.1cm, <-] (restaur.90);
     \node[attribute] (cid) [right=0.5cm of belongs] {cid} edge (belongs);
     \node[attribute] (rid) [above=0.5cm of belongs] {\key{rid}} edge (belongs);
 

@@ -22,7 +22,6 @@ router.get('/', function (req, res, next) {
   }
 
   var address = searchInfo.address;
-  console.log(address);
   if (address == 0) {
     address = '%%';
   } else {

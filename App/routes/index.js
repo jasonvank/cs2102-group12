@@ -39,10 +39,6 @@ router.post('/', function (req, res, next) {
     time : book_time,
     rating : rating
   }
-console.log(url.format({
-  pathname: "/results",
-  query: searchInfo
-}));
   res.redirect(url.format({
     pathname: "/results",
     query: searchInfo
@@ -66,7 +62,6 @@ router.post('/register', function (req, res, next) {
 
 
   function user_login() {
-    console.log("going to login")
     client.query('COMMIT', client.end.bind(client), (err, res2) => {
       req.login({
         username: username,
@@ -82,22 +77,17 @@ router.post('/register', function (req, res, next) {
   }
 
   client.query('BEGIN', function (err, data) {
-    console.log("start to register")
     if (err) return rollback(client);
     client.query(sql_query.query.user_register, [username, password_hash, last_name, first_name, contact_number], (err2, data2) => {
       var user_uid;
-      console.log("-1");
       if (err2) {
         // show message duplicate user name
         res.status(400).send("This user name has been registered, please change!");
         return rollback(client);
       }
-      console.log("-2");
-      console.log("complete registration");
       user_uid = data2.rows[0].user_uid;
       var inial_point = 100;
       if (user_type == "customer") {
-        console.log("customer");
         client.query(sql_query.query.customer_register, [user_uid], (err3, data3) => {
           if (err3) {
             return rollback(client);
@@ -119,11 +109,8 @@ router.post('/register', function (req, res, next) {
           })
         });
       } else {
-        console.log("manager");
-        console.log("-3");
         client.query(sql_query.query.manager_register, [user_uid], (err6, data6) => {
           if (err6) {
-            console.log("has problem");
             return rollback(client);
           }
           user_login();

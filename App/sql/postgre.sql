@@ -18,14 +18,12 @@ CREATE TABLE managers (
 CREATE TABLE restaurants (
     rid          uuid UNIQUE DEFAULT uuid_generate_v4 (),
     name         varchar(50) NOT NULL,
-    -- uid          uuid UNIQUE NOT NULL,
-    address      varchar(50) NOT NULL,
+    address      varchar(250) NOT NULL,
     location     varchar(50) NOT NULL,
     open_time    TIME NOT NULL,
     close_time   TIME NOT NULL,
     contacts     NUMERIC(10,0) NOT NULL,
     primary key (rid)
-    -- foreign key (uid) references managers (uid)
 );
 
 CREATE TABLE customers (
@@ -509,22 +507,22 @@ INSERT INTO restaurants (rid, name, address, location, open_time, close_time, co
 VALUES ('92933D0B-E261-9BDE-9CC3-4E1F7A2D8883', 'Mc Donalds (South East)', 'East Coast', 'East', '08:30', '23:00', 88505532);
 
 INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
-VALUES ('1D7C5463-B494-4545-FC8C-05C8C7F62262', 'Subway (Kent Ridge)', 'East Coast', 'East', '07:30', '23:00', 88505532);
+VALUES ('1D7C5463-B494-4545-FC8C-05C8C7F62262', 'Subway (Kent Ridge)', 'East Coast', 'West', '07:30', '23:00', 88505532);
 
 INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
-VALUES ('CC610696-910A-724F-FAC9-281A5839D8B1', 'Subway (Bouna Vista)', 'East Coast', 'East', '04:30', '23:00', 88505532);
+VALUES ('CC610696-910A-724F-FAC9-281A5839D8B1', 'Subway (Bouna Vista)', 'East Coast', 'West', '04:30', '23:00', 88505532);
 
 INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
-VALUES ('162189E2-94FD-66E5-AF00-121B43D93508', 'Crystal Jade (Holland Village)', 'East Coast', 'East', '09:30', '23:00', 88505532);
+VALUES ('162189E2-94FD-66E5-AF00-121B43D93508', 'Crystal Jade (Holland Village)', 'East Coast', 'South', '09:30', '23:00', 88505532);
 
 INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
-VALUES ('2914C6F4-EBE9-0C4E-FA8B-E027561710C9', 'Crystal Jade (Orchard)', 'East Coast', 'East', '12:30', '23:00', 88505532);
+VALUES ('2914C6F4-EBE9-0C4E-FA8B-E027561710C9', 'Crystal Jade (Orchard)', 'East Coast', 'South', '12:30', '23:00', 88505532);
 
 INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
-VALUES ('470C0298-16A1-ADF0-3F6A-3F183D8A0950', 'Crystal Jade (Vivo City)', 'East Coast', 'East', '07:30', '23:00', 88505532);
+VALUES ('470C0298-16A1-ADF0-3F6A-3F183D8A0950', 'Crystal Jade (Vivo City)', 'East Coast', 'West', '07:30', '23:00', 88505532);
 
 INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
-VALUES ('B75A9B18-7C5F-44D6-D6C9-A9A2B235DF41', 'XingWang (Kent Ridge)', 'East Coast', 'East', '07:30', '23:00', 88505532);
+VALUES ('B75A9B18-7C5F-44D6-D6C9-A9A2B235DF41', 'XingWang (Kent Ridge)', 'East Coast', 'North', '07:30', '23:00', 88505532);
 
 INSERT INTO restaurants (rid, name, address, location, open_time, close_time, contacts)
 VALUES ('4B0D5F3A-4538-19AF-3E7E-A7F80196F7D0', 'The Royal Bistro (Utown)', 'East Coast', 'East', '07:30', '23:00', 88505532);
@@ -606,6 +604,37 @@ VALUES ('d997f068-ec56-45d9-8e67-eb2257eee703', 'e2b4cfea-8358-4f8b-bae8-cfaab68
 
 INSERT INTO menus (mid, rid, name)
 VALUES ('5a68c459-8023-407b-9312-6573159ce0f0', 'e2b4cfea-8358-4f8b-bae8-cfaab688376f', 'breakfast');
+--------------------------------
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('C943C5E4-C65D-ABF4-959E-63B5F51B420A', '6423E498-6D68-2E93-9A4F-D3784056C9D7', 'breakfast');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('FECC1C80-05E8-D9FD-1A6A-9E528AEADE7A', 'A2D6F06B-D75F-07CB-8EAD-3CF8C5B16121', 'breakfast');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('9DD31637-9769-853A-849B-9C8508EBA100', '92933D0B-E261-9BDE-9CC3-4E1F7A2D8883', 'breakfast');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('A7C11C18-BDF8-CE26-287E-6B50C0206069', '1D7C5463-B494-4545-FC8C-05C8C7F62262', 'breakfast');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('200CC939-AE0F-5863-B6C9-A01103B6B303', 'CC610696-910A-724F-FAC9-281A5839D8B1', 'breakfast');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('36661948-A1DF-C099-25B7-C3C08D70024C', '162189E2-94FD-66E5-AF00-121B43D93508', 'breakfast');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('9BB6E0C4-318B-147B-3F71-280EE20439A4', '2914C6F4-EBE9-0C4E-FA8B-E027561710C9', 'breakfast');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('A35340F5-1C6C-CBC2-1B22-F36985B42759', '470C0298-16A1-ADF0-3F6A-3F183D8A0950', 'breakfast');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('BB46C94D-C14A-3706-7A3B-11A673970295', 'B75A9B18-7C5F-44D6-D6C9-A9A2B235DF41', 'breakfast');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('C1CD8987-FA41-13EA-F9F6-81B14B6E62F8', '4B0D5F3A-4538-19AF-3E7E-A7F80196F7D0', 'breakfast');
 
 --items
 --dinner--------------------------------------------------------------------------
@@ -890,6 +919,37 @@ VALUES ('609cace1-6b36-45b1-868d-f4fa463f358a', '54321535-9cc0-457f-94b8-39edb9e
 
 INSERT INTO belongs (rid, cid)
 VALUES ('e2b4cfea-8358-4f8b-bae8-cfaab688376f', '3b688933-e5ae-483a-87b1-3c3c99be8749');
+
+---------------------------------------------------------------------------
+INSERT INTO belongs (rid, cid)
+VALUES ('6423E498-6D68-2E93-9A4F-D3784056C9D7', '54321535-9cc0-457f-94b8-39edb9eb891b');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('A2D6F06B-D75F-07CB-8EAD-3CF8C5B16121', '54321535-9cc0-457f-94b8-39edb9eb891b');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('92933D0B-E261-9BDE-9CC3-4E1F7A2D8883', '54321535-9cc0-457f-94b8-39edb9eb891b');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('1D7C5463-B494-4545-FC8C-05C8C7F62262', '54321535-9cc0-457f-94b8-39edb9eb891b');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('CC610696-910A-724F-FAC9-281A5839D8B1', '54321535-9cc0-457f-94b8-39edb9eb891b');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('162189E2-94FD-66E5-AF00-121B43D93508', '3b688933-e5ae-483a-87b1-3c3c99be8749');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('2914C6F4-EBE9-0C4E-FA8B-E027561710C9', '3b688933-e5ae-483a-87b1-3c3c99be8749');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('470C0298-16A1-ADF0-3F6A-3F183D8A0950', '3b688933-e5ae-483a-87b1-3c3c99be8749');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('B75A9B18-7C5F-44D6-D6C9-A9A2B235DF41', '3b688933-e5ae-483a-87b1-3c3c99be8749');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('4B0D5F3A-4538-19AF-3E7E-A7F80196F7D0', '54321535-9cc0-457f-94b8-39edb9eb891b');
 
 --ratings
 INSERT INTO ratings (resid, rating)

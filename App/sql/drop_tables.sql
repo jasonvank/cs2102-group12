@@ -1,6 +1,13 @@
 -- drop table assigns;
+
+drop trigger if_restaurant_name_existed ON restaurants;
+drop function if_restaurant_name_existed();
+
 drop trigger if_menu_name_existed ON menus;
-drop function trig_addMenu();
+drop function if_menu_name_existed();
+
+drop trigger if_item_name_existed ON items;
+drop function if_item_name_existed();
 
 drop trigger validate_reservation_date ON reservations;
 drop function validate_reservation_date();

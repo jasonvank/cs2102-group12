@@ -117,7 +117,7 @@ CREATE TABLE ratings (
     foreign key (resid) references reservations (resid) on delete cascade
 );
 
-CREATE OR REPLACE FUNCTION trig_addMenu()
+CREATE OR REPLACE FUNCTION if_menu_name_existed()
 RETURNS TRIGGER AS
 $$
 DECLARE check_name uuid;
@@ -141,10 +141,10 @@ LANGUAGE plpgsql;
 CREATE TRIGGER if_menu_name_existed
 BEFORE INSERT OR UPDATE ON menus
 FOR EACH ROW
-EXECUTE PROCEDURE trig_addMenu();
+EXECUTE PROCEDURE if_menu_name_existed();
 
 
-CREATE OR REPLACE FUNCTION trig_addRestaurant()
+CREATE OR REPLACE FUNCTION if_restaurant_name_existed()
 RETURNS TRIGGER AS
 $$
 DECLARE check_name uuid;
@@ -168,9 +168,9 @@ LANGUAGE plpgsql;
 CREATE TRIGGER if_restaurant_name_existed
 BEFORE INSERT OR UPDATE ON restaurants
 FOR EACH ROW
-EXECUTE PROCEDURE trig_addRestaurant();
+EXECUTE PROCEDURE if_restaurant_name_existed();
 
-CREATE OR REPLACE FUNCTION trig_addItem()
+CREATE OR REPLACE FUNCTION if_item_name_existed()
 RETURNS TRIGGER AS
 $$
 DECLARE check_name uuid;
@@ -194,7 +194,7 @@ LANGUAGE plpgsql;
 CREATE TRIGGER if_item_name_existed
 BEFORE INSERT OR UPDATE ON items
 FOR EACH ROW
-EXECUTE PROCEDURE trig_addItem();
+EXECUTE PROCEDURE if_item_name_existed();
 
 
 

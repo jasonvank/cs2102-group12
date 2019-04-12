@@ -385,6 +385,38 @@ VALUES('197c344c-10a7-45e1-a91d-56916ea9d279', 'jojo', '$2b$10$QU1IB9xEAKzCCmp7B
 INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
 VALUES('42496f99-b5d8-4b4d-b033-ed16b602399a', 'jotaro', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC', 'Jotaro', 'Kujo', '46587865');
 
+-- extra users who are managers
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('0f56e1a1-272d-4553-be70-2d6211de99c1', 'burgerqueenmanager', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lava','Burger','99999999');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('c45a9838-7374-4220-b131-8dbc61f7cda0', 'sanpouteimanager', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Toshiba','Toyota','98765432');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('ebc72ddc-fe59-4f19-81f7-04ea9d6773f5', 'yayoimanager', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Mitsubishi','Samurai','98949491');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('d6e88324-a8d0-43e0-bb43-42b35c4ab427', 'oppabbqmanager', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Appa','Kim','91144234');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('40aebef0-1118-4f1b-bdf5-30eb2ec94858', 'yilinisdoodoomanager', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Eleanor','Doodoo','80808080');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('0f2c01c6-de2f-4a29-be41-b28bb351a3dd', 'paikbibimmanager', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Jong','Paik','87955469');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('132f0616-a811-4e62-99f6-65e3bfcf3b42', 'bobobabmanager', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Pearl','Boba','80880911');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('fff450e2-3a9a-45f2-97f0-5c494e742ddd', 'curryplanetmanager', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Srinithi','Srigiri','97473654');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('3c7e806d-e877-4844-b531-04df6c963dde', 'verygoodhotpotmanager', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Changrui','Wenkai','8123457');
+
+INSERT INTO users (user_uid,username,password_hash,first_name,last_name,contact_number)
+VALUES ('843cf3dd-8a28-45d3-94c6-6a686c31e924', 'bobsburgersmanager', '$2b$10$QU1IB9xEAKzCCmp7BMo9POH4rMXOyqbFzJigI/s5fqvfVLoBocPQC','Lava','Burger','99999999');
+
+
 --customers
 INSERT INTO customers (uid)
 VALUES ('fa9d34a8-78e5-4e3e-a800-e5b56554668e');
@@ -513,6 +545,36 @@ VALUES ('197c344c-10a7-45e1-a91d-56916ea9d279');
 INSERT INTO managers (uid)
 VALUES ('42496f99-b5d8-4b4d-b033-ed16b602399a');
 
+-- more managers
+INSERT INTO managers (uid)
+VALUES ('0f56e1a1-272d-4553-be70-2d6211de99c1');
+
+INSERT INTO managers (uid)
+VALUES ('c45a9838-7374-4220-b131-8dbc61f7cda0');
+
+INSERT INTO managers (uid)
+VALUES ('ebc72ddc-fe59-4f19-81f7-04ea9d6773f5');
+
+INSERT INTO managers (uid)
+VALUES ('d6e88324-a8d0-43e0-bb43-42b35c4ab427');
+
+INSERT INTO managers (uid)
+VALUES ('40aebef0-1118-4f1b-bdf5-30eb2ec94858');
+
+INSERT INTO managers (uid)
+VALUES ('0f2c01c6-de2f-4a29-be41-b28bb351a3dd');
+
+INSERT INTO managers (uid)
+VALUES ('132f0616-a811-4e62-99f6-65e3bfcf3b42');
+
+INSERT INTO managers (uid)
+VALUES ('fff450e2-3a9a-45f2-97f0-5c494e742ddd');
+
+INSERT INTO managers (uid)
+VALUES ('3c7e806d-e877-4844-b531-04df6c963dde');
+
+INSERT INTO managers (uid)
+VALUES ('843cf3dd-8a28-45d3-94c6-6a686c31e924');
 
 --restaurants
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
@@ -560,6 +622,36 @@ VALUES ('cc568518-4cd5-4648-a986-96e2b6735ba5', 'Vegetarian Planet','197c344c-10
 INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
 VALUES ('eaefbc91-86ea-4028-9a7d-348df2108d68', 'Canton Paradise', '42496f99-b5d8-4b4d-b033-ed16b602399a', 'Star Vista', 'West', '08:00', '20:00', 91928472);
 
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('7944f693-7703-4c98-9451-911a9c0b6da1', 'Burger Queeeeeen', '0f56e1a1-272d-4553-be70-2d6211de99c1', 'Clarke Quay', 'South', '07:00', '18:00', 69874521);
+
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('1559c814-e188-4eae-aa90-298f1615ceeb', 'Sanpoutei Rice', 'c45a9838-7374-4220-b131-8dbc61f7cda0', 'Prince Georges Park', 'West', '13:30', '04:00', 67765432);
+
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('f55ea70d-4b14-4e6e-84e0-d7b5fa0479a2', 'Yayoi Bento', 'ebc72ddc-fe59-4f19-81f7-04ea9d6773f5', 'Buona Vista', 'West', '13:00', '20:00', 69765432);
+
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('2f2f2e7d-9aa3-4ce0-9f43-c7386e781a81', 'Oppa BBQ @ Orchard', 'd6e88324-a8d0-43e0-bb43-42b35c4ab427', 'Orchard Road', 'Central', '11:00', '20:00', 63251489);
+
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('a9444554-7dd7-461e-b0e7-5fb54c812509', 'Doodoo Eelean', '40aebef0-1118-4f1b-bdf5-30eb2ec94858', 'Yishun', 'North', '07:00', '18:00', 61258795);
+
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('dac20863-15c4-4ae8-888d-ff1f383a9c33', 'Bobaboba', '0f2c01c6-de2f-4a29-be41-b28bb351a3dd', 'Harbourfront', 'South', '13:30', '20:30', 67132589);
+
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('d903e21c-ab3d-450d-96fc-cb2beebb3e8f', 'Paik Bibimmyun', '132f0616-a811-4e62-99f6-65e3bfcf3b42', 'Sembawang', 'North', '13:30', '20:00', 98765432);
+
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('a1380816-8080-42ee-b233-aed0442ee2a5', 'Curry Planet', 'fff450e2-3a9a-45f2-97f0-5c494e742ddd', 'Holland Road', 'Central', '13:30', '20:00', 98765432);
+
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('9184e572-57e8-4f96-9d92-533ca178299c', 'Very Good Hotpot', '3c7e806d-e877-4844-b531-04df6c963dde', 'Kent Ridge', 'West', '13:30', '21:00', 98765432);
+
+INSERT INTO restaurants (rid, name, uid, address, location, open_time, close_time, contacts)
+VALUES ('b945a604-5243-48e5-8781-b6f1e2112f81', 'Bobs Burgers', '843cf3dd-8a28-45d3-94c6-6a686c31e924', 'Yishun', 'North', '13:30', '23:00', 98765432);
+
 
 --registers
 INSERT INTO registers (uid, rid)
@@ -606,6 +698,37 @@ VALUES ('cc568518-4cd5-4648-a986-96e2b6735ba5', '197c344c-10a7-45e1-a91d-56916ea
 
 INSERT INTO registers (rid, uid)
 VALUES ('eaefbc91-86ea-4028-9a7d-348df2108d68', '42496f99-b5d8-4b4d-b033-ed16b602399a');
+
+INSERT INTO registers (rid, uid)
+VALUES ('7944f693-7703-4c98-9451-911a9c0b6da1', '0f56e1a1-272d-4553-be70-2d6211de99c1');
+
+INSERT INTO registers (rid, uid)
+VALUES ('1559c814-e188-4eae-aa90-298f1615ceeb', 'c45a9838-7374-4220-b131-8dbc61f7cda0');
+
+INSERT INTO registers (rid, uid)
+VALUES ('f55ea70d-4b14-4e6e-84e0-d7b5fa0479a2', 'ebc72ddc-fe59-4f19-81f7-04ea9d6773f5');
+
+INSERT INTO registers (rid, uid)
+VALUES ('2f2f2e7d-9aa3-4ce0-9f43-c7386e781a81', 'd6e88324-a8d0-43e0-bb43-42b35c4ab427');
+
+INSERT INTO registers (rid, uid)
+VALUES ('a9444554-7dd7-461e-b0e7-5fb54c812509', '40aebef0-1118-4f1b-bdf5-30eb2ec94858');
+
+INSERT INTO registers (rid, uid)
+VALUES ('dac20863-15c4-4ae8-888d-ff1f383a9c33', '0f2c01c6-de2f-4a29-be41-b28bb351a3dd');
+
+INSERT INTO registers (rid, uid)
+VALUES ('d903e21c-ab3d-450d-96fc-cb2beebb3e8f', '132f0616-a811-4e62-99f6-65e3bfcf3b42');
+
+INSERT INTO registers (rid, uid)
+VALUES ('a1380816-8080-42ee-b233-aed0442ee2a5', 'fff450e2-3a9a-45f2-97f0-5c494e742ddd');
+
+INSERT INTO registers (rid, uid)
+VALUES ('9184e572-57e8-4f96-9d92-533ca178299c', '3c7e806d-e877-4844-b531-04df6c963dde');
+
+INSERT INTO registers (rid, uid)
+VALUES ('b945a604-5243-48e5-8781-b6f1e2112f81', '843cf3dd-8a28-45d3-94c6-6a686c31e924');
+
 
 --menus
 INSERT INTO menus (mid, rid, name)
@@ -668,6 +791,35 @@ VALUES ('fb91b6b3-54ad-4ec2-af9e-d595a66525a3', 'cc568518-4cd5-4648-a986-96e2b67
 INSERT INTO menus (mid, rid, name)
 VALUES ('f916c8de-7bf4-4b8b-bdb1-97162fdec814', 'eaefbc91-86ea-4028-9a7d-348df2108d68', 'All Day Menu');
 
+INSERT INTO menus (mid, rid, name)
+VALUES ('ea7cc46e-f673-4234-b86b-20f76ad6b8b1', '7944f693-7703-4c98-9451-911a9c0b6da1', 'All Day Menu');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('102583b8-1c63-42c2-9a7a-df9ae4f301d9', '1559c814-e188-4eae-aa90-298f1615ceeb', 'All Day Menu');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('67f52851-eab7-4b2a-8583-3797956d1957','f55ea70d-4b14-4e6e-84e0-d7b5fa0479a2', 'All Day Menu');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ( '35b2efce-5fd4-46c5-8b2f-942e9671a1c1','2f2f2e7d-9aa3-4ce0-9f43-c7386e781a81', 'All Day Menu');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('64bc1903-63d6-4016-b43a-da3c12494419','a9444554-7dd7-461e-b0e7-5fb54c812509', 'All Day Menu');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ( '8e46c52b-f09c-4c8d-8a20-258fd6e39908','dac20863-15c4-4ae8-888d-ff1f383a9c33', 'All Day Menu');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('8c1f2d53-4932-41c3-9036-96e749599b50','d903e21c-ab3d-450d-96fc-cb2beebb3e8f', 'All Day Menu');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ( 'a6cd3fee-a58a-4d69-b255-0282499cb7c9','a1380816-8080-42ee-b233-aed0442ee2a5', 'All Day Menu');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ('aeaefb5e-5e10-41b8-9da8-99e1ef380709','9184e572-57e8-4f96-9d92-533ca178299c', 'All Day Menu');
+
+INSERT INTO menus (mid, rid, name)
+VALUES ( 'dfc75464-f0cb-4d1c-a54f-f453a039e839', 'b945a604-5243-48e5-8781-b6f1e2112f81', 'All Day Menu');
 
 
 --items
@@ -1105,6 +1257,37 @@ VALUES ('cc568518-4cd5-4648-a986-96e2b6735ba5', '958407cf-8ef0-40ca-a537-801d7f9
 
 INSERT INTO belongs (rid, cid)
 VALUES ('eaefbc91-86ea-4028-9a7d-348df2108d68', '3b688933-e5ae-483a-87b1-3c3c99be8749');
+
+
+INSERT INTO belongs (rid, cid)
+VALUES ('7944f693-7703-4c98-9451-911a9c0b6da1', '54321535-9cc0-457f-94b8-39edb9eb891b');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('1559c814-e188-4eae-aa90-298f1615ceeb', '8f87cee1-d078-429d-807a-e4e4db2e3a36');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('f55ea70d-4b14-4e6e-84e0-d7b5fa0479a2', '8f87cee1-d078-429d-807a-e4e4db2e3a36');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('2f2f2e7d-9aa3-4ce0-9f43-c7386e781a81', '74367fad-d083-4898-aa93-6c214870c460');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('a9444554-7dd7-461e-b0e7-5fb54c812509', '54321535-9cc0-457f-94b8-39edb9eb891b');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('dac20863-15c4-4ae8-888d-ff1f383a9c33', '3b688933-e5ae-483a-87b1-3c3c99be8749');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('d903e21c-ab3d-450d-96fc-cb2beebb3e8f', '74367fad-d083-4898-aa93-6c214870c460');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('a1380816-8080-42ee-b233-aed0442ee2a5', '958407cf-8ef0-40ca-a537-801d7f92e684');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('9184e572-57e8-4f96-9d92-533ca178299c', '3b688933-e5ae-483a-87b1-3c3c99be8749');
+
+INSERT INTO belongs (rid, cid)
+VALUES ('b945a604-5243-48e5-8781-b6f1e2112f81', '54321535-9cc0-457f-94b8-39edb9eb891b');
 
 --ratings
 INSERT INTO ratings (resid, rating)

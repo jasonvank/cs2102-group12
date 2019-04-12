@@ -717,10 +717,10 @@ BEGIN
  SELECT restime from reservations where resid = reservid INTO reservtime;
  SELECT open_time from restaurants where rid = restaurant INTO opentime;
  SELECT close_time from restaurants where rid = restaurant INTO closetime;
- IF closetime < opentime AND reservtime > closetime AND reservtime < opentime THEN RAISE NOTICE 'Restaurant not open!';
+ IF closetime < opentime AND reservtime > closetime AND reservtime < opentime THEN RAISE NOTICE 'close<open!';
  RAISE EXCEPTION 'Please choose a time when the restaurant is open';
  RETURN NULL;
- ELSIF closetime > opentime AND reservtime > closetime OR reservtime < opentime THEN RAISE NOTICE 'Restaurant not open!';
+ ELSIF reservtime > closetime OR reservtime < opentime AND closetime > opentime THEN RAISE NOTICE 'close>open!';
  RAISE EXCEPTION 'Please choose a time when the restaurant is open';
  RETURN NULL;
  ELSE RETURN NEW;

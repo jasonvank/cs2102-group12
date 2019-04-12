@@ -29,7 +29,6 @@ router.get('/', function (req, res, next) {
     address = '%' + address + '%';
   }
 
-  console.log(rest_name);
 
   var location = searchInfo.location;
   if (location == 'Anywhere') {
@@ -38,8 +37,6 @@ router.get('/', function (req, res, next) {
     location = location;
   }
 
-  console.log(location);
-
   var category = searchInfo.category;
   if (category == 'Anything') {
     category = '%%';
@@ -47,18 +44,12 @@ router.get('/', function (req, res, next) {
     category = '%' + category + '%';
   }
 
-  console.log(category);
-
   var rating = searchInfo.rating;
   if (rating == "Any Rating") {
     rating = 0;
   }
 
-  console.log("rating: " + rating);
-
   var time = searchInfo.time;
-  console.log("time :" + time);
-  console.log(time);
 
   if (time == 0) {
     time = ' ';
@@ -93,7 +84,6 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function(req, res, next) {
   var restaurant_name = req.body.restaurant_name;
-  console.log(restaurant_name);
   pool.query(sql_query.query.restaurant_name_to_rid, [restaurant_name], (err, data) => {
     if(err) return(next);
     restaurantRid = data.rows[0].rid;

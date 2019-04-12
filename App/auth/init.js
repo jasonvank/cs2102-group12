@@ -14,12 +14,12 @@ const pool = new Pool({connectionString: process.env.DATABASE_URL});
 function findUser(username, callback) {
   pool.query(sql_query.query.user_info, [username], async function (err, data) {
       if (err) {
-        console.error("Cannot find user");
+        //console.error("Cannot find user");
         return callback(null);
       }
 
       if (data.rows.length == 0) {
-        console.error("User does not exists?");
+        //console.error("User does not exists?");
         return callback(null)
       } else if (data.rows.length == 1) {
         var reward_points = 0;
@@ -38,7 +38,7 @@ function findUser(username, callback) {
           })
         })
       } else {
-        console.error("More than one user?");
+        //console.error("More than one user?");
         return callback(null);
       }
     }
@@ -62,7 +62,7 @@ function initPassport() {
         }
         // User not found
         if (!user) {
-          console.error('User not found');
+          //console.error('User not found');
           return done(null, false);
         }
 

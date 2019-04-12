@@ -11,10 +11,6 @@ var Client = require('pg').Client;
 var client = new Client({connectionString: process.env.DATABASE_URL});
 client.connect();
 
-
-// var historyRouter = require('./history.js');
-// router.use('/:userId/history', historyRouter);
-
 // User Profile Page -----------------------------------------------------------------------------------
 router.get('/', function (req, res, next) {
   res.render('user', {user: req.user});
@@ -147,7 +143,6 @@ router.post('/:userId/add_restaurant', function (req, res, next) {
           if (err) rollback(client, err);
           // To add Categories
           var cid;
-          // if (typeof cuisines === 'string' || cuisines instanceof String) {
           client.query(sql_query.query.cat_name_to_cid, [cuisines], function (err, data) {
             if (err) rollback(client, err);
             cid = data.rows[0].cid;
@@ -237,7 +232,6 @@ router.post('/:userId/edit_restaurant', function (req, res, next) {
       client.query(sql_query.query.delete_rest_belongs, [rid], function(err, data) {
         if (err) rollback(client, err);
         var cid;
-        // if (typeof cuisines === 'string' || cuisines instanceof String) {
           client.query(sql_query.query.cat_name_to_cid, [cuisines], function (err, data) {
             if (err) rollback(client, err);
             cid = data.rows[0].cid;
@@ -250,9 +244,7 @@ router.post('/:userId/edit_restaurant', function (req, res, next) {
               }
             });
           });
-        // }
       });
-      // return res.redirect('/user/' + req.user.username);
     });
   });
 });
@@ -451,8 +443,6 @@ router.post('/:userId/history/:reservationId/rate', function (req, res, next) {
     if (err) {
       res.status(404).send("You have rate already! "  + hotText.link(URL));
     }
-    // var history
-
     res.status(200).send("Rate Successfully! "  + hotText.link(URL));
   });
 });
@@ -511,7 +501,6 @@ function new_bookings(user_uid, req, res) {
       return res.redirect('/user/' + req.user.username);
     } else {
       return res.render('user/user', {
-        // data: data[0],
         new_bookings: data.rows,
         user: req.user,
       });
@@ -528,7 +517,6 @@ function current_reservations(user_uid, req, res) {
       current_reservations: data.rows,
       user: req.user,
     });
-    // }
   });
 }
 

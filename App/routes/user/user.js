@@ -28,7 +28,6 @@ router.get('/:userId', function (req, res, next) {
   if (req.user.username != req.params.userId) {
     res.redirect('/user/' + req.user.username);
   }
-  console.log(req.user);
   pool.query(sql_query.query.user_info, [req.user.username], (err, data) => {
     if (err) {
       res.status(500).send("Please login first")
@@ -142,7 +141,6 @@ router.post('/:userId/add_restaurant', function (req, res, next) {
     client.query(sql_query.query.add_restaurant, [name, address, location, open_time, close_time, contacts], function (err, data) {
       if (err) return rollback(client, err);
       rid = data.rows[0].rid;
-      console.log("rid0: " + rid);
       client.query(sql_query.query.register_restaurant, [uid, rid], function (err, data) {
         if (err) rollback(client, err);
         client.query(sql_query.query.add_menu, [rid, menu_name], function (err, data) {
@@ -150,17 +148,13 @@ router.post('/:userId/add_restaurant', function (req, res, next) {
           // To add Categories
           var cid;
           // if (typeof cuisines === 'string' || cuisines instanceof String) {
-          console.log("Only 1 category selected");
           client.query(sql_query.query.cat_name_to_cid, [cuisines], function (err, data) {
             if (err) rollback(client, err);
             cid = data.rows[0].cid;
-            console.log("cid: " + cid);
-            console.log("rid: " + rid);
             client.query(sql_query.query.add_category, [cid, rid], function (err, data) {
               if (err) {
                 rollback(client, err);
               } else {
-                console.log("Added to belongs");
                 client.query('COMMIT', client.end.bind(client), (err, res2) => {
                   return res.redirect('/user/' + req.user.username);
                 });
@@ -208,7 +202,6 @@ var rid;
 router.get('/:userId/edit_restaurant', function (req, res, next) {
   if (!req.user) res.redirect('/login');
   uid = req.user.user_uid;
-  // console.log(req.user.user_uid);
   pool.query(sql_query.query.userid_to_restaurant, [req.user.user_uid], (err, data) => {
     if (err) return next(err);
     var errorMessage = {
@@ -245,17 +238,13 @@ router.post('/:userId/edit_restaurant', function (req, res, next) {
         if (err) rollback(client, err);
         var cid;
         // if (typeof cuisines === 'string' || cuisines instanceof String) {
-          console.log("Only 1 category selected");
           client.query(sql_query.query.cat_name_to_cid, [cuisines], function (err, data) {
             if (err) rollback(client, err);
             cid = data.rows[0].cid;
-            console.log("cid: " + cid);
-            console.log("rid: " + rid);
             client.query(sql_query.query.add_category, [cid, rid], function (err, data) {
               if (err) {
                 rollback(client, err);
               } else {
-                console.log("Added to belongs");
                 client.query('COMMIT');
                 return res.redirect('/user/' + req.user.username);
               }
@@ -275,7 +264,6 @@ var rid;
 router.get('/:userId/delete_restaurant', function (req, res, next) {
   if (!req.user) res.redirect('/login');
   uid = req.user.user_uid;
-  // console.log(req.user.user_uid);
   pool.query(sql_query.query.userid_to_restaurant, [req.user.user_uid], (err, data) => {
     if (err) return next(err);
     var errorMessage = {
@@ -290,7 +278,6 @@ router.get('/:userId/delete_restaurant', function (req, res, next) {
 
 router.post('/:userId/delete_restaurant', function(req, res, next) {
   var result = typeof req.body.Yes == 'undefined' ? "No" : "Yes";
-  // console.log(result);
   if (result == "No") return res.redirect('/user/' + req.user.username);
   var rollback = function(client, err) {
     client.query('ROLLBACK', client.end.bind(client), function() {
@@ -301,7 +288,6 @@ router.post('/:userId/delete_restaurant', function(req, res, next) {
       return res.render('user/restaurants/error_page/operation_error', {data: errorMessage});
     });
   };
-  console.log(rid);
   client.query('BEGIN', function(err, data) {
     if(err) return rollback(client, err);
     client.query(sql_query.query.delete_register, [rid], function(err, data) {
@@ -322,7 +308,6 @@ router.post('/:userId/delete_restaurant', function(req, res, next) {
 
 // Router to user past reservations or bookings page -------------------------------------------------------
 router.get('/:userId/history', function (req, res, next) {
-  console.log("hey");
   if (!req.user) {
     res.redirect('/login');
   }
@@ -331,10 +316,8 @@ router.get('/:userId/history', function (req, res, next) {
   }
   var user_uid = req.user.user_uid;
   if (req.user.isManager) {
-    console.log("is Manager ");
     return manager_history(user_uid, req, res);
   } else {
-    console.log("is Customer ");
     return customer_history(user_uid, req, res)
   }
 });
@@ -438,9 +421,6 @@ router.get('/:userId/:resId/edit', function (req, res, next) {
   pool.query(sql_query.query.get_reservation, [req.params.resId], (err, data) => {
     if (err) return res.status(500).send("Cannot find reservation");
     var reserv = data.rows[0];
-    console.log("date" + reserv.resdate.toISOString().split('T')[0]);
-    console.log(reserv.restime);
-    console.log(reserv.numpeople);
     res.render('user/edit_reserv', {data: reserv});
   });
 });
@@ -450,7 +430,6 @@ router.post('/:userId/:resId/edit', function (req, res, next) {
   var resdate = req.body.book_date;
   var restime = req.body.book_time;
   var numpeople = req.body.numpeople;
-  console.log("form: " + resdate + ", " + restime + "," + numpeople);
   pool.query(sql_query.query.update_reservation, [resdate, restime, numpeople, resid], (err, data) => {
     if (err) return res.status(500).send("Cannot update reservation");
     res.redirect('/user/' + req.user.username);
@@ -459,7 +438,6 @@ router.post('/:userId/:resId/edit', function (req, res, next) {
 
 
 router.post('/:userId/history/:reservationId/rate', function (req, res, next) {
-  console.log('reservation history');
 
   if (!req.user.username) {
     res.redirect('/login');
@@ -471,7 +449,6 @@ router.post('/:userId/history/:reservationId/rate', function (req, res, next) {
   var hotText = 'Go Back';
   pool.query(sql_query.query.rate_reservation_restaurant, [reservation_id, rating_value], (err, data) => {
     if (err) {
-      console.log(err);
       res.status(404).send("You have rate already! "  + hotText.link(URL));
     }
     // var history
@@ -502,11 +479,8 @@ router.post('/:userId/:resId/cancel', function (req, res, next) {
 
 // Supplementary functions for user queries ------------------------------------------------------------
 function customer_history(user_uid, req, res) {
-  console.log("user uid", user_uid);
-  console.log("goign to display ")
   pool.query(sql_query.query.display_customer_history, [user_uid], (err, data) => {
     if (err) {
-      console.log(err);
       return res.redirect('/user/' + req.user.username);
     } else {
       return res.render('user/history', {
@@ -519,7 +493,6 @@ function customer_history(user_uid, req, res) {
 
 function manager_history(user_uid, req, res) {
   pool.query(sql_query.query.display_manager_history, [user_uid], (err, data) => {
-    console.log(JSON.stringify(data));
     if (err) {
       return res.redirect('/user/' + req.user.username);
     } else {
@@ -534,11 +507,9 @@ function manager_history(user_uid, req, res) {
 function new_bookings(user_uid, req, res) {
   // TODO:
   pool.query(sql_query.query.display_new_bookings, [user_uid], (err, data) => {
-    console.log(JSON.stringify(data));
     if (err) {
       return res.redirect('/user/' + req.user.username);
     } else {
-      console.log(JSON.stringify(data));
       return res.render('user/user', {
         // data: data[0],
         new_bookings: data.rows,
@@ -551,7 +522,6 @@ function new_bookings(user_uid, req, res) {
 function current_reservations(user_uid, req, res) {
   pool.query(sql_query.query.display_current_reservations, [user_uid], (err, data) => {
     if (err) {
-      console.log(err);
       return res.redirect('/user/' + req.user.username);
     }
     return res.render('user/user', {

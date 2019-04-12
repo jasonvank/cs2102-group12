@@ -30,12 +30,9 @@ router.get('/:rid', function (req, res, next) {
 }, function (req, res, next) {
   //get user_id of current user
   uid = req.user.user_uid;
-  console.log("uid:" + uid);
   rid = req.params.rid;
-  console.log("rid:" + rid);
   var isNotCustomer = req.user.isManager;
   if (isNotCustomer == true) {
-    console.log("Only customers can make reservations");
     return res.render('reservations/notcustomererror');
   } else {
     return next();
@@ -45,7 +42,6 @@ router.get('/:rid', function (req, res, next) {
   var rewardvalues;
   pool.query(sql_query.query.get_rewards, [uid], (err, data) => {
     rewardvalues = data.rows;
-    console.log(rewardvalues);
     res.render('reservations/reservation', {user: req.user, rewardsList: rewardvalues}); //the user is for navbar, rewards list for displaying rewards
   });
 });
@@ -57,8 +53,6 @@ router.post('/:rid', function (req, res, next) {
   var numpeople = req.body.numpeople;
   var usereward = req.body.usereward;
 
-  console.log("use reward: " + usereward);
-  console.log("form: " + resdate + ", " + restime + "," + numpeople);
   var resid;
 
   var rollback = function (client, err) {
@@ -72,14 +66,11 @@ router.post('/:rid', function (req, res, next) {
     if (usereward != 0) {
       client.query(sql_query.query.select_reward, [uid, usereward], (err, data) => {
         if (err) {
-          console.log("find reward ERROR");
           return rollback(client, err);
         } else {
           rewid = data.rows[0].rewid;
-          console.log("rewid:" + rewid);
           client.query(sql_query.query.delete_reward, [rewid], (err, data) => {
             if (err) {
-              console.log("delete reward ERROR");
               return rollback(client, err);
             }
           });
@@ -87,43 +78,30 @@ router.post('/:rid', function (req, res, next) {
       });
     }
     var earnedpoints = Math.min(numpeople * 10, 50);
-    console.log("earned points: " + earnedpoints)
     client.query(sql_query.query.add_reward, [earnedpoints], (err, data) => {
       if (err) {
-        console.log("add reward ERROR");
         return rollback(client, err);
       }
       var newrewid = data.rows[0].rewid;
 
       client.query(sql_query.query.add_earns, [newrewid, uid], (err, data) => {
         if (err) {
-          console.log("add earns ERROR");
           return rollback(client, err);
         }
         //insert into Reservations table
-
-        console.log(restime);
-        console.log(resdate);
-        console.log(numpeople);
-        console.log(usereward);
-
         client.query(sql_query.query.add_reservation, [restime, resdate, numpeople, usereward], function (err, data) {
           if (err) {
-            console.log("reserve ERROR");
             return rollback(client, err);
           }
           resid = data.rows[0].resid;
-          console.log("resid: " + resid);
           //insert into Books table
           client.query(sql_query.query.add_books, [resid, uid], function (err, data) {
             if (err) {
-              console.log("book ERROR");
               return rollback(client, err);
             }
             // insert into processes table
             client.query(sql_query.query.add_processes, [resid, rid], function (err, data) {
               if (err) {
-                console.log("process ERROR");
                 return rollback(client, err);
               }
               else {

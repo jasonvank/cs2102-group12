@@ -14,7 +14,7 @@
 <body class="form-v5">
 	<div class="page-content">
 		<div class="form-v5-content">
-			<form class="form-detail" action="" method="post">
+			<form class="form-detail" action="" name="form" onsubmit="return validateForm()" method="post">
 				<h2>Add Restaurant Form</h2>
 				<div class="form-row">
 					<label for="name">Your restaurant name</label>
@@ -50,7 +50,7 @@
 
         <div class="form-row">
           <label for="close_time">Choose your closing time:</label>
-          <input type="time" id="close_time" name="close_time">
+          <input type="time" id="close_time" name="close_time" required>
           <!-- <i class="fas fa-user"></i> -->
           <!-- <span class="note">Office hours are 9am to 6pm</span> -->
         </div>
@@ -82,8 +82,18 @@
 				<div class="form-row-last">
 					<input type="submit" name="register" class="register" value="Register">
 				</div>
-      </form>
 
+        <script>
+        function validateForm() {
+          var close_time = document.forms["form"]["close_time"].value;
+          var open_time = document.forms["form"]["open_time"].value;
+          if (open_time > close_time) {
+            alert("The close time should be later than open time!");
+            return false;
+          }
+        }
+      </script>
+      </form>
 		</div>
 	</div>
 </body>

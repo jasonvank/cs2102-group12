@@ -14,7 +14,7 @@
 <body class="form-v5">
 	<div class="page-content">
 		<div class="form-v5-content">
-			<form class="form-detail" action="" method="post">
+			<form class="form-detail" action=""  name="form" onsubmit="return validateForm()" method="post">
 				<h2>Edit Restaurant Form</h2>
 				<div class="form-row">
 					<label for="your-restaurant-name">name</label>
@@ -75,22 +75,19 @@
 					</select>
 				</div>
 				</div>
-
-        <!-- <div class="row">
-          <input class="radio col s6" type="radio" id="customer" name="usertype" value="customer">
-          <label class="radio-label" for="customer">Customer</label>
-
-          <input class="radio col s6" type="radio" id="branch_manager" name="usertype" value="branch_manager">
-					<label class="radio-label" for="manager">Branch Manager</label>
-
-					<input class="radio col s6" type="radio" id="restaurant_manager" name="usertype" value="restaurant_manager">
-					<label class="radio-label" for="manager">Restaurant Manager</label>
-
-        </div> -->
-
 				<div class="form-row-last">
 					<input type="submit" name="register" class="register" value="Update">
 				</div>
+        <script>
+        function validateForm() {
+          var close_time = document.forms["form"]["close_time"].value;
+          var open_time = document.forms["form"]["open_time"].value;
+          if (open_time > close_time) {
+            alert("The close time should be later than open time!");
+            return false;
+          }
+        }
+      </script>
       </form>
 
 		</div>

@@ -31,11 +31,6 @@ router.post('/', function (req, res, next) {
   var book_time = req.body.book_time;
   var rating = req.body.rating;
 
-  console.log(res_name == 0);
-  console.log(location);
-  console.log(category);
-  console.log(book_time == 0);
-
   var searchInfo = {
     name : res_name,
     address: res_address,

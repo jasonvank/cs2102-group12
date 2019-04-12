@@ -606,7 +606,7 @@ INSERT INTO reservations (resid, restime, resdate, numpeople, discount)
 VALUES ('b2a5078d-df7a-46f2-a4c1-d60b9a168394', '07:00', '2019-04-05', 2, 30);
 
 INSERT INTO reservations (resid, restime, resdate, numpeople, discount)
-VALUES ('d2d3fa97-bb8f-450a-9f2a-fe58df40133c', '02:00', '2019-04-15', 5, 100);
+VALUES ('d2d3fa97-bb8f-450a-9f2a-fe58df40133c', '14:00', '2019-04-15', 5, 10);
 
 INSERT INTO reservations (resid, restime, resdate, numpeople)
 VALUES ('235a555f-6c36-4b57-b34c-eb92db1276d2', '08:00', '2019-03-15', 15);
@@ -717,7 +717,10 @@ BEGIN
  SELECT restime from reservations where resid = reservid INTO reservtime;
  SELECT open_time from restaurants where rid = restaurant INTO opentime;
  SELECT close_time from restaurants where rid = restaurant INTO closetime;
- IF reservtime < opentime OR reservtime > closetime THEN RAISE NOTICE 'Restaurant not open!';
+ IF closetime < opentime AND reservtime > closetime AND reservtime < opentime THEN RAISE NOTICE 'Restaurant not open!';
+ RAISE EXCEPTION 'Please choose a time when the restaurant is open';
+ RETURN NULL;
+ ELSIF closetime > opentime AND reservtime > closetime OR reservtime < opentime THEN RAISE NOTICE 'Restaurant not open!';
  RAISE EXCEPTION 'Please choose a time when the restaurant is open';
  RETURN NULL;
  ELSE RETURN NEW;
